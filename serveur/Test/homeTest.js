@@ -1,8 +1,12 @@
-const request = require("supertest");
-const app = require("../main");
+/* eslint-disable linebreak-style */
+/* eslint-disable no-undef */
 
-describe("GET /api/test", () => {
-  it("respond with Hello World", (done) => {
-    request(app).get("/api/test").expect("hello world !", done);
-  })
+
+const request = require('supertest');
+const app = require('../main');
+
+describe('GET /api/test', () => {
+  it('respond with Hello World', (done) => {
+    request(app).get('/api/test').expect('hello world !', done);
+  });
 });
