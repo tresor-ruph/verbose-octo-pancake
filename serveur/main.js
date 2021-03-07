@@ -1,28 +1,20 @@
-const express = require('express');
+const dependencies = require('./dependency')
+const dbConnection = require('./infrastructure/orm/dbConnection');
 
-const path = require('path');
-const dotenv = require('dotenv');
-const bodyParser = require('body-parser');
-const dbConnection = require('./infrastructure/orm/dbConnection')
-const routes = require('./frameworks/web/routes')
-
-const app = express();
-dbConnection.authenticate().then(()=> {
+const app = dependencies.express();
+dbConnection.authenticate().then(() => {
   console.log('connection succesfull');
 })
-dotenv.config();
-app.use('/api', routes())
+dependencies.dotenv.config();
 
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(dependencies.bodyParser.json({ limit: "50mb" }));
+app.use(dependencies.bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
+const apiRoutes = require('./frameworks/web/routes')(app,dependencies)
 
-app.use(bodyParser.json({limit: "50mb"}));
-app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
-
+app.use(dependencies.express.static(dependencies.path.join(__dirname, 'build')));
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  res.sendFile(dependencies.path.join(__dirname, 'build', 'index.html'));
 });
-
-app.get('/api/test', (req, res) => res.send('hello world !'));
 
 app.listen(process.env.PORT, () => {
   console.log(`your server is running on port ${process.env.PORT}`);

@@ -4,11 +4,11 @@ const dotenv = require('dotenv');
 
   dotenv.config()
   const dbConnection = new Sequelize(
-    process.env.DATABASE,
-    process.env.USER,
-    process.env.PASSWORD,
+    process.env.MYSQL_ADDON_DB,
+    process.env.MYSQL_ADDON_USER,
+    process.env.MYSQL_ADDON_PASSWORD,
     {
-      host: process.env.HOST,
+      host: process.env.MYSQL_ADDON_HOST,
       dialect: 'mysql',
 
       logging: false,
