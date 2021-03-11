@@ -1,19 +1,23 @@
-const dependencies = require('./dependency')
+const express = require('express');
+const path = require('path');
+const dotenv = require('dotenv');
+const bodyParser = require('body-parser');
+const Joi = require('joi')
 const dbConnection = require('./infrastructure/orm/dbConnection');
 
-const app = dependencies.express();
+const app = express();
 dbConnection.authenticate().then(() => {
   console.log('connection succesfull');
 })
-dependencies.dotenv.config();
+dotenv.config();
 
-app.use(dependencies.bodyParser.json({ limit: "50mb" }));
-app.use(dependencies.bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
-const apiRoutes = require('./frameworks/web/routes')(app,dependencies)
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
+const apiRoutes = require('./frameworks/web/routes')(app)
 
-app.use(dependencies.express.static(dependencies.path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, 'build')));
 app.get('/', (req, res) => {
-  res.sendFile(dependencies.path.join(__dirname, 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
 app.listen(process.env.PORT, () => {

@@ -1,55 +1,49 @@
-
 module.exports = {
-
 
   getAllUsers: async function (Usermodel) {
     const users = await Usermodel.findAll()
     return users
   },
-  getOneUser: async function (req, Usermodel) {
-    const params = req.params.id
+  getOneUser: async function (param, Usermodel) {
+
     const user = await Usermodel.findAll({
       where: {
-        email: params
+        userName: param
       }
     })
     return user
   },
-  removeUser: async function (req, Usermodel) {
-    const params = req.params.id
+  removeUser: async function (param, Usermodel) {
+
     const user = await Usermodel.destroy({
       where: {
-        userName: params
+        userName: param
       }
     })
     console.log(user) //number of deleted elements
-
+    if (user === 0) {
+      return { message: "could not delete. User not found" }
+    }
     return { message: "user deleted" }
   },
-  addUser: async function (req, Usermodel) {
-    const params = req.body
-    // const user = await Usermodel.create({
-    //   email: params.email,
-    //   password: params.password,
-    //   username: params.username,
-    //   eventId: null,
-    // })
-    // return user.dataValues.UserId
-    return {message : 'test'}
+  addUser: async function (userObject, Usermodel) {
+    const user = await Usermodel.create(userObject)
+    return user.dataValues.UserId
   },
-  updateUser: async function (req, Usermodel) {
-    const params = req.body
+  updateUser: async function (userObject, Usermodel) {
     const user = await Usermodel.update({
-      password: params.password
+      password: userObject.password
     },
       {
         where:
         {
-          username: params.username
+          username: userObject.username
         }
       })
     //user returns de number of updated lines (arr)
-    console.log(user)
+    if (user[0] == 0) {
+      return { message: "could not update" }
+    }
     return { message: "data updated" }
   },
 

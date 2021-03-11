@@ -1,9 +1,8 @@
+const users = require('./userRoutes');
 
-module.exports = (app, dependencies) => {
+module.exports = (app) => {
 
-    const users = require('./userRoutes');
-
-    users(app, dependencies);
+    users(app);
 }
 
 

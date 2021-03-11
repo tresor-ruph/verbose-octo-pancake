@@ -1,25 +1,28 @@
 const userService = require('./userServices')
-const userModel = require('./../domain/Users')
+const gestUsersRepo = require('./../contracts/')
+
 
 module.exports = {
-    listAll: async (userRepository) => {
-        const response = await userService.fetchAll(userRepository)
+  
+
+    listAll: async () => {
+        const response = await userService.fetchAll(gestUsersRepo)
         return response
     },
-    getOne: async (request, userRepository) => {
-        const response = await userService.fetchOne(request, userRepository)
+    getOne: async (request) => {
+        const response = await userService.fetchOne(request, gestUsersRepo)
         return response
     },
-    deleteUser: async (request, userRepository) => {
-        const response = await userService.deleteUser(request, userRepository)
+    deleteUser: async (request) => {
+        const response = await userService.deleteUser(request, gestUsersRepo)
         return response
     },
-    addUser: async (request, userRepository) => {
-        const response = await userService.create(request, userRepository,userModel)
+    addUser: async (request) => {
+        const response = await userService.create(request, gestUsersRepo)
         return response
     },
-    updateUser: async (request, userRepository) => {
-        const response = await userService.update(request, userRepository)
+    updateUser: async (request) => {
+        const response = await userService.update(request, gestUsersRepo)
         return response
     },
 
