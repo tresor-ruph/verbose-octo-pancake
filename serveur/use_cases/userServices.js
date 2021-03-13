@@ -14,7 +14,7 @@ module.exports = {
     let isHTML = RegExp.prototype.test.bind(/'(<([^>]+)>)'/i)
 
     if (isHTML(param) || param.length < 3 || param.length > 30) {
-      return { message: "invalid parameter" }
+      return -1
     }
 
     const response = await userRepository.getOne(param)
@@ -27,7 +27,7 @@ module.exports = {
     let values = Object.values(request.body)
     const validMod = userModel(...values)
     if (validMod.error) {
-      return validMod.error[0].message
+      return { code: -1, message: validMod.error[0].message }
     }
 
     const userExist = await userRepository.getOne(values[2])
@@ -46,12 +46,12 @@ module.exports = {
     let values = Object.values(request.body)
     const validMod = userModel(...values)
     if (validMod.error) {
-      return validMod.error[0].message
+      return { code: -1, message: validMod.error[0].message }
     }
 
     const userExist = await userRepository.getOne(values[2])
     if (userExist.length === 0) {
-      return { message: `${values[2]} could not update` }
+      return -1
     }
     const response = await userRepository.update(validMod.value)
     return response
@@ -66,7 +66,7 @@ module.exports = {
     let isHTML = RegExp.prototype.test.bind(/'(<([^>]+)>)'/i)
 
     if (isHTML(param) || param.length < 3 || param.length > 30) {
-      return { message: "invalid parameter" }
+      return -1
     }
 
     const response = await userRepository.deleteUser(param)

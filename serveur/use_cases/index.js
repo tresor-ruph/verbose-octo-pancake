@@ -3,7 +3,7 @@ const gestUsersRepo = require('./../contracts/')
 
 
 module.exports = {
-  
+
 
     listAll: async () => {
         const response = await userService.fetchAll(gestUsersRepo)
