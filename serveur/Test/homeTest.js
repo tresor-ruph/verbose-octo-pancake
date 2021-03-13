@@ -6,7 +6,7 @@ const request = require('supertest');
 const app = require('../main');
 
 describe('GET /api/test', () => {
-  it('respond with Hello World', (done) => {
+  it('respond with status 200', (done) => {
     request(app).get('/api/allUsers').expect(200, done);
   });
 });
