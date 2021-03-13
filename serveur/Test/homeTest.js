@@ -7,6 +7,6 @@ const app = require('../main');
 
 describe('GET /api/test', () => {
   it('respond with Hello World', (done) => {
-    request(app).get('/api/test').expect('hello world !', done);
+    request(app).get('/api/allUsers').expect(200, done);
   });
 });

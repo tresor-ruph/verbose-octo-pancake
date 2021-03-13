@@ -1,15 +1,16 @@
 const userModel = require('./../domain/Users')
+const {UsersRepo} = require('../contracts')
 
 
-module.exports = {
-  fetchAll: async (userRepository) => {
-    const response = await userRepository.getAll()
+module.exports = () => {
+  const fetchAll = async () => {
+    const response = await UsersRepo.getAllUsers()
     return response
-  },
+  }
 
 
 
-  fetchOne: async (param, userRepository) => {
+  const fetchOne = async (param) => {
 
     let isHTML = RegExp.prototype.test.bind(/'(<([^>]+)>)'/i)
 
@@ -17,12 +18,12 @@ module.exports = {
       return -1
     }
 
-    const response = await userRepository.getOne(param)
+    const response = await UsersRepo.getOneUser(param)
     return response
-  },
+  }
 
 
-  create: async (request, userRepository) => {
+  const create = async (request) => {
 
     let values = Object.values(request.body)
     const validMod = userModel(...values)
@@ -30,18 +31,18 @@ module.exports = {
       return { code: -1, message: validMod.error[0].message }
     }
 
-    const userExist = await userRepository.getOne(values[2])
+    const userExist = await UsersRepo.getOneUser(values[2])
 
     if (userExist.length === 0) {
-      const response = await userRepository.add(validMod.value)
+      const response = await UsersRepo.addUser(validMod.value)
       return response
     }
 
-    return { message: -1 }
-  },
+    return -1
+  }
 
 
-  update: async (request, userRepository) => {
+  const update = async (request) => {
 
     let values = Object.values(request.body)
     const validMod = userModel(...values)
@@ -49,19 +50,19 @@ module.exports = {
       return { code: -1, message: validMod.error[0].message }
     }
 
-    const userExist = await userRepository.getOne(values[2])
+    const userExist = await UsersRepo.getOneUser(values[2])
     if (userExist.length === 0) {
       return -1
     }
-    const response = await userRepository.update(validMod.value)
+    const response = await UsersRepo.updateUser(validMod.value)
     return response
 
 
 
-  },
+  }
 
 
-  deleteUser: async (param, userRepository) => {
+  const deleteUser = async (param) => {
 
     let isHTML = RegExp.prototype.test.bind(/'(<([^>]+)>)'/i)
 
@@ -69,8 +70,8 @@ module.exports = {
       return -1
     }
 
-    const response = await userRepository.deleteUser(param)
+    const response = await UsersRepo.removeUser(param)
     return response
-  },
-
+  }
+  return ({ fetchAll, fetchOne, create, update, deleteUser })
 }

@@ -1,10 +1,9 @@
 
-const userService = require('../use_cases');
+const { userServices } = require('../use_cases');
 
 module.exports = () => {
-
   const listAllUsers = async function (req, res) {
-    const response = await userService.listAll()
+    const response = await userServices.fetchAll()
     res.status(200).send(JSON.stringify(response, null, 2))
   }
 
@@ -12,7 +11,7 @@ module.exports = () => {
   const getUser = async (req, res) => {
     console.log(req.params)
     const request = req.params.username
-    const response = await userService.getOne(request)
+    const response = await userServices.fetchOne(request)
 
     if (response.length === 0) {
       res.status(404).send(JSON.stringify({ message: 'requested resource not found' }))
@@ -30,7 +29,7 @@ module.exports = () => {
   const deleteUser = async (req, res) => {
 
     const request = req.params.username
-    const response = await userService.deleteUser(request)
+    const response = await userServices.deleteUser(request)
     if (response === -1) {
       res.status(400).send(JSON.stringify({ message: 'invalid request' }))
       return
@@ -38,12 +37,13 @@ module.exports = () => {
       res.status(404).send(JSON.stringify({ message: 'An error occured' }))
       return
     }
-    res.send(JSON.stringify(response))
+    res.status(200).send(JSON.stringify({message:"user deleted"}))
   }
 
 
   const createUser = async (req, res) => {
-    const response = await userService.addUser(req)
+    const response = await userServices.create(req)
+    console.log(response)
     if (response == -1) {
       //user exist
       res.status(404).send(JSON.stringify({ message: 'An error occured' }))
@@ -54,14 +54,14 @@ module.exports = () => {
       return
 
     }
-    res.send(JSON.stringify(response))
+    res.status(200).send(JSON.stringify(response))
 
   }
 
 
   const updateUser = async (req, res) => {
-    const request = req.params.username
-    const response = await userService.updateUser(request)
+    const request = req
+    const response = await userServices.update(request)
     if (response == -1) {
       res.status(404).send(JSON.stringify({ message: 'An error occured' }))
       return
@@ -71,7 +71,8 @@ module.exports = () => {
       return
 
     }
-    res.send(JSON.stringify(response))
+    console.log(response)
+    res.status(200).send(JSON.stringify({message: 'user updated'}))
 
   }
 

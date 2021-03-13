@@ -1,35 +1,43 @@
-module.exports = {
+const { User } = require('./../infrastructure/orm/models');
 
-  getAllUsers: async function (Usermodel) {
-    const users = await Usermodel.findAll()
+module.exports = () => {
+
+  const getAllUsers = async function () {
+    const users = await User.findAll()
     return users
-  },
-  getOneUser: async function (param, Usermodel) {
+  }
 
-    const user = await Usermodel.findAll({
+
+  const getOneUser = async function (param) {
+
+    const user = await User.findAll({
       where: {
         userName: param
       }
     })
     return user
-  },
-  removeUser: async function (param, Usermodel) {
+  }
 
-    const user = await Usermodel.destroy({
+
+  const removeUser = async function (param) {
+
+    const user = await User.destroy({
       where: {
         userName: param
       }
     })
-  return user
-  },
+    return user
+  }
 
-  addUser: async function (userObject, Usermodel) {
-    const user = await Usermodel.create(userObject)
+
+  const addUser = async function (userObject) {
+    const user = await User.create(userObject)
     return user.dataValues.UserId
-  },
-  
-  updateUser: async function (userObject, Usermodel) {
-    const user = await Usermodel.update({
+  }
+
+
+  const updateUser = async function (userObject) {
+    const user = await User.update({
       password: userObject.password
     },
       {
@@ -38,10 +46,10 @@ module.exports = {
           username: userObject.username
         }
       })
-    if (user[0] == 0) {
-      return { message: "could not update" }
-    }
-    return { message: "data updated" }
-  },
+    return user
+  }
+
+
+  return { getAllUsers, getOneUser, removeUser, addUser, updateUser }
 
 }
