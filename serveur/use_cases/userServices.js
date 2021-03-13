@@ -3,7 +3,6 @@ const userModel = require('./../domain/Users')
 
 module.exports = {
   fetchAll: async (userRepository) => {
-console.log(userRepository)
     const response = await userRepository.getAll()
     return response
   },

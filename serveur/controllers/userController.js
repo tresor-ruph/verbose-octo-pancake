@@ -1,45 +1,41 @@
 
- const userService = require('../use_cases');
+const userService = require('../use_cases');
 
+module.exports = () => {
 
-
-module.exports =  {
-
-   listAllUsers : async (req, res) => {
-     const response = await userService.listAll()
-    return response
-  },
-
-   getUser : async (req, res) => {
+  const listAllUsers = async function (req, res) {
+    const response = await userService.listAll()
+    res.send(JSON.stringify(response, null, 2))
+  }
+  const getUser = async (req, res) => {
+    console.log(req.params)
     const request = req.params.username
     const response = await userService.getOne(request)
-    return response
-  },
+    res.send(JSON.stringify(response, null, 2))
 
-   deleteUser : async (req, res) => {
+  }
+
+  const deleteUser = async (req, res) => {
     const request = req.params.username
 
     const response = await userService.deleteUser(request)
-    return response
-  },
-
-   createUser : async (req, res) => {
+    res.send(JSON.stringify(response))
+  }
+  const createUser = async (req, res) => {
     const request = req.params.username
-
     const response = await userService.addUser(request)
     if (response == -1) {
-
     }
-    return response
-  },
+    res.send(JSON.stringify(response))
 
-   updateUser : async (req, res) => {
+  }
+  const updateUser = async (req, res) => {
     const request = req.params.username
-
     const response = await userService.updateUser(request)
-    return response
+    res.send(JSON.stringify(response))
   }
 
-  
+  return ({ listAllUsers, getUser, deleteUser, createUser, updateUser })
+
 }
 

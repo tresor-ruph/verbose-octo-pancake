@@ -1,14 +1,11 @@
 
- const Controller = require('../../../controllers/');
+const { userController } = require('../../../controllers/');
+module.exports = (app) => {
 
- module.exports = (app, dependencies) => {
-     // const router = dependencies.express.Router();
-     // const userController = Controller(dependencies)
-     app.get('/api/allusers', Controller.getAll)
-     app.get('/api/user/:id', Controller.getOne)
-     app.delete('/api/user/:id', Controller.deleteOne)
- 
-     app.post('/api/user', Controller.createOne)
-     app.put('/api/user', Controller.updateOne)
- 
- }
+    app.get('/api/allusers', userController.listAllUsers)
+    app.get('/api/user/:username', userController.getUser)
+    app.delete('/api/user/:username', userController.deleteUser)
+    app.post('/api/user', userController.createUser)
+    app.put('/api/user', userController.updateUser)
+
+}
