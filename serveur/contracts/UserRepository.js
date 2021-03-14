@@ -1,4 +1,5 @@
 const { User } = require('./../infrastructure/orm/models');
+const {Op} = require("sequelize")
 
 module.exports = () => {
 
@@ -12,10 +13,21 @@ module.exports = () => {
 
     const user = await User.findAll({
       where: {
-        userName: param
+       [Op.or]:[{userName: param},{email:param}]
       }
     })
     return user
+  }
+
+  const userExist = async function (email, userName) {
+
+    const user = await User.findAll({
+      where: { 
+        [Op.or]: [{ email: email}, {username: userName }]
+       }
+    })
+    return user
+
   }
 
 
@@ -50,6 +62,6 @@ module.exports = () => {
   }
 
 
-  return { getAllUsers, getOneUser, removeUser, addUser, updateUser }
+  return { getAllUsers, getOneUser,userExist, removeUser, addUser, updateUser }
 
 }
