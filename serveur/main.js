@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
-const Joi = require('joi')
 const dbConnection = require('./infrastructure/orm/dbConnection');
 
 const app = express();
