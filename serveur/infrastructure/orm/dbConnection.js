@@ -4,11 +4,11 @@ const dotenv = require('dotenv');
 
   dotenv.config()
   const dbConnection = new Sequelize(
-    "bl67mfnvtkaiutazhidc",
-    "bl67mfnvtkaiutazhidc-mysql.services.clever-cloud.com",
-    "Xp9EOg0B7aYZrsK8e1nG",
+    process.env.MYSQL_ADDON_DB,
+    process.env.MYSQL_ADDON_USER,
+    process.env.MYSQL_ADDON_PASSWORD,
     {
-      host: "bl67mfnvtkaiutazhidc-mysql.services.clever-cloud.com",
+      host: process.env.MYSQL_ADDON_HOST,
       dialect: 'mysql',
 
       logging: false,
