@@ -1,5 +1,5 @@
 const userModel = require('./../domain/Users')
-const { UsersRepo } = require('../contracts')
+const { UsersRepo } = require('../repository')
 const tokenManager = require('../security/AccessTokenManager')
 const passWordManager = require('../security/passwordManager')
 

@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
-const dbConnection = require('./infrastructure/orm/dbConnection');
+const dbConnection = require('./database/dbConnection');
 
 const app = express();
 dbConnection.authenticate().then(() => {
@@ -12,7 +12,7 @@ dotenv.config();
 
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
-const apiRoutes = require('./frameworks/web/routes')(app)
+const apiRoutes = require('./routes')(app)
 
 app.use(express.static(path.join(__dirname, 'build')));
 app.get('/', (req, res) => {

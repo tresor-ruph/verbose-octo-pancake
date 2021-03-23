@@ -1,4 +1,4 @@
-const { User } = require('./../infrastructure/orm/models');
+const { User } = require('../database/models');
 const {Op} = require("sequelize")
 
 module.exports = () => {
