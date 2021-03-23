@@ -1,8 +1,8 @@
-import Login from './components/Authentification/Login'
+import Main from './routes'
 function App() {
   return (
     <div>
-      <Login />
+      <Main />
     </div>
 
   );
