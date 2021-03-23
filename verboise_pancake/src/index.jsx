@@ -1,13 +1,11 @@
 import React from 'react'
 import { render } from 'react-dom'
-import './index.css'
-import { createStore } from 'redux'
 import { Provider } from 'react-redux'
-import allReducer from './store/reducers/'
+import store from './store'
+import './index.css'
 import App from './App';
 import reportWebVitals from './reportWebVitals'
 
-const store = createStore(allReducer);
 
 render(
   <Provider store={store}>
