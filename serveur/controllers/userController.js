@@ -56,7 +56,6 @@ module.exports = () => {
   const createUser = async (req, res) => {
 
     const response = await userServices.create(req)
-
     if (response == 0) {
       //user exist
       res.status(404).send(JSON.stringify({ message: 'User already exist' }))
@@ -64,6 +63,7 @@ module.exports = () => {
     }
 
     if (response.code) {
+    
       res.status(400).send(JSON.stringify({ message: response.message }))
       return
 

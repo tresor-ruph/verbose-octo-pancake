@@ -24,7 +24,6 @@ module.exports = () => {
 
 
   const create = async (request) => {
-
     let values = Object.values(request.body)
     const validMod = userModel(...values)
 
