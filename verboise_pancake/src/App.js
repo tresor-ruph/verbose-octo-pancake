@@ -1,11 +1,19 @@
-import Main from './routes'
+
+import React from "react";
+import ReactDOM from "react-dom";
+
+import { BrowserRouter, Redirect } from "react-router-dom";
+import Main from "routes"
 function App() {
+
+ 
   return (
-    <div>
-      <Main />
-    </div>
+    <BrowserRouter>
+     <Main />
+    </BrowserRouter>
 
   );
 }
 
 export default App;
+

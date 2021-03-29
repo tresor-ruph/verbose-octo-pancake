@@ -4,6 +4,7 @@ const INITIAL_STATE = {
     sessionId: undefined,
     user: {
         username: "",
+        isLogged: false,
     }
 }
 

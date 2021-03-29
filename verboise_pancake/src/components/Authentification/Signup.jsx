@@ -4,7 +4,7 @@ import { Redirect, useHistory } from "react-router";
 
 
 function Login(props) {
-  console.log(props)
+  const [email, setEmail] = useState("")
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
