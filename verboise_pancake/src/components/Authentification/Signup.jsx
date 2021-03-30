@@ -37,14 +37,15 @@ function Signup(props) {
         dispatch({
           type: "LOG_IN",
           payload: {
-            sessionId: res.data,
+            sessionId: res.data.token,
+            userId: res.data.id,
             user: {
               username,
               isLogged: true,
             },
           },
         });
-        props.history.push("/");
+        props.history.push("/confEmail");
       })
       .catch((err) => {
         console.log(err.response.data.message);

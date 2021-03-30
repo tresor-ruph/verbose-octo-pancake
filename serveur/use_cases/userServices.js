@@ -2,6 +2,7 @@ const userModel = require('./../domain/Users')
 const { UsersRepo } = require('../repository')
 const tokenManager = require('../security/AccessTokenManager')
 const passWordManager = require('../security/passwordManager')
+const mail = require(('../helper/nodemailer/nodemailer'))
 
 module.exports = () => {
 
@@ -37,7 +38,10 @@ module.exports = () => {
 
       validMod.value.password = passWordManager.hashPassword(validMod.value.password)
       const response = await UsersRepo.addUser(validMod.value)
-      return response
+      const token = await tokenManager.encode(response)
+
+      mail.send('tresortek8@gmail.com', `${token},${response}`)
+      return { token: token, id: response }
 
     }
 
@@ -45,18 +49,19 @@ module.exports = () => {
   }
 
   const login = async (request) => {
-    console.log(request.params)
-    let values =JSON.parse(request.params.user)
+    let values = JSON.parse(request.params.user)
     const response = await UsersRepo.getOneUser(values.em_usname)
-
     if (response.length === 0) {
       return 0
+    }
+    if (response[0].dataValues.Accountstatus == 'waiting') {
+      return -1
     }
     if (!passWordManager.comparePassword(values.password, response[0].dataValues.password)) {
       return ({ code: 'invalid' })
     }
     const token = await tokenManager.encode(response[0].dataValues)
-    return token
+    return { token, id: response[0].dataValues.userId }
   }
 
 
@@ -83,6 +88,26 @@ module.exports = () => {
 
   }
 
+  const confirm = async (request) => {
+
+    let value = (request.params.id)
+    arr = value.split(',')
+    console.log(arr)
+    let valid = tokenManager.simpleCheck(arr[0])
+    if (valid.error) {
+      return -1
+    }
+    const response = await UsersRepo.confirmUser(arr[1])
+    return response
+
+  }
+
+  const sendLink = async (request) => {
+    const param = JSON.parse(request.params.obj)
+
+    mail.send('tresortek8@gmail.com', `${param.tok},${param.id}`)
+  }
+
 
   const deleteUser = async (req) => {
     if (tokenManager.decode(req).error) {
@@ -99,5 +124,5 @@ module.exports = () => {
     const response = await UsersRepo.removeUser(param)
     return response
   }
-  return ({ fetchAll, fetchOne, create, login, update, deleteUser })
+  return ({ fetchAll, fetchOne, create, login, update, deleteUser, confirm, sendLink })
 }

@@ -1,5 +1,5 @@
 const { User } = require('../database/models');
-const {Op} = require("sequelize")
+const { Op } = require("sequelize")
 
 module.exports = () => {
 
@@ -13,7 +13,7 @@ module.exports = () => {
 
     const user = await User.findAll({
       where: {
-       [Op.or]:[{userName: param},{email:param}]
+        [Op.or]: [{ userName: param }, { email: param }]
       }
     })
     return user
@@ -22,9 +22,9 @@ module.exports = () => {
   const userExist = async function (email, userName) {
 
     const user = await User.findAll({
-      where: { 
-        [Op.or]: [{ email: email}, {username: userName }]
-       }
+      where: {
+        [Op.or]: [{ email: email }, { username: userName }]
+      }
     })
     return user
 
@@ -43,6 +43,7 @@ module.exports = () => {
 
 
   const addUser = async function (userObject) {
+    userObject.Accountstatus = 'waiting'
     const user = await User.create(userObject)
     return user.dataValues.UserId
   }
@@ -60,8 +61,20 @@ module.exports = () => {
       })
     return user
   }
+  const confirmUser = async function (val) {
+    const user = await User.update({ Accountstatus: "confirm" },
+      {
+        where:
+        {
+          userId: val
+        }
+      })
+    console.log(user)
+    return user
+  }
 
 
-  return { getAllUsers, getOneUser,userExist, removeUser, addUser, updateUser }
+
+  return { getAllUsers, getOneUser, userExist, removeUser, addUser, updateUser, confirmUser }
 
 }

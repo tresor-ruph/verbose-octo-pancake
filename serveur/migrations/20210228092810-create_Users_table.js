@@ -20,6 +20,12 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: false,
     },
+    Accountstatus: {
+      type: Sequelize.STRING,
+      allowNull: false,
+
+
+    },
     eventId: Sequelize.INTEGER(11),
     createdAt: Sequelize.DATE,
     updatedAt: Sequelize.DATE

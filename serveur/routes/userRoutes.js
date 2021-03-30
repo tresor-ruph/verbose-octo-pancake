@@ -8,6 +8,7 @@ module.exports = (app) => {
     app.put('/api/user', userController.updateUser)
     app.get('/api/Login/:user', userController.userLogin)
     app.post('/api/Signin', userController.createUser)
-
+    app.get('/api/confirmEmail/:id', userController.confirmEmail)
+    app.get('/api/resendLink/:obj',userController.resendLink )
 
 }

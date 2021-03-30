@@ -3,6 +3,7 @@ import ls from 'local-storage'
 
 const INITIAL_STATE = {
     sessionId: undefined,
+    userId: undefined,
     user: {
         username: "",
         isLogged: false,
@@ -14,6 +15,7 @@ const SessionReducer = (state = INITIAL_STATE, action) => {
         case actionTypes.LOG_IN:
         
              ls.set('token', JSON.stringify(action.payload.sessionId))
+             ls.set('userId', JSON.stringify(action.payload.userId))
             console.log(action.payload)
             return {
                 ...state,

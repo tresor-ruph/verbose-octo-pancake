@@ -20,6 +20,10 @@ module.exports =   dbConnection.define("User", {
       type: Sequelize.STRING,
       allowNull: false,
     },
+    Accountstatus: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    }
   },
 
   )

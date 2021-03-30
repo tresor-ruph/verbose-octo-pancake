@@ -63,7 +63,7 @@ module.exports = () => {
     }
 
     if (response.code) {
-    
+
       res.status(400).send(JSON.stringify({ message: response.message }))
       return
 
@@ -79,6 +79,10 @@ module.exports = () => {
 
     if (response == 0) {
       res.status(404).send(JSON.stringify({ message: 'User does not exist' }))
+      return
+    }
+    if (response == -1) {
+      res.status(403).send(JSON.stringify({ message: 'please confirm your email' }))
       return
     }
 
@@ -118,7 +122,44 @@ module.exports = () => {
 
   }
 
-  return ({ listAllUsers, getUser, deleteUser, userLogin, createUser, updateUser })
+
+  const confirmEmail = async (req, res) => {
+
+    const request = req
+
+    const response = await userServices.confirm(request)
+
+    if (response == -1) {
+      res.status(404).send(JSON.stringify({ message: 'Link expired' }))
+      return
+    }
+    if (response.code) {
+      res.status(400).send(JSON.stringify({ message: response.message }))
+      return
+
+    }
+
+    res.status(200).redirect('http://localhost:3000/Login')
+
+  }
+
+  const resendLink = async (req, res) => {
+
+    const request = req
+
+    const response = await userServices.sendLink(request)
+
+    if (response == 0) {
+      res.status(404).send(JSON.stringify({ message: 'an error occured' }))
+      return
+    }
+
+
+    res.status(200).send(JSON.stringify({message: 'link send'}))
+
+  }
+
+  return ({ listAllUsers, getUser, deleteUser, userLogin, createUser, updateUser, confirmEmail, resendLink })
 
 }
 

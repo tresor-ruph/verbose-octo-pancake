@@ -14,6 +14,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import AdminLayout from "layouts/Admin.js";
 import Login from "components/authentification/Login"
 import Signup from "components/authentification/Signup"
+import ConfirmMail from "components/Error/confirmEmail"
 
 function Main(props) {
     const { user } = useSelector(state => state.SessionReducer)
@@ -23,6 +24,8 @@ function Main(props) {
             <Switch>
                 <Route path="/Signup" render={(props) => <Signup {...props} />} />
                 <Route path="/Login" render={(props) => <Login {...props} />} />
+                <Route path="/confEmail" render={(props) => <ConfirmMail {...props} />} />
+
                 {user.isLogged ? <Route path="/" render={(props) => <AdminLayout {...props} />} /> : <Redirect to='/Login' />}
 
             </Switch>
