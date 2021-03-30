@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Redirect, useHistory } from "react-router";
-
+import { useHistory } from "react-router";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import 'helper/axiosConfig'
 
 function Login(props) {
-  console.log(props)
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [err, setErr] = useState(null);
+
   const dispatch = useDispatch();
 
   const handleUsername = (event) => {
@@ -17,18 +20,32 @@ function Login(props) {
   };
 
   const handleSubmit = () => {
-    console.log(username, password);
-    dispatch({
-      type: "LOG_IN",
-      payload: {
-        sessionId: "azerty",
-        user: {
-          username,
-          isLogged: true,
-        },
-      },
-    });
-    props.history.push('/')
+    const data = {
+      em_usname: username,
+      password,
+    };
+    console.log(data);
+    axios
+      .get("/Login/" + JSON.stringify(data))
+      .then((res) => {
+        console.log(res);
+        setErr(null);
+        dispatch({
+          type: "LOG_IN",
+          payload: {
+            sessionId: res.data,
+            user: {
+              username,
+              isLogged: true,
+            },
+          },
+        });
+        props.history.push("/");
+      })
+      .catch((err) => {
+        setErr(err.response.data.message);
+        console.log(err.response);
+      });
   };
 
   return (
@@ -48,6 +65,10 @@ function Login(props) {
       />
       <br />
       <button onClick={() => handleSubmit()}>submit</button>
+      <br />
+      <Link to="/Signup">
+        <button>Signup</button>
+      </Link>
     </div>
   );
 }

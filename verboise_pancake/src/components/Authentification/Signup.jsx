@@ -1,14 +1,20 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { Redirect, useHistory } from "react-router";
 
-
-function Login(props) {
-  const [email, setEmail] = useState("")
+import axios from "axios";
+import "../../helper/axiosConfig";
+function Signup(props) {
+  const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const [err, setErr] = useState(null);
   const dispatch = useDispatch();
 
+  const handleEmail = (event) => {
+    setEmail(event.target.value);
+  };
   const handleUsername = (event) => {
     setUsername(event.target.value);
   };
@@ -17,27 +23,42 @@ function Login(props) {
   };
 
   const handleSubmit = () => {
-    console.log(username, password);
-    dispatch({
-      type: "LOG_IN",
-      payload: {
-        sessionId: "azerty",
-        user: {
-          username,
-          isLogged: true,
-        },
-      },
-    });
-    props.history.push('/')
+    console.log(email, username, password);
+    const data = {
+      email,
+      password,
+      username,
+    };
+    axios
+      .post("/Signin", data)
+      .then((res) => {
+        console.log(res);
+        setErr(null);
+        dispatch({
+          type: "LOG_IN",
+          payload: {
+            sessionId: res.data,
+            user: {
+              username,
+              isLogged: true,
+            },
+          },
+        });
+        props.history.push("/");
+      })
+      .catch((err) => {
+        console.log(err.response.data.message);
+        setErr(err.response.data.message);
+      });
   };
 
   return (
     <div>
       <input
         type="text"
-        placeholder="username / email"
-        value={username}
-        onChange={(event) => handleUsername(event)}
+        placeholder="email"
+        value={email}
+        onChange={(event) => handleEmail(event)}
       />
       <br />
       <input
@@ -47,9 +68,23 @@ function Login(props) {
         onChange={(event) => handlePassword(event)}
       />
       <br />
+      <input
+        type="text"
+        placeholder="username"
+        value={username}
+        onChange={(event) => handleUsername(event)}
+      />
+      <br />
+
+      <br />
       <button onClick={() => handleSubmit()}>submit</button>
+      <br></br>
+      <Link to="/Login">
+        <button>Login</button>
+      </Link>
+      <div>{err != null && err}</div>
     </div>
   );
 }
 
-export default Login;
+export default Signup;

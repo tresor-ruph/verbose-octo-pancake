@@ -13,6 +13,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 
 import AdminLayout from "layouts/Admin.js";
 import Login from "components/authentification/Login"
+import Signup from "components/authentification/Signup"
 
 function Main(props) {
     const { user } = useSelector(state => state.SessionReducer)
@@ -20,8 +21,9 @@ function Main(props) {
     return (
         <BrowserRouter>
             <Switch>
+                <Route path="/Signup" render={(props) => <Signup {...props} />} />
                 <Route path="/Login" render={(props) => <Login {...props} />} />
-                {!user.isLogged ? <Route path="/" render={(props) => <AdminLayout {...props} />} /> : <Redirect to='/Login' />}
+                {user.isLogged ? <Route path="/" render={(props) => <AdminLayout {...props} />} /> : <Redirect to='/Login' />}
 
             </Switch>
         </BrowserRouter>

@@ -45,8 +45,8 @@ module.exports = () => {
   }
 
   const login = async (request) => {
-
-    let values = request.body
+    console.log(request.params)
+    let values =JSON.parse(request.params.user)
     const response = await UsersRepo.getOneUser(values.em_usname)
 
     if (response.length === 0) {

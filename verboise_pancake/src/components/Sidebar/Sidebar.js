@@ -6,7 +6,6 @@ import { Nav } from "react-bootstrap";
 function Sidebar({ color, image, routes }) {
   const location = useLocation();
   const activeRoute = (routeName) => {
-    console.log(routeName)
     return location.pathname.indexOf(routeName) > -1 ? "active" : "";
   };
   return (

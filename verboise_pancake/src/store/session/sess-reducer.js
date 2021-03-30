@@ -1,4 +1,5 @@
 import * as actionTypes from './sess-types'
+import ls from 'local-storage'
 
 const INITIAL_STATE = {
     sessionId: undefined,
@@ -11,6 +12,9 @@ const INITIAL_STATE = {
 const SessionReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case actionTypes.LOG_IN:
+        
+             ls.set('token', JSON.stringify(action.payload.sessionId))
+            console.log(action.payload)
             return {
                 ...state,
                 sessionId: action.payload.sessionId,
