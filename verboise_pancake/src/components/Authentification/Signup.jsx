@@ -41,6 +41,7 @@ function Signup(props) {
             userId: res.data.id,
             user: {
               username,
+              email,
               isLogged: true,
             },
           },

@@ -1,12 +1,13 @@
 const nodemailer = require('nodemailer')
 const dotenv = require('dotenv');
-// const hbs = require('nodemailer-express-handlebars')
+const hbs = require('nodemailer-express-handlebars')
+const path = require('path')
 dotenv.config()
 
 module.exports = {
 
 
-    send: (destEmail,token) => {
+    send: (destEmail,token,username) => {
         let transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -19,12 +20,24 @@ module.exports = {
             from: process.env.EMAIL_USER,
             to: destEmail,
             subject: 'email confirmation',
-            html: `<a href='http://localhost:8000/api/confirmEmail/${token}' >confirm mail</a>`
+             template: 'index',
+             context: {
+                 username: username,
+                 link: token
+             }
+            // html: `<a href='http://localhost:8000/api/confirmEmail/${token}' >confirm mail</a>`
+
         };
-        // transporter.use('compile', hbs({
-        //     viewEngine: 'express-handlebars',
-        //     viewPath: '/serveur/helper/nodemailer/views/'
-        // }))
+        transporter.use('compile', hbs({
+            viewEngine: {            
+             extName:'.handlebars',
+            partialsDir:path.resolve(__dirname,"views"),
+            defaultLayout: false,
+        },
+            viewPath: path.resolve(__dirname, "views"),
+            extName: ".handlebars"
+
+        }))
 
         transporter.sendMail(mailOptions, function (err, data) {
             if (err) {

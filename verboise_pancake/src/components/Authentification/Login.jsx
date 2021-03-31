@@ -28,20 +28,27 @@ function Login(props) {
     axios
       .get("/Login/" + JSON.stringify(data))
       .then((res) => {
-        console.log(res);
         setErr(null);
+        const {id, token} = res.data.token
+      
         dispatch({
           type: "LOG_IN",
           payload: {
-            sessionId: res.data.token,
-            userId: res.data.id,
+            sessionId:token,
+            userId: id,
             user: {
               username,
               isLogged: true,
             },
           },
         });
-        // props.history.push("/");
+        if(res.status===203){
+          console.log("we are here")
+          props.history.push("/confEmail")
+        }else if(res.status === 200){
+          props.history.push("/")
+        }
+      
       })
       .catch((err) => {
         setErr(err.response.data.message);

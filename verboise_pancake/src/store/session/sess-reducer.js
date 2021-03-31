@@ -6,6 +6,7 @@ const INITIAL_STATE = {
     userId: undefined,
     user: {
         username: "",
+        email:"",
         isLogged: false,
     }
 }
@@ -16,11 +17,15 @@ const SessionReducer = (state = INITIAL_STATE, action) => {
         
              ls.set('token', JSON.stringify(action.payload.sessionId))
              ls.set('userId', JSON.stringify(action.payload.userId))
+             ls.set('username', JSON.stringify(action.payload.user.username))
+             ls.set('email', JSON.stringify(action.payload.user.email))
             console.log(action.payload)
             return {
                 ...state,
                 sessionId: action.payload.sessionId,
+                userId:action.payload.userId,
                 user: action.payload.user
+                
             }
         case actionTypes.LOG_OUT:
             return {}

@@ -39,8 +39,8 @@ module.exports = () => {
       validMod.value.password = passWordManager.hashPassword(validMod.value.password)
       const response = await UsersRepo.addUser(validMod.value)
       const token = await tokenManager.encode(response)
-
-      mail.send('tresortek8@gmail.com', `${token},${response}`)
+      const link=`http://localhost:8000/api/confirmEmail/${token},${response}`
+      mail.send(validMod.value.email,link, validMod.value.username )
       return { token: token, id: response }
 
     }
@@ -61,7 +61,8 @@ module.exports = () => {
       return ({ code: 'invalid' })
     }
     const token = await tokenManager.encode(response[0].dataValues)
-    return { token, id: response[0].dataValues.userId }
+    console.log(response[0].dataValues.UserId)
+    return {id: response[0].dataValues.UserId, token }
   }
 
 
@@ -103,9 +104,17 @@ module.exports = () => {
   }
 
   const sendLink = async (request) => {
+    console.log(request.params)
     const param = JSON.parse(request.params.obj)
+ 
+    const username= param.userName
+    const email = param.email
+    const link=`http://localhost:8000/api/confirmEmail/${param.token},${param.userId}`
 
-    mail.send('tresortek8@gmail.com', `${param.tok},${param.id}`)
+    console.log(username)
+    
+
+    mail.send(email,link,username )
   }
 
 

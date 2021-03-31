@@ -82,7 +82,7 @@ module.exports = () => {
       return
     }
     if (response == -1) {
-      res.status(403).send(JSON.stringify({ message: 'please confirm your email' }))
+      res.status(203).send(JSON.stringify({ message: 'please confirm your email' }))
       return
     }
 
@@ -146,15 +146,15 @@ module.exports = () => {
   const resendLink = async (req, res) => {
 
     const request = req
-
+console.log('bif')
     const response = await userServices.sendLink(request)
-
+console.log(response)
     if (response == 0) {
       res.status(404).send(JSON.stringify({ message: 'an error occured' }))
       return
     }
 
-
+console.log('test')
     res.status(200).send(JSON.stringify({message: 'link send'}))
 
   }
