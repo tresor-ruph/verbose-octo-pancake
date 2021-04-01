@@ -77,7 +77,7 @@ module.exports = () => {
         return ({ code: -2 })
       }
     }
-    const token = await tokenManager.encode(response[0].dataValues)
+    const token = await tokenManager.encode(response[0].dataValues.UserId)
     return { id: response[0].dataValues.UserId, token }
   }
 
@@ -87,21 +87,30 @@ module.exports = () => {
     if (token.error) {
       return "access_D"
     }
-
     let values = Object.values(request.body)
     const validMod = userModel(...values)
-
     if (validMod.error) {
       return { code: -1, message: validMod.error[0].message }
     }
-
     const getOneUser = await UsersRepo.getOneUser(values[2])
-
     if (getOneUser.length === 0) {
       return 0
     }
     const response = await UsersRepo.updateUser(validMod.value)
     return response
+  }
+
+  const updatePassword= async (request)=>{
+    
+    console.log(request.body.userId)
+    const getOneUser = await UsersRepo.getOneUser(request.body.userId)
+    if (getOneUser.length === 0) {
+      return 0
+    }
+    request.body.password = passWordManager.hashPassword(request.body.password)
+    const response = await UsersRepo.updatePassword(request)
+    return response
+
 
   }
 
@@ -109,7 +118,6 @@ module.exports = () => {
 
     let value = (request.params.id)
     arr = value.split(',')
-    console.log(arr)
     let valid = tokenManager.simpleCheck(arr[0])
     if (valid.error) {
       return -1
@@ -133,6 +141,17 @@ module.exports = () => {
     mail.send(email, link, username)
   }
 
+  const reset= async (request)=>{
+    response = await UsersRepo.getOneUser(request.params.email)
+    console.log(response)
+    const token = await tokenManager.encode(response[0].dataValues.UserId)
+
+    let link =`http://localhost:3000/resetpassword/${token},${response[0].dataValues.UserId}`
+
+     mail.send(request.params.email, link, "",true)
+
+  }
+
 
   const deleteUser = async (req) => {
     if (tokenManager.decode(req).error) {
@@ -149,5 +168,5 @@ module.exports = () => {
     const response = await UsersRepo.removeUser(param)
     return response
   }
-  return ({ fetchAll, fetchOne, create, login, update, deleteUser, confirm, sendLink })
+  return ({ fetchAll, fetchOne, create, login, update, deleteUser, confirm,updatePassword, sendLink,reset })
 }

@@ -98,15 +98,12 @@ module.exports = () => {
 
   const updateUser = async (req, res) => {
 
-    const request = req
-
-    const response = await userServices.update(request)
+    const response = await userServices.update(req)
 
     if (response == 0) {
       res.status(404).send(JSON.stringify({ message: 'User not found' }))
       return
     }
-
     else if (response == "access_D") {
       res.status(403).send('Access Denied')
       return
@@ -115,12 +112,24 @@ module.exports = () => {
     if (response.code) {
       res.status(400).send(JSON.stringify({ message: response.message }))
       return
-
-    }
-
+  }
     res.status(200).send(JSON.stringify({ message: 'user updated' }))
 
   }
+
+  
+  const updatePassword = async (req, res) => {
+
+    const response = await userServices.updatePassword(req)
+
+    if (response == 0) {
+      res.status(404).send(JSON.stringify({ message: 'User not found' }))
+      return
+    }
+    res.status(200).send(JSON.stringify({ message: 'password updated' }))
+
+  }
+
 
 
   const confirmEmail = async (req, res) => {
@@ -155,8 +164,18 @@ module.exports = () => {
     res.status(200).send(JSON.stringify({message: 'link send'}))
 
   }
+  const resetPassword= async(req, res)=> {
+    const request = req
+    const response = await userServices.reset(request)
+    if (response == 0) {
+      res.status(404).send(JSON.stringify({ message: 'an error occured' }))
+      return
+    }
 
-  return ({ listAllUsers, getUser, deleteUser, userLogin, createUser, updateUser, confirmEmail, resendLink })
+    res.status(200).send(JSON.stringify({message: 'email send'}))
+  }
+
+  return ({ listAllUsers, getUser, deleteUser, userLogin, createUser, updatePassword, updateUser, confirmEmail, resendLink,resetPassword })
 
 }
 

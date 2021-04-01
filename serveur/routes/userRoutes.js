@@ -10,5 +10,8 @@ module.exports = (app) => {
     app.post('/api/Signin', userController.createUser)
     app.get('/api/confirmEmail/:id', userController.confirmEmail)
     app.get('/api/resendLink/:obj',userController.resendLink )
+    app.get('/api/resetpassword/:email',userController.resetPassword)
+    app.put('/api/password', userController.updatePassword)
+
 
 }

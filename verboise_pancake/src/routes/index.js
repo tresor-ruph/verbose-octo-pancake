@@ -11,6 +11,7 @@ import AdminLayout from "layouts/Admin.js";
 import Login from "components/authentification/Login"
 import Signup from "components/authentification/Signup"
 import ConfirmMail from "components/Error/confirmEmail"
+import Reset from "components/Error/resetPassword"
 
 function Main(props) {
     let isLogged = JSON.parse(ls.get('isLogged'))
@@ -19,8 +20,10 @@ function Main(props) {
             <Switch>
                 <Route exact path="/Signup" render={(props) => !isLogged ? <Signup {...props} /> : <Redirect to='/home' />} />
                 <Route exact path="/Login" render={(props) => !isLogged ? <Login {...props} /> : <Redirect to='/home' />} />
+                <Route path="/resetpassword/:id" render={(props) => <Reset {...props} />} />
+
                 <Route path="/confEmail/:id" render={(props) => <ConfirmMail {...props} />} />
-                {isLogged ? <Route path="/home/" render={(props) => <AdminLayout {...props} />} /> : <Redirect to='/Login' />}
+                <Route path="/home/" render={(props) => isLogged ?( <AdminLayout {...props} />): <Redirect to='/Login' />} />
 
             </Switch>
         </BrowserRouter>

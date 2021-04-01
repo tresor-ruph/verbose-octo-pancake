@@ -15,7 +15,7 @@ module.exports = () => {
     !state ? (
       user = await User.findAll({
         where: {
-          [Op.or]: [{ userName: param }, { email: param }]
+          [Op.or]: [{ userName: param }, { email: param },{UserId: param}]
         }
       })
     ) : (user = await User.findAll({
@@ -67,6 +67,18 @@ module.exports = () => {
       })
     return user
   }
+  const updatePassword = async function (userObject) {
+    const user = await User.update({
+      password: userObject.body.password
+    },
+      {
+        where:
+        {
+          UserId: userObject.body.userId
+        }
+      })
+    return user
+  }
   const confirmUser = async function (val) {
     const user = await User.update({ Accountstatus: "confirm" },
       {
@@ -81,6 +93,6 @@ module.exports = () => {
 
 
 
-  return { getAllUsers, getOneUser, userExist, removeUser, addUser, updateUser, confirmUser }
+  return { getAllUsers, getOneUser, userExist, removeUser, addUser,updatePassword, updateUser, confirmUser }
 
 }

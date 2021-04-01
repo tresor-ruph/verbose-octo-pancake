@@ -7,7 +7,7 @@ dotenv.config()
 module.exports = {
 
 
-    send: (destEmail,token,username) => {
+    send: (destEmail,token,username, reset=false) => {
         let transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -19,8 +19,8 @@ module.exports = {
         let mailOptions = {
             from: process.env.EMAIL_USER,
             to: destEmail,
-            subject: 'email confirmation',
-             template: 'index',
+            subject: !reset? 'email confirmation' :'reset password',
+             template: !reset ? 'index' : "reset",
              context: {
                  username: username,
                  link: token

@@ -16,7 +16,15 @@ function Login(props) {
       firebase.auth.FacebookAuthProvider.PROVIDER_ID,
     ],
     callbacks: {
-      signInSuccessWithAuthResult: () => false,
+      signInSuccessWithAuthResult: ({user}) =>{
+        handleSubmit({
+          email: user.email,
+          password: user.uid,
+          username: user.displayName,
+          social: true,
+        });
+       
+      }
     },
   };
 
@@ -29,17 +37,8 @@ function Login(props) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-      // firebase.auth().onAuthStateChanged((user) => {
-      //   console.log(user)
-      //   if (user) {
-      //     handleSubmit({
-      //       email: user.email,
-      //       password: user.uid,
-      //       username: user.displayName,
-      //       social: true,
-      //     });
-      //   }
-      // });
+      firebase.auth().onAuthStateChanged((user) => {
+      });
     
 
   }, []);
@@ -80,7 +79,7 @@ function Login(props) {
           if (res.status === 203) {
             props.history.push(`/confEmail/${id}`);
           } else if (res.status === 200) {
-            props.history.push("/");
+            window.location.reload("/home/")
           }
         })
         .catch((err) => {
@@ -138,7 +137,10 @@ function Login(props) {
           }
         >
           Sign out!
-        </button>
+        </button>      
+      </div>
+      <div>
+        <button onClick={() =>props.history.push('/resetpassword/test') }>reset password</button>
       </div>
     </div>
   );

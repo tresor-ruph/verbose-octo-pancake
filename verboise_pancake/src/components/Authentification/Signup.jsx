@@ -4,6 +4,8 @@ import { useDispatch } from "react-redux";
 
 import axios from "axios";
 import "../../helper/axiosConfig";
+
+
 function Signup(props) {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -46,7 +48,8 @@ function Signup(props) {
             },
           },
         });
-        props.history.push("/confEmail");
+
+        props.history.push(`/confEmail/${res.data.id}`);
       })
       .catch((err) => {
         console.log(err.response.data.message);
