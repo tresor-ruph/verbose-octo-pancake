@@ -13,10 +13,6 @@ export const test = (sessId, user = {}) => {
 
 export const Logout = () => {
     return {
-        type: actionTypes.LOG_OUT,
-        payload: {
-            sessionId: undefined,
-            user: {}
-        }
+        type: actionTypes.LOG_OUT,      
     }
 }

@@ -23,7 +23,7 @@ function Main(props) {
                 <Route path="/resetpassword/:id" render={(props) => <Reset {...props} />} />
 
                 <Route path="/confEmail/:id" render={(props) => <ConfirmMail {...props} />} />
-                <Route path="/home/" render={(props) => isLogged ?( <AdminLayout {...props} />): <Redirect to='/Login' />} />
+                <Route path="/" render={(props) => isLogged ?( <AdminLayout {...props} />): <Redirect to='/Login' />} />
 
             </Switch>
         </BrowserRouter>

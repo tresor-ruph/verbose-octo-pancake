@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import firebase from "firebase";
@@ -31,9 +30,7 @@ function Login(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState(null);
-  const [loaded, setLoaded] = useState(false);
-  const [email, setEmail] = useState("");
-
+ 
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -60,8 +57,6 @@ function Login(props) {
       axios
         .get("/Login/" + JSON.stringify(data))
         .then((res) => {
-          console.log(res);
-          console.log(res.status)
           setErr(null);
           const { id, token } = res.data.token;
 
@@ -79,7 +74,7 @@ function Login(props) {
           if (res.status === 203) {
             props.history.push(`/confEmail/${id}`);
           } else if (res.status === 200) {
-            window.location.reload("/home/")
+            window.location.reload("/")
           }
         })
         .catch((err) => {

@@ -4,14 +4,12 @@ const { userServices } = require('../use_cases');
 module.exports = () => {
 
   const listAllUsers = async function (req, res) {
-
     const response = await userServices.fetchAll()
     res.status(200).send(JSON.stringify(response, null, 2))
 
   }
 
   const getUser = async (req, res) => {
-
     const request = req.params.username
     const response = await userServices.fetchOne(request)
 
@@ -26,11 +24,9 @@ module.exports = () => {
     }
 
     res.status(200).send(JSON.stringify(response, null, 2))
-
   }
 
   const deleteUser = async (req, res) => {
-
     const response = await userServices.deleteUser(req)
 
     if (response.code) {
@@ -47,9 +43,7 @@ module.exports = () => {
       res.status(403).send("Access denied")
       return
     }
-
     res.status(200).send(JSON.stringify({ message: "user deleted" }))
-
   }
 
 
@@ -63,10 +57,8 @@ module.exports = () => {
     }
 
     if (response.code) {
-
       res.status(400).send(JSON.stringify({ message: response.message }))
       return
-
     }
 
     res.status(200).send(JSON.stringify(response))
@@ -74,7 +66,6 @@ module.exports = () => {
   }
 
   const userLogin = async (req, res) => {
-
     const response = await userServices.login(req)
 
     if (response == 0) {
@@ -97,7 +88,6 @@ module.exports = () => {
 
 
   const updateUser = async (req, res) => {
-
     const response = await userServices.update(req)
 
     if (response == 0) {
@@ -121,7 +111,6 @@ module.exports = () => {
   const updatePassword = async (req, res) => {
 
     const response = await userServices.updatePassword(req)
-
     if (response == 0) {
       res.status(404).send(JSON.stringify({ message: 'User not found' }))
       return
@@ -133,10 +122,7 @@ module.exports = () => {
 
 
   const confirmEmail = async (req, res) => {
-
-    const request = req
-
-    const response = await userServices.confirm(request)
+    const response = await userServices.confirm(req)
 
     if (response == -1) {
       res.status(404).send(JSON.stringify({ message: 'Link expired' }))
