@@ -14,7 +14,7 @@ const INITIAL_STATE = {
 const SessionReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case actionTypes.LOG_IN:
-        
+                
              ls.set('token', JSON.stringify(action.payload.sessionId))
              ls.set('userId', JSON.stringify(action.payload.userId))
              ls.set('username', JSON.stringify(action.payload.user.username))

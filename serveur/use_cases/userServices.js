@@ -37,10 +37,11 @@ module.exports = () => {
     if (userExist.length === 0) {
 
       validMod.value.password = passWordManager.hashPassword(validMod.value.password)
+      validMod.value.Accountstatus = 'waiting'
       const response = await UsersRepo.addUser(validMod.value)
       const token = await tokenManager.encode(response)
-      const link=`http://localhost:8000/api/confirmEmail/${token},${response}`
-      mail.send(validMod.value.email,link, validMod.value.username )
+      const link = `http://localhost:8000/api/confirmEmail/${token},${response}`
+      mail.send(validMod.value.email, link, validMod.value.username)
       return { token: token, id: response }
 
     }
@@ -50,19 +51,33 @@ module.exports = () => {
 
   const login = async (request) => {
     let values = JSON.parse(request.params.user)
-    const response = await UsersRepo.getOneUser(values.em_usname)
-    if (response.length === 0) {
-      return 0
-    }
-    if (response[0].dataValues.Accountstatus == 'waiting') {
-      return -1
-    }
-    if (!passWordManager.comparePassword(values.password, response[0].dataValues.password)) {
-      return ({ code: 'invalid' })
+    let response;
+    if (values.social) {
+      response = await UsersRepo.getOneUser(values.email, true)
+      console.log(response)
+      if (response.length === 0) {
+        values.password = passWordManager.hashPassword(values.password)
+        values.Accountstatus = 'social'
+        const response = await UsersRepo.addUser(values)
+        const token = await tokenManager.encode(response)
+        return { token: token, id: response }
+
+      }
+    } else {
+
+      response = await UsersRepo.getOneUser(values.em_usname)
+      if (response.length === 0) {
+        return 0
+      }
+      if (response[0].dataValues.Accountstatus == 'waiting') {
+        return -1
+      }
+      if (!passWordManager.comparePassword(values.password, response[0].dataValues.password)) {
+        return ({ code: 'invalid' })
+      }
     }
     const token = await tokenManager.encode(response[0].dataValues)
-    console.log(response[0].dataValues.UserId)
-    return {id: response[0].dataValues.UserId, token }
+    return { id: response[0].dataValues.UserId, token }
   }
 
 
@@ -79,9 +94,9 @@ module.exports = () => {
       return { code: -1, message: validMod.error[0].message }
     }
 
-    const userExist = await UsersRepo.getOneUser(values[2])
+    const getOneUser = await UsersRepo.getOneUser(values[2])
 
-    if (userExist.length === 0) {
+    if (getOneUser.length === 0) {
       return 0
     }
     const response = await UsersRepo.updateUser(validMod.value)
@@ -106,15 +121,15 @@ module.exports = () => {
   const sendLink = async (request) => {
     console.log(request.params)
     const param = JSON.parse(request.params.obj)
- 
-    const username= param.userName
+
+    const username = param.userName
     const email = param.email
-    const link=`http://localhost:8000/api/confirmEmail/${param.token},${param.userId}`
+    const link = `http://localhost:8000/api/confirmEmail/${param.token},${param.userId}`
 
     console.log(username)
-    
 
-    mail.send(email,link,username )
+
+    mail.send(email, link, username)
   }
 
 

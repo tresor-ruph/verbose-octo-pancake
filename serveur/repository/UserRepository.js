@@ -9,13 +9,20 @@ module.exports = () => {
   }
 
 
-  const getOneUser = async function (param) {
-
-    const user = await User.findAll({
+  const getOneUser = async function (param, state = false) {
+    console.log(param)
+    let user;
+    !state ? (
+      user = await User.findAll({
+        where: {
+          [Op.or]: [{ userName: param }, { email: param }]
+        }
+      })
+    ) : (user = await User.findAll({
       where: {
-        [Op.or]: [{ userName: param }, { email: param }]
+        [Op.and]: [{ Accountstatus: 'social' }, { email: param }]
       }
-    })
+    }))
     return user
   }
 
@@ -43,7 +50,6 @@ module.exports = () => {
 
 
   const addUser = async function (userObject) {
-    userObject.Accountstatus = 'waiting'
     const user = await User.create(userObject)
     return user.dataValues.UserId
   }
