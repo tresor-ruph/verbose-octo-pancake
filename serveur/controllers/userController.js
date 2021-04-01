@@ -81,12 +81,12 @@ module.exports = () => {
       res.status(404).send(JSON.stringify({ message: 'User does not exist' }))
       return
     }
-    if (response == -1) {
-      res.status(203).send(JSON.stringify({ message: 'please confirm your email' }))
+    if (response.code == -1 ) {
+      res.status(203).send(JSON.stringify({ token:response }))
       return
     }
 
-    if (response.code) {
+    if (response.code == -2) {
       res.status(400).send(JSON.stringify({ message: 'invalid identifiers' }))
       return
     }
@@ -146,15 +146,12 @@ module.exports = () => {
   const resendLink = async (req, res) => {
 
     const request = req
-console.log('bif')
     const response = await userServices.sendLink(request)
-console.log(response)
     if (response == 0) {
       res.status(404).send(JSON.stringify({ message: 'an error occured' }))
       return
     }
 
-console.log('test')
     res.status(200).send(JSON.stringify({message: 'link send'}))
 
   }

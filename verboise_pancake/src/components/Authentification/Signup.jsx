@@ -42,7 +42,7 @@ function Signup(props) {
             user: {
               username,
               email,
-              isLogged: true,
+              isLogged: false,
             },
           },
         });

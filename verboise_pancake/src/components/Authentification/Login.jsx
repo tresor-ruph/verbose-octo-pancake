@@ -6,10 +6,9 @@ import axios from "axios";
 import firebase from "firebase";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import "helper/axiosConfig";
-import "helper/firebaseConfig"
+import "helper/firebaseConfig";
 
 function Login(props) {
- 
   let uiConfig = {
     signInFlow: "popup",
     signInOptions: [
@@ -24,21 +23,25 @@ function Login(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [err, setErr] = useState(null);
+  const [loaded, setLoaded] = useState(false);
   const [email, setEmail] = useState("");
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user !=user) {
-        handleSubmit({
-          email: user.email,
-          password: user.uid,
-          username: user.displayName,
-          social: true,
-        });
-      }
-    });
+      // firebase.auth().onAuthStateChanged((user) => {
+      //   console.log(user)
+      //   if (user) {
+      //     handleSubmit({
+      //       email: user.email,
+      //       password: user.uid,
+      //       username: user.displayName,
+      //       social: true,
+      //     });
+      //   }
+      // });
+    
+
   }, []);
   const handleUsername = (event) => {
     setUsername(event.target.value);
@@ -59,6 +62,7 @@ function Login(props) {
         .get("/Login/" + JSON.stringify(data))
         .then((res) => {
           console.log(res);
+          console.log(res.status)
           setErr(null);
           const { id, token } = res.data.token;
 
@@ -69,28 +73,24 @@ function Login(props) {
               userId: id,
               user: {
                 username: data.username ? data.username : username,
-                isLogged: true,
+                isLogged: res.status== 200 ? true : false,
               },
             },
           });
           if (res.status === 203) {
-            props.history.push("/confEmail");
+            props.history.push(`/confEmail/${id}`);
           } else if (res.status === 200) {
-            // props.history.push("/");
+            props.history.push("/");
           }
         })
         .catch((err) => {
-          // setErr(err.response.data.message);
-          console.log(err.response);
+          setErr(err.response.data.message);
         });
     }
   };
 
   return (
     <div>
-      <div>{process.env.REACT_APP_TEST}</div>
-      <div>qqsdqsdqs</div>
-
       <input
         type="text"
         placeholder="username / email"

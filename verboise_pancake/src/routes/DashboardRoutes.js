@@ -11,35 +11,35 @@ import Icons from "views/Icons.js";
 const dashboardRoutes = [
  
   {
-    path: "/dashboard",
+    path: "/home/dashboard",
     name: "Dashboard",
     icon: "nc-icon nc-chart-pie-35",
     component: Dashboard,
     layout: "",
   },
   {
-    path: "/user",
+    path: "/home/user",
     name: "User Profile",
     icon: "nc-icon nc-circle-09",
     component: UserProfile,
     layout: "",
   },
   {
-    path: "/table",
+    path: "/home/table",
     name: "Table List",
     icon: "nc-icon nc-notes",
     component: TableList,
     layout: "",
   },
   {
-    path: "/typography",
+    path: "/home/typography",
     name: "Typography",
     icon: "nc-icon nc-paper-2",
     component: Typography,
     layout: "",
   },
   {
-    path: "/icons",
+    path: "/home/icons",
     name: "Icons",
     icon: "nc-icon nc-atom",
     component: Icons,
