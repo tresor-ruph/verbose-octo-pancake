@@ -6,7 +6,6 @@ import { Button} from 'react-bootstrap'
 const MainHeader = (props) => {
   const route = useLocation();
   const history = useHistory()
-  console.log(route);
 
   const renderLoginHeader = () => {
     if (route.pathname === "/login") {

@@ -151,7 +151,7 @@ function Login(props) {
                     <a
                       href="#"
                       className="forgot-pass"
-                      onClick={() => props.history.push("/resetpassword/test")}
+                      onClick={() => props.history.push("/resetpassword/user")}
                     >
                       Forgot Password
                     </a>
