@@ -9,7 +9,7 @@ import loginImage from "resources/Images/login.jpg";
 import "helper/axiosConfig";
 import "helper/firebaseConfig";
 import "components/authentification/login.css";
-import { Button } from "react-bootstrap";
+import { Button, Alert } from "react-bootstrap";
 import MainHeader from "components/Navbars/MainHeader";
 
 function Login(props) {
@@ -33,7 +33,9 @@ function Login(props) {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [err, setErr] = useState(null);
+  const [notif, setNotif] = useState(false);
+  const [notifMess, setnotifMess] = useState("");
+  const [variant, setVariant] = useState("");
 
   const user = useRef(null);
   const passwd = useRef(null);
@@ -75,7 +77,6 @@ function Login(props) {
       axios
         .get("/Login/" + JSON.stringify(data))
         .then((res) => {
-          setErr(null);
           const { id, token } = res.data.token;
 
           dispatch({
@@ -96,7 +97,11 @@ function Login(props) {
           }
         })
         .catch((err) => {
-          setErr(err.response.data.message);
+          console.log("hahahahhahah")
+          setnotifMess(err.response.data.message);
+          setVariant("danger");
+          setNotif(true);
+
         });
     }
   };
@@ -104,6 +109,20 @@ function Login(props) {
   return (
     <div>
       <MainHeader />
+      {notif && (
+        <Alert variant={variant}>
+          <button
+            aria-hidden={true}
+            className="close"
+            data-dismiss="alert"
+            type="button"
+            onClick={() => setNotif(false)}
+          >
+            <i className="nc-icon nc-simple-remove"></i>
+          </button>
+          <span style={{ textAlign: "center" }}>{notifMess}</span>
+        </Alert>
+      )}
            <div className="d-lg-flex half ">
         <div className="bg order-2 order-md-1 login-i">
           <img src={loginImage} width="100%" className="login-i " />
