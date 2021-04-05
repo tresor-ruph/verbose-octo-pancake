@@ -4,9 +4,13 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import firebase from "firebase";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
+import loginImage from "resources/Images/login.jpg";
+
 import "helper/axiosConfig";
 import "helper/firebaseConfig";
 import "components/authentification/login.css";
+import { Button } from "react-bootstrap";
+import MainHeader from "components/Navbars/MainHeader";
 
 function Login(props) {
   let uiConfig = {
@@ -98,11 +102,12 @@ function Login(props) {
   };
 
   return (
-    <div >
-      <div className="d-lg-flex half">
-        <div
-          className="bg order-2 order-md-1 login-i"
-        ></div>
+    <div>
+      <MainHeader />
+           <div className="d-lg-flex half ">
+        <div className="bg order-2 order-md-1 login-i">
+          <img src={loginImage} width="100%" className="login-i " />
+        </div>
         <div className="contents order-1 order-md-2 ">
           <div className="container">
             <div className="row align-items-center justify-content-center">
@@ -111,7 +116,9 @@ function Login(props) {
                   <h3>Log In</h3>
                 </div>
                 <div className="form-group first frm-log" ref={user}>
-                  <label className='label' htmlFor="username">Username or Email</label>
+                  <label className="label" htmlFor="username">
+                    Username or Email
+                  </label>
                   <input
                     type="text"
                     className="form-control"
@@ -124,7 +131,9 @@ function Login(props) {
                 </div>
                 <br />
                 <div className="form-group frm-log last mb-3" ref={passwd}>
-                  <label className='label' htmlFor="password">Password</label>
+                  <label className="label" htmlFor="password">
+                    Password
+                  </label>
                   <input
                     type="password"
                     className="form-control"
@@ -137,11 +146,7 @@ function Login(props) {
                 </div>
 
                 <div className="d-flex mb-5 align-items-center">
-                  <label className="control control--checkbox mb-0 label">
-                    <span className="caption">Remember me</span>
-                    <input type="checkbox" checked="checked" />
-                    <div className="control__indicator"></div>
-                  </label>
+                 
                   <span className="ml-auto">
                     <a
                       href="#"
@@ -152,8 +157,12 @@ function Login(props) {
                     </a>
                   </span>
                 </div>
-                <button
-                  className="btn btn-block btn-primary"
+
+                <Button
+                  block
+                  className="btn-fill pull-right"
+                  type="submit"
+                  variant="info"
                   onClick={() =>
                     handleSubmit({
                       em_usname: username,
@@ -161,8 +170,8 @@ function Login(props) {
                     })
                   }
                 >
-                  submit
-                </button>
+                  Login
+                </Button>
 
                 <span className="d-block text-center my-4 text-muted">
                   &mdash; or &mdash;

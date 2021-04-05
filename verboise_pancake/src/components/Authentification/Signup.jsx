@@ -1,10 +1,14 @@
 import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { Button } from "react-bootstrap";
 
 import axios from "axios";
 import "../../helper/axiosConfig";
 import "components/authentification/signup.css";
+import loginImage from "resources/Images/login.jpg";
+import MainHeader from "components/Navbars/MainHeader";
+
 function Signup(props) {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -198,8 +202,11 @@ function Signup(props) {
 
   return (
     <div>
+      <MainHeader />
       <div className="d-lg-flex half ">
-        <div className="bg order-2 order-md-1 login-i"></div>
+        <div className="bg order-2 order-md-1 login-i left">
+          <img src={loginImage} width="100%" className="login-i " />
+        </div>
         <div className="contents order-1 order-md-2 ">
           <div className="container">
             <div className="row align-items-center justify-content-center">
@@ -287,15 +294,50 @@ function Signup(props) {
                   />
                 </div>
                 {disabled2 && (
-                  <span className="pwd-inv-mess">password not identical</span>
+                  <span
+                    className="pwd-inv-mess"
+                    style={{ marginBottom: "20px" }}
+                  >
+                    password not identical
+                  </span>
                 )}
                 <br />
-                <button
-                  className="btn btn-block btn-primary"
-                  onClick={() => handleSubmit()}
-                >
-                  submit
-                </button>
+                <div class="custom-control custom-checkbox">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input test"
+                    id="defaultUnchecked"
+                  />
+                  <label class="custom-control-label" for="defaultUnchecked">
+                    <span className="caption">
+                      I accept the{" "}
+                      <a
+                        href="#"
+                        style={{ color: "#42D0ED", textDecoration: "none" }}
+                      >
+                        terms and condition
+                      </a>{" "}
+                      and{" "}
+                      <a
+                        href="#"
+                        style={{ color: "#42D0ED", textDecoration: "none" }}
+                      >
+                        private policy
+                      </a>
+                    </span>
+                  </label>
+                </div>
+                <div className="signin-btn">
+                  <Button
+                    block
+                    className="btn-fill pull-right"
+                    type="submit"
+                    variant="info"
+                    onClick={() => handleSubmit()}
+                  >
+                    Create Account
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
