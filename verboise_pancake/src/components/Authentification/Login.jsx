@@ -97,7 +97,6 @@ function Login(props) {
           }
         })
         .catch((err) => {
-          console.log("hahahahhahah")
           setnotifMess(err.response.data.message);
           setVariant("danger");
           setNotif(true);

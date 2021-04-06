@@ -1,7 +1,6 @@
 import React, { useState, useRef } from "react";
-import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { Button } from "react-bootstrap";
+import { Button, Alert } from "react-bootstrap";
 
 import axios from "axios";
 import "../../helper/axiosConfig";
@@ -21,6 +20,11 @@ function Signup(props) {
   const [emailErr, setEmailErr] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalDisplay, setModalDisplay] = useState("");
+  const [check, setCheck] = useState("off");
+  const [checkBoxErr, setCheckBoxErr] = useState(false);
+  const [notif, setNotif] = useState(false);
+  const [notifMess, setnotifMess] = useState("");
+  const [variant, setVariant] = useState("");
 
   const emailRef = useRef(null);
   const emailLabel = useRef(null);
@@ -73,6 +77,14 @@ function Signup(props) {
 
   const handlePassword2 = (event) => {
     setPassword2(event.target.value);
+  };
+  const handleCheck = () => {
+    if (check === "on") {
+      setCheck("off");
+    } else {
+      setCheck("on");
+      setCheckBoxErr(false);
+    }
   };
 
   const handleEmailStyle = () => {
@@ -172,6 +184,33 @@ function Signup(props) {
   };
 
   const handleSubmit = () => {
+    let err = false;
+    if (check === "off") {
+      setCheckBoxErr(true);
+      err = true;
+    } 
+    if (!verifPassword()) {
+      setStyle(pwd, passwd, labelPasswd);
+      setDisabled(true);
+      err = true;
+    }
+    if(password.length > 1 && password2.length === 0){
+      setStyle(pwd2, passwd2, labelPasswd2);
+      setDisabled2(true);
+    }
+    if (!verifEmail()) {
+      setStyle(emailInp, emailRef, emailLabel);
+      setEmailErr(true);
+      err = true;
+    }
+    if (!verifUsername()) {
+      setStyle(userInp, userRef, userLabel);
+      setUserErr(true);
+      err = true;
+    }
+    if (err === true) return;
+
+
     const data = {
       email,
       password,
@@ -198,8 +237,9 @@ function Signup(props) {
         props.history.push(`/confEmail/${res.data.id}`);
       })
       .catch((err) => {
-        console.log(err.response.data.message);
-        setErr(err.response.data.message);
+        setnotifMess(err.response.data.message);
+        setVariant("danger");
+        setNotif(true);
       });
   };
 
@@ -211,9 +251,10 @@ function Signup(props) {
     setModalDisplay("privacy");
     setShowModal(true);
   };
+
   return (
     <div>
-      <MainHeader  />
+      <MainHeader />
       {showModal && (
         <TermsAndCondition display={modalDisplay}>
           <Button
@@ -221,11 +262,25 @@ function Signup(props) {
             className="btn-fill pull-right"
             type="submit"
             variant="info"
-            onClick={()=>setShowModal(false)}
+            onClick={() => setShowModal(false)}
           >
             close
           </Button>
         </TermsAndCondition>
+      )}
+        {notif && (
+        <Alert variant={variant}>
+          <button
+            aria-hidden={true}
+            className="close"
+            data-dismiss="alert"
+            type="button"
+            onClick={() => setNotif(false)}
+          >
+            <i className="nc-icon nc-simple-remove"></i>
+          </button>
+          <span style={{ textAlign: "center" }}>{notifMess}</span>
+        </Alert>
       )}
       <div className="d-lg-flex half ">
         <div className="bg order-2 order-md-1 login-i left">
@@ -329,8 +384,10 @@ function Signup(props) {
                 <div className="custom-control custom-checkbox">
                   <input
                     type="checkbox"
-                    className="custom-control-input test"
+                    className="custom-control-input"
                     id="defaultUnchecked"
+                    onChange={(event) => handleCheck(event)}
+                    ckecked={check}
                   />
                   <label
                     className="custom-control-label"
@@ -356,6 +413,14 @@ function Signup(props) {
                     </span>
                   </label>
                 </div>
+                {checkBoxErr && (
+                  <span
+                    className="pwd-inv-mess"
+                    style={{ marginBottom: "20px" }}
+                  >
+                    You must accept our conditions
+                  </span>
+                )}
                 <div className="signin-btn">
                   <Button
                     block
