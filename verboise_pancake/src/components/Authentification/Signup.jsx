@@ -8,6 +8,7 @@ import "../../helper/axiosConfig";
 import "components/authentification/signup.css";
 import loginImage from "resources/Images/login.jpg";
 import MainHeader from "components/Navbars/MainHeader";
+import TermsAndCondition from "components/modal/TermsCondition";
 
 function Signup(props) {
   const [email, setEmail] = useState("");
@@ -18,6 +19,8 @@ function Signup(props) {
   const [disabled2, setDisabled2] = useState(false);
   const [userErr, setUserErr] = useState(false);
   const [emailErr, setEmailErr] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [modalDisplay, setModalDisplay] = useState("");
 
   const emailRef = useRef(null);
   const emailLabel = useRef(null);
@@ -200,9 +203,30 @@ function Signup(props) {
       });
   };
 
+  const handleTerms = () => {
+    setModalDisplay("terms");
+    setShowModal(true);
+  };
+  const handlePrivacy = () => {
+    setModalDisplay("privacy");
+    setShowModal(true);
+  };
   return (
     <div>
-      <MainHeader />
+      <MainHeader  />
+      {showModal && (
+        <TermsAndCondition display={modalDisplay}>
+          <Button
+            block
+            className="btn-fill pull-right"
+            type="submit"
+            variant="info"
+            onClick={()=>setShowModal(false)}
+          >
+            close
+          </Button>
+        </TermsAndCondition>
+      )}
       <div className="d-lg-flex half ">
         <div className="bg order-2 order-md-1 login-i left">
           <img src={loginImage} width="100%" className="login-i " />
@@ -302,18 +326,22 @@ function Signup(props) {
                   </span>
                 )}
                 <br />
-                <div class="custom-control custom-checkbox">
+                <div className="custom-control custom-checkbox">
                   <input
                     type="checkbox"
-                    class="custom-control-input test"
+                    className="custom-control-input test"
                     id="defaultUnchecked"
                   />
-                  <label class="custom-control-label" for="defaultUnchecked">
+                  <label
+                    className="custom-control-label"
+                    htmlFor="defaultUnchecked"
+                  >
                     <span className="caption">
                       I accept the{" "}
                       <a
                         href="#"
                         style={{ color: "#42D0ED", textDecoration: "none" }}
+                        onClick={() => handleTerms()}
                       >
                         terms and condition
                       </a>{" "}
@@ -321,6 +349,7 @@ function Signup(props) {
                       <a
                         href="#"
                         style={{ color: "#42D0ED", textDecoration: "none" }}
+                        onClick={() => handlePrivacy()}
                       >
                         private policy
                       </a>
