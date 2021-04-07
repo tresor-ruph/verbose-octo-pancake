@@ -1,13 +1,12 @@
 import React, { useState, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { Button, Alert } from "react-bootstrap";
-
 import axios from "axios";
-import "../../helper/axiosConfig";
-import "components/authentification/signup.css";
 import loginImage from "resources/Images/login.jpg";
-import MainHeader from "components/Navbars/MainHeader";
-import TermsAndCondition from "components/modal/TermsCondition";
+import RegisterUI from 'components/authentification/UI/RegisterUI'
+import "../../helper/axiosConfig";
+import {EmailVerification , PasswordVerification, UsernameVerification} from "helper/detailsVerification" 
+import { setStyle, clearStyle } from "helper/dynamicCss"
+
 
 function Signup(props) {
   const [email, setEmail] = useState("");
@@ -25,11 +24,10 @@ function Signup(props) {
   const [notif, setNotif] = useState(false);
   const [notifMess, setnotifMess] = useState("");
   const [variant, setVariant] = useState("");
-
+  const [err, setErr] = useState(null);
   const emailRef = useRef(null);
   const emailLabel = useRef(null);
   const emailInp = useRef(null);
-
   const userRef = useRef(null);
   const userLabel = useRef(null);
   const userInp = useRef(null);
@@ -39,30 +37,9 @@ function Signup(props) {
   const labelPasswd = useRef(null);
   const pwd2 = useRef(null);
   const labelPasswd2 = useRef(null);
-
-  const [err, setErr] = useState(null);
   const dispatch = useDispatch();
 
-  const setStyle = (x, y, z) => {
-    x.current.classList.add("is-invalid");
-    x.current.style.color = "red";
-    y.current.classList.add("pwd-invalid");
-    y.current.classList.contains("frm-log") &&
-      y.current.classList.remove("frm-log");
-    z.current.style.color = "red";
-  };
-
-  const clearStyle = (x, y, z) => {
-    x.current.classList.contains("is-invalid") &&
-      x.current.classList.remove("is-invalid");
-    x.current.classList.contains("pwd-invalid") &&
-      x.current.classList.remove("pwd-invalid");
-    !x.current.classList.contains("frm-log") &&
-      y.current.classList.add("frm-log");
-    x.current.style.color = "";
-    z.current.style.color = "#b3b3b3";
-  };
-
+  
   const handleEmail = (event) => {
     setEmail(event.target.value);
   };
@@ -78,7 +55,7 @@ function Signup(props) {
   const handlePassword2 = (event) => {
     setPassword2(event.target.value);
   };
-  const handleCheck = () => {
+  const handleCheckBox = () => {
     if (check === "on") {
       setCheck("off");
     } else {
@@ -87,16 +64,16 @@ function Signup(props) {
     }
   };
 
-  const handleEmailStyle = () => {
+  const handleEmailFocus = () => {
     emailRef.current.classList.add("field--not-empty");
     clearStyle(emailInp, emailRef, emailLabel);
     setEmailErr(false);
   };
 
-  const handleRemoveEmailStyle = () => {
+  const handleEmailBlur = () => {
     if (email.length === 0)
       emailRef.current.classList.remove("field--not-empty");
-    if (!verifEmail()) {
+    if (!EmailVerification(email)) {
       setStyle(emailInp, emailRef, emailLabel);
       setEmailErr(true);
     } else {
@@ -105,34 +82,34 @@ function Signup(props) {
     }
   };
 
-  const handleUserStyle = () => {
+  const handleUserFocus = () => {
     userRef.current.classList.add("field--not-empty");
     clearStyle(userInp, userRef, userLabel);
     setUserErr(false);
   };
 
-  const handleRemoveUserStyle = () => {
+  const handleUserBlur = () => {
     if (username.length === 0)
       userRef.current.classList.remove("field--not-empty");
 
-    if (!verifUsername()) {
+    if (!UsernameVerification(username)) {
       setStyle(userInp, userRef, userLabel);
       setUserErr(true);
     }
   };
 
-  const handlePasswordStyle = () => {
+  const handlePasswordFocus= () => {
     passwd.current.classList.add("field--not-empty");
     clearStyle(pwd, passwd, labelPasswd);
     setDisabled(false);
   };
 
-  const handleRemovePasswdStyle = () => {
+  const handlePasswordBlur = () => {
     if (password.length === 0) {
       passwd.current.classList.remove("field--not-empty");
     }
 
-    if (!verifPassword()) {
+    if (!PasswordVerification(password)) {
       setStyle(pwd, passwd, labelPasswd);
       setDisabled(true);
     } else {
@@ -141,13 +118,13 @@ function Signup(props) {
     }
   };
 
-  const handlePassword2Style = () => {
+  const handlePassword2Focus = () => {
     passwd2.current.classList.add("field--not-empty");
     clearStyle(pwd2, passwd2, labelPasswd2);
     setDisabled2(false);
   };
 
-  const handleRemovePasswd2Style = () => {
+  const handlePassword2Blur = () => {
     if (password2.length === 0)
       passwd2.current.classList.remove("field--not-empty");
 
@@ -156,61 +133,34 @@ function Signup(props) {
       setDisabled2(true);
     }
   };
-
-  const verifEmail = () => {
-    let re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|gov|mil|biz|info|mobi|name|aero|jobs|museum)\b/;
-
-    return re.test(email);
-  };
-  const verifUsername = () => {
-    let bol = false;
-    if (username.length > 3) {
-      bol = true;
-    }
-    return bol;
-  };
-
-  const verifPassword = () => {
-    let bol = false;
-    if (
-      password.length > 6 &&
-      /[0-9]/.test(password) &&
-      /[A-Z]/.test(password) &&
-      /[a-z]/.test(passwd)
-    ) {
-      bol = true;
-    }
-    return bol;
-  };
-
+  
   const handleSubmit = () => {
     let err = false;
     if (check === "off") {
       setCheckBoxErr(true);
       err = true;
     } 
-    if (!verifPassword()) {
+    if (!PasswordVerification(password)) {
       setStyle(pwd, passwd, labelPasswd);
       setDisabled(true);
       err = true;
     }
-    if(password.length > 1 && password2.length === 0){
+    if(password.length > 1  && password != password2){
       setStyle(pwd2, passwd2, labelPasswd2);
       setDisabled2(true);
+      err = true;
     }
-    if (!verifEmail()) {
+    if (!EmailVerification(email)) {
       setStyle(emailInp, emailRef, emailLabel);
       setEmailErr(true);
       err = true;
     }
-    if (!verifUsername()) {
+    if (!UsernameVerification(username)) {
       setStyle(userInp, userRef, userLabel);
       setUserErr(true);
       err = true;
     }
     if (err === true) return;
-
-
     const data = {
       email,
       password,
@@ -253,191 +203,57 @@ function Signup(props) {
   };
 
   return (
-    <div>
-      <MainHeader />
-      {showModal && (
-        <TermsAndCondition display={modalDisplay}>
-          <Button
-            block
-            className="btn-fill pull-right"
-            type="submit"
-            variant="info"
-            onClick={() => setShowModal(false)}
-          >
-            close
-          </Button>
-        </TermsAndCondition>
-      )}
-        {notif && (
-        <Alert variant={variant}>
-          <button
-            aria-hidden={true}
-            className="close"
-            data-dismiss="alert"
-            type="button"
-            onClick={() => setNotif(false)}
-          >
-            <i className="nc-icon nc-simple-remove"></i>
-          </button>
-          <span style={{ textAlign: "center" }}>{notifMess}</span>
-        </Alert>
-      )}
-      <div className="d-lg-flex half ">
-        <div className="bg order-2 order-md-1 login-i left">
-          <img src={loginImage} width="100%" className="login-i " />
-        </div>
-        <div className="contents order-1 order-md-2 ">
-          <div className="container">
-            <div className="row align-items-center justify-content-center">
-              <div className="col-md-7">
-                <div className="mb-4">
-                  <h3>Sign In</h3>
-                </div>
-                <div className="form-group first frm-log" ref={emailRef}>
-                  <label className="label" ref={emailLabel} htmlFor="username">
-                    Email
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="email"
-                    value={email}
-                    ref={emailInp}
-                    onFocus={handleEmailStyle}
-                    onBlur={handleRemoveEmailStyle}
-                    onChange={(event) => handleEmail(event)}
-                  />
-                </div>
-                {emailErr && (
-                  <span className="pwd-inv-mess">email not valid</span>
-                )}
+    <RegisterUI 
 
-                <br />
-                <div className="form-group first frm-log" ref={userRef}>
-                  <label className="label" ref={userLabel} htmlFor="username">
-                    Username
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="username"
-                    value={username}
-                    ref={userInp}
-                    onFocus={handleUserStyle}
-                    onBlur={handleRemoveUserStyle}
-                    onChange={(event) => handleUsername(event)}
-                  />
-                </div>
-                {userErr && (
-                  <span className="pwd-inv-mess">username not valid</span>
-                )}
+    showModal={showModal}
+    setShowModal ={setShowModal}
+    modalDisplay ={modalDisplay}
+    notif={notif}
+    setNotif={setNotif}
+    notifMess={notifMess}
+    loginImage={loginImage}
+    emailRef={emailRef}
+    emailLabel={emailLabel}
+    email={email}
+    emailInp={emailInp}
+    handleEmailFocus={handleEmailFocus}
+    handleEmailBlur={handleEmailBlur}
+    handleEmail={handleEmail}
+    emailErr={emailErr}
+    userRef={userRef}
+    userLabel={userLabel}
+    username={username}
+    userInp={userInp}
+    handleUserFocus={handleUserFocus}
+    handleUserBlur={handleUserBlur}
+    handleUsername={handleUsername}
+    passwd={passwd}
+    labelPasswd={labelPasswd}
+    pwd={pwd}
+    password={password}
+    handlePasswordFocus={handlePasswordFocus}
+    handlePasswordBlur={handlePasswordBlur}
+    handlePassword={handlePassword}
+    passwd2={passwd2}
+    labelPasswd2={labelPasswd2}
+    password2={password2}
+    pwd2={pwd2}
+    handlePassword2Focus={handlePassword2Focus}
+    handlePassword2Blur={handlePassword2Blur}
+    handlePassword2={handlePassword2}
+    disabled2={disabled2}
+    handleCheckBox={handleCheckBox}
+    check={check}
+    handleTerms={handleTerms}
+    handlePrivacy={handlePrivacy}
+    handleSubmit={handleSubmit}
+    variant={variant}
+    userErr={userErr}
+    disabled={disabled}
+    checkBoxErr={checkBoxErr}
 
-                <br />
-                <div className="form-group frm-log" ref={passwd}>
-                  <label htmlFor="password" ref={labelPasswd} className="label">
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="password"
-                    ref={pwd}
-                    value={password}
-                    onFocus={handlePasswordStyle}
-                    onBlur={handleRemovePasswdStyle}
-                    onChange={(event) => handlePassword(event)}
-                  />
-                </div>
-                {disabled && (
-                  <span className="pwd-inv-mess">password not valid</span>
-                )}
-                <br />
-                <div className="form-group frm-log" ref={passwd2}>
-                  <label
-                    className="label"
-                    ref={labelPasswd2}
-                    htmlFor="password2"
-                  >
-                    Confirm Password
-                  </label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="password2"
-                    value={password2}
-                    ref={pwd2}
-                    onFocus={handlePassword2Style}
-                    onBlur={handleRemovePasswd2Style}
-                    onChange={(event) => handlePassword2(event)}
-                    disabled={disabled}
-                  />
-                </div>
-                {disabled2 && (
-                  <span
-                    className="pwd-inv-mess"
-                    style={{ marginBottom: "20px" }}
-                  >
-                    password not identical
-                  </span>
-                )}
-                <br />
-                <div className="custom-control custom-checkbox">
-                  <input
-                    type="checkbox"
-                    className="custom-control-input"
-                    id="defaultUnchecked"
-                    onChange={(event) => handleCheck(event)}
-                    ckecked={check}
-                  />
-                  <label
-                    className="custom-control-label"
-                    htmlFor="defaultUnchecked"
-                  >
-                    <span className="caption">
-                      I accept the{" "}
-                      <a
-                        href="#"
-                        style={{ color: "#42D0ED", textDecoration: "none" }}
-                        onClick={() => handleTerms()}
-                      >
-                        terms and condition
-                      </a>{" "}
-                      and{" "}
-                      <a
-                        href="#"
-                        style={{ color: "#42D0ED", textDecoration: "none" }}
-                        onClick={() => handlePrivacy()}
-                      >
-                        private policy
-                      </a>
-                    </span>
-                  </label>
-                </div>
-                {checkBoxErr && (
-                  <span
-                    className="pwd-inv-mess"
-                    style={{ marginBottom: "20px" }}
-                  >
-                    You must accept our conditions
-                  </span>
-                )}
-                <div className="signin-btn">
-                  <Button
-                    block
-                    className="btn-fill pull-right"
-                    type="submit"
-                    variant="info"
-                    onClick={() => handleSubmit()}
-                  >
-                    Create Account
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    />
+
   );
 }
 
