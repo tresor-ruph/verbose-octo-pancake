@@ -11,6 +11,7 @@ import Login from "components/authentification/Login"
 import Signup from "components/authentification/Signup"
 import ConfirmMail from "components/Error/confirmEmail"
 import Reset from "components/Error/resetPassword"
+import Notfound from "components/Error/Notfound"
 import {useSelector} from 'react-redux'
 
 function Main(props) {
@@ -20,9 +21,10 @@ function Main(props) {
             <Switch>
                 <Route exact path="/signup" render={(props) => !isLogged ? <Signup {...props} /> : <Redirect to='/home' />} />
                 <Route exact path="/login" render={(props) => !isLogged ? <Login {...props} /> : <Redirect to='/home' />} />
-                <Route path="/resetpassword/:id" render={(props) => !isLogged ? <Reset {...props} />:  <Redirect to='/home' /> } />
-                <Route path="/confEmail/:id" render={(props) =>!isLogged ? <ConfirmMail {...props} />:<Redirect to='/home' />} />
-                <Route path="/" render={(props) => isLogged ?( <AdminLayout {...props} />): <Redirect to='/login' />} />
+                <Route exact path="/resetpassword/:id" render={(props) => !isLogged ? <Reset {...props} />:  <Redirect to='/home' /> } />
+                <Route exact path="/confEmail/:id" render={(props) =>!isLogged ? <ConfirmMail {...props} />:<Redirect to='/home' />} />
+                <Route exact path="/" render={(props) => isLogged ?( <AdminLayout {...props} />): <Redirect to='/login' />} />
+                <Route component={Notfound} />
 
             </Switch>
         </BrowserRouter>
