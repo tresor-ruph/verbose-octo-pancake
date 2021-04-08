@@ -1,11 +1,27 @@
 import React from "react";
 import MainHeader from "components/Navbars/MainHeader";
+import { Button, Alert } from "react-bootstrap";
+
 
 const ConfirmEmailUI = (props) => {
-  const { fromLoging, email, handleSendLink } = props;
+  const { fromLoging, email, handleSendLink,notif,variant,setNotif,notifMess } = props;
   return (
     <div>
       <MainHeader />
+      {notif && (
+        <Alert variant={variant}>
+          <button
+            aria-hidden={true}
+            className="close"
+            data-dismiss="alert"
+            type="button"
+            onClick={() => setNotif(false)}
+          >
+            <i className="nc-icon nc-simple-remove"></i>
+          </button>
+          <span style={{ textAlign: "center" }}>{notifMess}</span>
+        </Alert>
+      )}
       <div className="container bootstrap snippet">
         <div className="main-div">
           <div className="center-div">

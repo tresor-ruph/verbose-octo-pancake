@@ -3,6 +3,9 @@ const { UsersRepo } = require('../repository')
 const tokenManager = require('../security/AccessTokenManager')
 const passWordManager = require('../security/passwordManager')
 const mail = require(('../helper/nodemailer/nodemailer'))
+const dotenv = require('dotenv');
+dotenv.config();
+
 
 module.exports = () => {
 
@@ -146,7 +149,10 @@ module.exports = () => {
     console.log(response)
     const token = await tokenManager.encode(response[0].dataValues.UserId)
 
-    let link =`http://localhost:3000/resetpassword/${token},${response[0].dataValues.UserId}`
+    // let link =`http://localhost:3000/resetpassword/${token},${response[0].dataValues.UserId}`
+    
+    let link =`http://localhost:${process.env.PORT}/resetpassword/${token},${response[0].dataValues.UserId}`
+
 
      mail.send(request.params.email, link, "",true)
 

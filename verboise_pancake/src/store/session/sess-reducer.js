@@ -24,7 +24,8 @@ const SessionReducer = (state = INITIAL_STATE, action) => {
             }
 
         case actionTypes.LOG_OUT:    
-            ls.remove('token')          
+            ls.remove('token')    
+            console.log('log out')      
             return {
                 ...state,
                 sessionId: "",

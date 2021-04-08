@@ -39,7 +39,6 @@ export default function Reset(props) {
       axios
         .get(`/resetpassword/${email}`)
         .then((res) => {
-          console.log(res);
 
           if (res.status == 200) {
             setnotifMess(` An Email has been sent to ${email}. Follow the instructions to reset
@@ -71,13 +70,11 @@ export default function Reset(props) {
       axios
         .put("/password", data)
         .then((res) => {
-          console.log(res);
           setnotifMess(` password updated`);
           setVariant("success");
           setNotif(true);
 
           setTimeout(function () {
-            console.log('test')
             history.push("/login");
           }, 1000);
         })

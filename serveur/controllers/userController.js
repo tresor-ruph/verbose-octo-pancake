@@ -1,5 +1,7 @@
 
 const { userServices } = require('../use_cases');
+const dotenv = require('dotenv');
+dotenv.config()
 
 module.exports = () => {
 
@@ -134,7 +136,7 @@ module.exports = () => {
 
     }
 
-    res.status(200).redirect('http://localhost:3000/Login')
+    res.status(200).redirect(`http://localhost:${process.env.PORT}/login`)
 
   }
 

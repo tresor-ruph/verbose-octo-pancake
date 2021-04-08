@@ -19,10 +19,10 @@ function Main(props) {
     return (
         <BrowserRouter>
             <Switch>
-                <Route exact path="/signup" render={(props) => !isLogged ? <Signup {...props} /> : <Redirect to='/home' />} />
-                <Route exact path="/login" render={(props) => !isLogged ? <Login {...props} /> : <Redirect to='/home' />} />
-                <Route exact path="/resetpassword/:id" render={(props) => !isLogged ? <Reset {...props} />:  <Redirect to='/home' /> } />
-                <Route exact path="/confEmail/:id" render={(props) =>!isLogged ? <ConfirmMail {...props} />:<Redirect to='/home' />} />
+                <Route exact path="/signup" render={(props) => !isLogged ? <Signup {...props} /> : <Redirect to='/' />} />
+                <Route exact path="/login" render={(props) => !isLogged ? <Login {...props} /> : <Redirect to='/' />} />
+                <Route exact path="/resetpassword/:id" render={(props) => !isLogged ? <Reset {...props} />:  <Redirect to='/' /> } />
+                <Route exact path="/confEmail/:id" render={(props) =>!isLogged ? <ConfirmMail {...props} />:<Redirect to='/' />} />
                 <Route exact path="/" render={(props) => isLogged ?( <AdminLayout {...props} />): <Redirect to='/login' />} />
                 <Route component={Notfound} />
 

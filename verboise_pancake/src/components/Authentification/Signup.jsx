@@ -169,7 +169,6 @@ function Signup(props) {
     axios
       .post("/Signin", data)
       .then((res) => {
-        console.log(res);
         setErr(null);
         dispatch({
           type: "LOG_IN",

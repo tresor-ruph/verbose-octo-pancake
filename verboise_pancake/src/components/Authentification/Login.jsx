@@ -70,7 +70,6 @@ function Login(props) {
     }
   ) => {
     if (data.em_usname !== "" || data.email !== undefined) {
-      console.log(data);
       axios
         .get("/Login/" + JSON.stringify(data))
         .then((res) => {

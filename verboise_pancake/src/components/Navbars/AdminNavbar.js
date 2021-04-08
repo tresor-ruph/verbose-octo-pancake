@@ -31,10 +31,8 @@ function Header() {
   };
   const handleLogOut = () => {
     dispatch({
-      type: "LOG_OUT",
-    
+      type: "LOG_OUT",    
     });
-    window.location.reload('/Login')
 
   }
 

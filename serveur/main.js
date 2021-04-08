@@ -16,13 +16,17 @@ app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
 const apiRoutes = require('./routes')(app)
 
-// app.use(express.static(path.join(__dirname, 'build')));
-// app.get('/', (req, res) => {
-//   res.sendFile(path.join(__dirname, 'build', 'index.html'));
-// });
+//*************************************************************** */
+app.use(express.static(path.join(__dirname, 'index')));
+app.get(['/','*'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'index', 'index.html'));
+});
 
-app.listen(8000, () => {
-  console.log(`your server is running on port ${8000}`);
+
+
+//**************************************************************** */
+app.listen(process.env.PORT, () => {
+  console.log(`your server is running on port ${process.env.PORT}`);
 });
 
 module.exports = app;
