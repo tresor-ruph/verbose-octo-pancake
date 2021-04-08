@@ -88,7 +88,7 @@ function Login(props) {
             },
           });
           if (res.status === 203) {
-            props.history.push(`/confEmail/${id}`);
+            props.history.push(`/confEmail/${id}`,'login');
           } else if (res.status === 200) {
             window.location.reload("/");
           }

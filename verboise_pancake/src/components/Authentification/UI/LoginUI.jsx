@@ -87,7 +87,6 @@ const LoginUI = (props) => {
                 <div className="d-flex mb-5 align-items-center">
                   <span className="ml-auto">
                     <a
-                      href="#"
                       className="forgot-pass"
                       onClick={() =>history.push("/resetpassword/user")}
                     >

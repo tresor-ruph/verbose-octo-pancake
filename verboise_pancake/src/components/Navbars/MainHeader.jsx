@@ -13,13 +13,13 @@ const MainHeader = (props) => {
           <a
             // href="#"
             style={{ color: "#42D0ED", textDecoration: "none" }}
-            onClick={() => history.push("/Signup")}
+            onClick={() => history.push("/signup")}
           >
             Create an account
           </a>
         </Header>
       );
-    } else if (route.pathname === "/Signup") {
+    } else if (route.pathname === "/signup") {
       return (
         <Header>
           <a

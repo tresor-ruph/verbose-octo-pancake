@@ -121,3 +121,6 @@
     margin-top: 15vh;
   }
 }
+a:hover {
+cursor: pointer;
+}

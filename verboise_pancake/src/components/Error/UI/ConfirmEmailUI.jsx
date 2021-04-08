@@ -2,7 +2,7 @@ import React from "react";
 import MainHeader from "components/Navbars/MainHeader";
 
 const ConfirmEmailUI = (props) => {
-  const { email,handleSendLink } = props;
+  const { fromLoging, email, handleSendLink } = props;
   return (
     <div>
       <MainHeader />
@@ -13,8 +13,10 @@ const ConfirmEmailUI = (props) => {
             <hr />
 
             <p>
-              An activation EMail has been sent to {email}. Please follow the
-              mail instructions in orther to activate your account{" "}
+              {!fromLoging
+                ? `An activation EMail has been sent to ${email}. Please follow the
+              mail instructions in orther to activate your account`
+                : `Your account has not been activated. Please verify your mails for the activation link`}
             </p>
             <p style={{ marginTop: "50px", fontSize: "12px" }}>
               Did not recieve the Mail ?{" "}

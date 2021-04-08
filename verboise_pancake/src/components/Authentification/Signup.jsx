@@ -184,7 +184,7 @@ function Signup(props) {
           },
         });
 
-        props.history.push(`/confEmail/${res.data.id}`);
+        props.history.push(`/confEmail/${res.data.id}`, '');
       })
       .catch((err) => {
         setnotifMess(err.response.data.message);

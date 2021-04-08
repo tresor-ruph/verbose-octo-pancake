@@ -1,7 +1,7 @@
 import React from "react";
 import MainHeader from "components/Navbars/MainHeader";
 import TermsAndCondition from "components/modal/TermsCondition";
-import { Button, Alert } from "react-bootstrap";
+import { Button, Alert, Popover, OverlayTrigger } from "react-bootstrap";
 import 'customcss/signup.css'
 
 const SignupUI = (props) => {
@@ -53,6 +53,18 @@ const SignupUI = (props) => {
     disabled,
     checkBoxErr,
   } = props;
+
+  const popover = (
+    <Popover id="popover-basic">
+      <Popover.Content>
+        your password should contain atleast.
+        1 capital letter
+        1 small letter
+        1 number 
+        6 characters
+      </Popover.Content>
+    </Popover>
+  );
   return (
     <div>
       <MainHeader />
@@ -137,6 +149,9 @@ const SignupUI = (props) => {
                 <div className="form-group frm-log" ref={passwd}>
                   <label htmlFor="password" ref={labelPasswd} className="label">
                     Password
+                    <OverlayTrigger rootClose={true} trigger="click" placement="right" overlay={popover}>
+                    <i id="password" className="far fa-question-circle title-i"></i>
+                    </OverlayTrigger>
                   </label>
                   <input
                     type="password"
