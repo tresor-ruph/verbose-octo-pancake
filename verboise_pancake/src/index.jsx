@@ -1,17 +1,23 @@
-import React from 'react'
-import { render } from 'react-dom'
-import { Provider } from 'react-redux'
-import store from './store'
-import './index.css'
-import App from './App';
-import reportWebVitals from './reportWebVitals'
+import React from "react";
+import { render } from "react-dom";
+import { Provider } from "react-redux";
+import { store, persistor } from "store";
+import "./index.css";
+import reportWebVitals from "./reportWebVitals";
+import { PersistGate } from "redux-persist/integration/react";
+import { BrowserRouter } from "react-router-dom";
 
+import Main from "routes";
 
 render(
   <Provider store={store}>
-    <App />
+    <PersistGate persistor={persistor}>
+      <BrowserRouter>
+        <Main />
+      </BrowserRouter>
+    </PersistGate>
   </Provider>,
-  document.getElementById('root'),
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function

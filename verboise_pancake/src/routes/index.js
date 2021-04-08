@@ -1,8 +1,6 @@
 
 import React, { useEffect } from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
-import {useLocation} from 'react-router'
-import ls from 'local-storage'
 import "bootstrap/dist/css/bootstrap.min.css";
 import "assets/css/animate.min.css";
 import "assets/scss/light-bootstrap-dashboard-react.scss?v=2.0.0";
@@ -13,24 +11,17 @@ import Login from "components/authentification/Login"
 import Signup from "components/authentification/Signup"
 import ConfirmMail from "components/Error/confirmEmail"
 import Reset from "components/Error/resetPassword"
+import {useSelector} from 'react-redux'
 
 function Main(props) {
-    let isLogged = JSON.parse(ls.get('isLogged'))
-    let email = JSON.parse(ls.get('email'))
-
-    // const location = useLocation()
-    // useEffect(() => {
-    // console.log(location)
-    // }, [])
-
+    const {isLogged} = useSelector(state=>state.SessionReducer.user)   
     return (
         <BrowserRouter>
             <Switch>
                 <Route exact path="/Signup" render={(props) => !isLogged ? <Signup {...props} /> : <Redirect to='/home' />} />
                 <Route exact path="/Login" render={(props) => !isLogged ? <Login {...props} /> : <Redirect to='/home' />} />
                 <Route path="/resetpassword/:id" render={(props) => !isLogged ? <Reset {...props} />:  <Redirect to='/home' /> } />
-
-                <Route path="/confEmail/:id" render={(props) =>!isLogged ? (email != null ?<ConfirmMail {...props} /> : <Redirect to='/Login' /> ) :<Redirect to='/home' />} />
+                <Route path="/confEmail/:id" render={(props) =>!isLogged ? <ConfirmMail {...props} />:<Redirect to='/home' />} />
                 <Route path="/" render={(props) => isLogged ?( <AdminLayout {...props} />): <Redirect to='/Login' />} />
 
             </Switch>
