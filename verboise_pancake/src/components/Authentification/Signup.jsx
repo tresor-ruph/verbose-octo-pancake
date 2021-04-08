@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import loginImage from "resources/Images/login.jpg";
-import RegisterUI from 'components/authentification/UI/RegisterUI'
+import SignupUI from 'components/authentification/UI/SignupUI'
 import "../../helper/axiosConfig";
 import {EmailVerification , PasswordVerification, UsernameVerification} from "helper/detailsVerification" 
 import { setStyle, clearStyle } from "helper/dynamicCss"
@@ -203,7 +203,7 @@ function Signup(props) {
   };
 
   return (
-    <RegisterUI 
+    <SignupUI 
 
     showModal={showModal}
     setShowModal ={setShowModal}

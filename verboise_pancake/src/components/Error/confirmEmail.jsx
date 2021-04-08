@@ -2,9 +2,8 @@ import React from "react";
 import axios from "axios";
 import ls from "local-storage";
 import "helper/axiosConfig";
-
-import MainHeader from "components/Navbars/MainHeader";
-import { Button } from "react-bootstrap";
+import {useLocation, useHistory} from 'react-router'
+import ConfirmEmailUI from 'components/Error/UI/ConfirmEmailUI'
 
 export default function ConfirmMail(props) {
   const tok = JSON.parse(ls.get("token"));
@@ -27,47 +26,10 @@ export default function ConfirmMail(props) {
       .catch((err) => console.log(err.response));
   };
   return (
-    // <div>
-    //   <h1>Validate your email</h1>
-    //   <button onClick={() => handleSendLink()}>resend link</button>
-    //   <br />
-    //   <button>Home</button>
-    // </div>
-
-    <div>
-      <MainHeader />
-      <div className="container bootstrap snippet">
-        <div className="main-div">
-          <div className="center-div">
-            <p className="text-res">Confirm Account</p>
-            <hr />
-
-            <p>
-              An activation EMail has been sent to {email}. Please follow the
-              mail instructions in orther to activate your account{" "}
-            </p>
-            <p style={{ marginTop: "50px", fontSize: "12px" }}>
-              Did not recieve the Mail ?   <a
-              href=""
-              style={{ color: "#42D0ED", textDecoration: "none" }}
-              onClick={() => handleSendLink()}
-            >
-              resend Link
-            </a>
-            </p>
-          
-            {/* <Button
-              className="btn-fill pull-right"
-              type="submit"
-              variant="info"
-              onClick={() => handleSendLink()}
-            >
-              Resent Link
-            </Button> */}
-          </div>
-          <div></div>
-        </div>
-      </div>
-    </div>
+   <ConfirmEmailUI 
+   email={email}
+   handleSendLink={handleSendLink}
+   
+   />
   );
 }

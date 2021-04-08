@@ -4,7 +4,7 @@ import TermsAndCondition from "components/modal/TermsCondition";
 import { Button, Alert } from "react-bootstrap";
 import 'customcss/signup.css'
 
-const RegisterUI = (props) => {
+const SignupUI = (props) => {
   const {
     showModal,
     setShowModal,
@@ -242,4 +242,4 @@ const RegisterUI = (props) => {
   );
 };
 
-export default RegisterUI;
+export default SignupUI;
