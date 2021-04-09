@@ -17,9 +17,9 @@ app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 5
 const apiRoutes = require('./routes')(app)
 
 //*************************************************************** */
-app.use(express.static(path.join(__dirname, 'index')));
+app.use(express.static(path.join(__dirname, 'build')));
 app.get(['/','*'], (req, res) => {
-  res.sendFile(path.join(__dirname, 'index', 'index.html'));
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
 
