@@ -15,21 +15,13 @@ dotenv.config();
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
 
-//*************************************************************** */
 const apiRoutes = require('./routes')(app)
 
+// app.use(express.static(path.join(__dirname, 'client')));
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'client', 'index.html'));
+// });
 
-app.use(express.static(path.join(__dirname, 'client')));
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client', 'index.html'));
-});
-
-
-
-
-
-
-//**************************************************************** */
 app.listen(process.env.PORT, () => {
   console.log(`your server is running on port ${process.env.PORT}`);
 });
