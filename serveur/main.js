@@ -9,7 +9,7 @@ const app = express();
 app.use(cors())
 dbConnection.authenticate().then(() => {
   console.log('connection succesfull');
-}).catch(e=> console.log(e))
+}).catch(err=>console.log(err))
 dotenv.config();
 
 app.use(bodyParser.json({ limit: "50mb" }));
@@ -17,7 +17,10 @@ app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 5
 const apiRoutes = require('./routes')(app)
 
 //*************************************************************** */
-app.use(['/','*'],express.static(path.join(__dirname, 'index')));
+app.use(express.static(path.join(__dirname, 'index')));
+app.get(['/','*'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'index', 'index.html'));
+});
 
 
 
