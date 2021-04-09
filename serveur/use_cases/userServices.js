@@ -72,12 +72,13 @@ module.exports = () => {
       if (response.length === 0) {
         return 0
       }
+     
+      if (!passWordManager.comparePassword(values.password, response[0].dataValues.password)) {
+        return ({ code: -2 })
+      }
       if (response[0].dataValues.Accountstatus == 'waiting') {
         const token = await tokenManager.encode(response[0].dataValues)
         return { id: response[0].dataValues.UserId, token, code:-1 }
-      }
-      if (!passWordManager.comparePassword(values.password, response[0].dataValues.password)) {
-        return ({ code: -2 })
       }
     }
     const token = await tokenManager.encode(response[0].dataValues.UserId)
