@@ -137,7 +137,8 @@ module.exports = () => {
 
     const username = param.userName
     const email = param.email
-    const link = `http://localhost:8000/api/confirmEmail/${param.token},${param.userId}`
+    // const link = `http://localhost:8000/api/confirmEmail/${param.token},${param.userId}`
+    const link = `https://verbose-octo-pancake.herokuapp.com/api/${param.token},${param.userId}`
 
     console.log(username)
 
@@ -151,9 +152,7 @@ module.exports = () => {
     const token = await tokenManager.encode(response[0].dataValues.UserId)
 
     // let link =`http://localhost:3000/resetpassword/${token},${response[0].dataValues.UserId}`
-    
-    let link =`http://localhost:${process.env.PORT}/resetpassword/${token},${response[0].dataValues.UserId}`
-
+    let link =` https://verbose-pancake-4fb37.web.app/resetpassword/${token},${response[0].dataValues.UserId}`
 
      mail.send(request.params.email, link, "",true)
 
