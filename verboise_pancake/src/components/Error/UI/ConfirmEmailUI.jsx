@@ -1,13 +1,20 @@
 import React from "react";
-import MainHeader from "components/Navbars/MainHeader";
-import { Button, Alert } from "react-bootstrap";
-
+import { Alert } from "react-bootstrap";
 
 const ConfirmEmailUI = (props) => {
-  const { fromLoging, email, handleSendLink,notif,variant,setNotif,notifMess } = props;
+  const {
+    fromLoging,
+    email,
+    handleSendLink,
+    notif,
+    variant,
+    setNotif,
+    notifMess,
+    returnHeader,
+  } = props;
   return (
     <div>
-      <MainHeader />
+      {returnHeader}
       {notif && (
         <Alert variant={variant}>
           <button
@@ -19,7 +26,7 @@ const ConfirmEmailUI = (props) => {
           >
             <i className="nc-icon nc-simple-remove"></i>
           </button>
-          <span style={{ textAlign: "center" }}>{notifMess}</span>
+          <div className="notifText">{notifMess}</div>
         </Alert>
       )}
       <div className="container bootstrap snippet">
@@ -34,16 +41,18 @@ const ConfirmEmailUI = (props) => {
               mail instructions in orther to activate your account`
                 : `Your account has not been activated. Please verify your mails for the activation link`}
             </p>
-            <p style={{ marginTop: "50px", fontSize: "12px" }}>
-              Did not recieve the Mail ?{" "}
-              <a
-                // href=""
-                style={{ color: "#42D0ED", textDecoration: "none" }}
-                onClick={() => handleSendLink()}
-              >
-                resend Link
-              </a>
-            </p>
+            {!fromLoging && (
+              <p style={{ marginTop: "50px", fontSize: "12px" }}>
+                Did not recieve the Mail ?{" "}
+                <a
+                  // href=""
+                  style={{ color: "#42D0ED", textDecoration: "none" }}
+                  onClick={() => handleSendLink()}
+                >
+                  resend Link
+                </a>
+              </p>
+            )}
           </div>
           <div></div>
         </div>

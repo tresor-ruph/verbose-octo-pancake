@@ -1,11 +1,11 @@
 import React from "react";
-import { Button, Alert } from "react-bootstrap";
-import {useHistory} from 'react-router'
-import MainHeader from "components/Navbars/MainHeader";
-import "customcss/login.css";
+import { Button, Alert, Collapse } from "react-bootstrap";
+import { useHistory } from "react-router";
+
 
 const LoginUI = (props) => {
   const {
+    MainHeader,
     notif,
     variant,
     setNotif,
@@ -24,30 +24,32 @@ const LoginUI = (props) => {
     handleSubmit,
   } = props;
 
-  const history = useHistory()
+  const history = useHistory();
 
   return (
-    <div>
-      <MainHeader />
+    <div className="main-login">
+      {MainHeader}
       {notif && (
-        <Alert variant={variant}>
-          <button
-            aria-hidden={true}
-            className="close"
-            data-dismiss="alert"
-            type="button"
-            onClick={() => setNotif(false)}
-          >
-            <i className="nc-icon nc-simple-remove"></i>
-          </button>
-          <span style={{ textAlign: "center" }}>{notifMess}</span>
-        </Alert>
+        <Collapse in={notif}>
+          <Alert variant={variant} dismissible>
+            <button
+              aria-hidden={true}
+              className="close"
+              data-dismiss="alert"
+              type="button"
+              onClick={() => setNotif(false)}
+            >
+              <i className="nc-icon nc-simple-remove"></i>
+            </button>
+            <div className="notifText">{notifMess}</div>
+          </Alert>
+        </Collapse>
       )}
       <div className="d-lg-flex half ">
         <div className="bg order-2 order-md-1 login-i">
           <img src={loginImage} width="100%" className="login-i " />
         </div>
-        <div className="contents order-1 order-md-2 ">
+        <div className="contents order-1 order-md-2 log-form ">
           <div className="container">
             <div className="row align-items-center justify-content-center">
               <div className="col-md-7">
@@ -88,7 +90,7 @@ const LoginUI = (props) => {
                   <span className="ml-auto">
                     <a
                       className="forgot-pass"
-                      onClick={() =>history.push("/resetpassword/user")}
+                      onClick={() => history.push("/resetpassword/user")}
                     >
                       Forgot Password
                     </a>
@@ -97,7 +99,7 @@ const LoginUI = (props) => {
 
                 <Button
                   block
-                  className="btn-fill pull-right"
+                  className="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn"
                   type="submit"
                   variant="info"
                   onClick={() =>
@@ -123,4 +125,4 @@ const LoginUI = (props) => {
   );
 };
 
-export default LoginUI
+export default LoginUI;

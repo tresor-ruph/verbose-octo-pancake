@@ -1,22 +1,29 @@
 import React from "react";
-import MainHeader from "components/Navbars/MainHeader";
 
-const ConfirmEmailUI = () => {
+const NotFoundUI = (props) => {
+  const { expireLink, MainHeader } = props;
   return (
     <div>
-      <MainHeader />
-      <div className="container bootstrap snippet">
-        <div className="main-div">
-          <div className="center-div">
-            <p className="text-res">Page not found</p>
-            <hr />
-
-         
+      {MainHeader}
+      {!expireLink ? (
+        <div className="container bootstrap snippet">
+          <div className="main-div">
+            <div className="center-div">
+              <p className="text-res">Page not found</p>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="container bootstrap snippet">
+          <div className="main-div">
+            <div className="center-div">
+              <p className="text-res">The Link expired</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default ConfirmEmailUI;
+export default NotFoundUI;

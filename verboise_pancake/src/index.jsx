@@ -2,7 +2,8 @@ import React from "react";
 import { render } from "react-dom";
 import { Provider } from "react-redux";
 import { store, persistor } from "store";
-import "./index.css";
+ import "./index.css";
+// import "./index.scss"
 import reportWebVitals from "./reportWebVitals";
 import { PersistGate } from "redux-persist/integration/react";
 import { BrowserRouter } from "react-router-dom";

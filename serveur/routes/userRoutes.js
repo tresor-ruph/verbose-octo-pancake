@@ -12,6 +12,10 @@ module.exports = (app) => {
     app.get('/api/resendLink/:obj',userController.resendLink )
     app.get('/api/resetpassword/:email',userController.resetPassword)
     app.put('/api/password', userController.updatePassword)
+    app.get('/api/verifLink/:id', userController.redirectPassword)
+
+
+    
 
 
 }

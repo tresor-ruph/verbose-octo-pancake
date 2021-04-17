@@ -2,8 +2,12 @@ import React, { useState } from "react";
 import { useHistory } from "react-router";
 import axios from "axios";
 import "helper/axiosConfig";
-import {EmailVerification} from "helper/detailsVerification" 
-import ResetPasswordUI from 'components/Error/UI/ResetPasswordUI'
+import { EmailVerification } from "helper/detailsVerification";
+import ResetPasswordUI from "components/Error/UI/ResetPasswordUI";
+import { useEffect } from "react";
+import { returnHeader } from "helper/customMixin";
+
+import "customcss/resetPassword.css";
 
 export default function Reset(props) {
   const [email, setEmail] = useState("");
@@ -12,15 +16,33 @@ export default function Reset(props) {
   const [notif, setNotif] = useState(false);
   const [notifMess, setnotifMess] = useState("");
   const [variant, setVariant] = useState("");
-
-  
+  const [reset, setReset] = useState(true);
   let history = useHistory();
-  let reset = true;
   let link = props.location.pathname;
-  let arr = link.split(",");
-  if (arr.length === 2) {
-    reset = false;
-  }
+
+  useEffect(() => {
+    if (link === "/resetpassword/user") {
+      setReset(true);
+    } else if (link === "/resetpassword/validation") {
+      setReset(false);
+    } else {
+      let arr = link.split("/");
+      console.log(arr);
+      axios
+        .get(`/verifLink/${arr[2]}`)
+        .then((res) => {
+          if (res.data.message == "valid") {
+            history.push("/resetpassword/validation");
+          } else if (res.data.message == "invalid") {
+            history.push("/error");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [props.location]);
+
   const handleEmail = (event) => {
     setEmail(event.target.value);
   };
@@ -31,7 +53,6 @@ export default function Reset(props) {
     setPassword2(event.target.value);
   };
 
-
   const handleReset = () => {
     if (!EmailVerification(email)) {
       return;
@@ -39,7 +60,6 @@ export default function Reset(props) {
       axios
         .get(`/resetpassword/${email}`)
         .then((res) => {
-
           if (res.status == 200) {
             setnotifMess(` An Email has been sent to ${email}. Follow the instructions to reset
             your password`);
@@ -48,8 +68,7 @@ export default function Reset(props) {
           }
         })
         .catch((err) => {
-          console.log(err)
-          setnotifMess(`An error occured`);
+          setnotifMess(err?.response?.data?.message || "An error occured");
           setVariant("danger");
           setNotif(true);
         });
@@ -63,7 +82,6 @@ export default function Reset(props) {
       return;
     } else {
       const data = {
-        userId: arr[1],
         password: password1,
       };
 
@@ -87,22 +105,21 @@ export default function Reset(props) {
   };
 
   return (
-    <ResetPasswordUI 
-    notif={notif}
-    variant={variant}
-    setNotif={setNotif}
-    notifMess={notifMess}
-    email={email}
-    handleEmail={handleEmail}
-    handleReset={handleReset}
-    password1={password1}
-    handlePassword1={handlePassword1}
-    password2={password2}
-    handlePassword2={handlePassword2}
-    updatePassword={updatePassword}
-    reset={reset}
-    
+    <ResetPasswordUI
+      MainHeader={returnHeader}
+      notif={notif}
+      variant={variant}
+      setNotif={setNotif}
+      notifMess={notifMess}
+      email={email}
+      handleEmail={handleEmail}
+      handleReset={handleReset}
+      password1={password1}
+      handlePassword1={handlePassword1}
+      password2={password2}
+      handlePassword2={handlePassword2}
+      updatePassword={updatePassword}
+      reset={reset}
     />
-     
   );
 }

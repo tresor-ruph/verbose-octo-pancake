@@ -1,14 +1,11 @@
 import React from "react";
-import MainHeader from "components/Navbars/MainHeader";
-import TermsAndCondition from "components/modal/TermsCondition";
 import { Button, Alert, Popover, OverlayTrigger } from "react-bootstrap";
-import 'customcss/signup.css'
 
 const SignupUI = (props) => {
   const {
+    MainHeader,
     showModal,
-    setShowModal,
-    modalDisplay,
+    returnTermsAndCondition,
     notif,
     setNotif,
     notifMess,
@@ -57,30 +54,15 @@ const SignupUI = (props) => {
   const popover = (
     <Popover id="popover-basic">
       <Popover.Content>
-        your password should contain atleast.
-        1 capital letter
-        1 small letter
-        1 number 
-        6 characters
+        your passwo/rd should contain atleast. 1 capital letter 1 small letter 1
+        number 6 characters
       </Popover.Content>
     </Popover>
   );
   return (
-    <div>
-      <MainHeader />
-      {showModal && (
-        <TermsAndCondition display={modalDisplay}>
-          <Button
-            block
-            className="btn-fill pull-right"
-            type="submit"
-            variant="info"
-            onClick={() => setShowModal(false)}
-          >
-            close
-          </Button>
-        </TermsAndCondition>
-      )}
+    <div class="main-sigin">
+      {showModal && returnTermsAndCondition}
+      {MainHeader}
       {notif && (
         <Alert variant={variant}>
           <button
@@ -92,7 +74,7 @@ const SignupUI = (props) => {
           >
             <i className="nc-icon nc-simple-remove"></i>
           </button>
-          <span style={{ textAlign: "center" }}>{notifMess}</span>
+          <div className="notifText">{notifMess}</div>
         </Alert>
       )}
       <div className="d-lg-flex half ">
@@ -149,8 +131,16 @@ const SignupUI = (props) => {
                 <div className="form-group frm-log" ref={passwd}>
                   <label htmlFor="password" ref={labelPasswd} className="label">
                     Password
-                    <OverlayTrigger rootClose={true} trigger="click" placement="right" overlay={popover}>
-                    <i id="password" className="far fa-question-circle title-i"></i>
+                    <OverlayTrigger
+                      rootClose={true}
+                      trigger="click"
+                      placement="right"
+                      overlay={popover}
+                    >
+                      <i
+                        id="password"
+                        className="far fa-question-circle title-i"
+                      ></i>
                     </OverlayTrigger>
                   </label>
                   <input
@@ -240,7 +230,7 @@ const SignupUI = (props) => {
                 <div className="signin-btn">
                   <Button
                     block
-                    className="btn-fill pull-right"
+                    className="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn"
                     type="submit"
                     variant="info"
                     onClick={() => handleSubmit()}

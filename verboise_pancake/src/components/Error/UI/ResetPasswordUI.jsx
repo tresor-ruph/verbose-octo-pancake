@@ -1,10 +1,9 @@
 import React from 'react'
 import { Button, Alert } from "react-bootstrap";
-import MainHeader from "components/Navbars/MainHeader";
-import "customcss/resetPassword.css"
 
 const ResetPasswordUI =(props) =>{
     const {
+      MainHeader,
         notif,
         variant,
         setNotif,
@@ -21,8 +20,8 @@ const ResetPasswordUI =(props) =>{
     } =props
 
     return(
-        <div>
-        <MainHeader />
+        <div className='reset-passwd'>
+        {MainHeader}
         {notif && (
           <Alert variant={variant}>
             <button
@@ -34,7 +33,7 @@ const ResetPasswordUI =(props) =>{
             >
               <i className="nc-icon nc-simple-remove"></i>
             </button>
-            <span style={{ textAlign: "center" }}>{notifMess}</span>
+            <div className='notifText'>{notifMess}</div>
           </Alert>
         )}
         {reset ? (

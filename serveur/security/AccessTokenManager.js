@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken')
 module.exports = {
 
-  encode: async (user) => {
+  encode: async (user , time =Math.floor(Date.now() / 1000) + (24*60 * 60)) => {
 
-    const token = await jwt.sign({ exp: Math.floor(Date.now() / 1000) + (24*60 * 60), data: user }, 'secretKey')
+    const token = await jwt.sign({ exp: time, data: user }, 'secretKey')
     return token
   },
 

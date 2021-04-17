@@ -1,12 +1,21 @@
 import React, { useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import axios from "axios";
-import loginImage from "resources/Images/login.jpg";
-import SignupUI from 'components/authentification/UI/SignupUI'
-import "../../helper/axiosConfig";
-import {EmailVerification , PasswordVerification, UsernameVerification} from "helper/detailsVerification" 
-import { setStyle, clearStyle } from "helper/dynamicCss"
 
+import loginImage from "assets/images/background/login.jpg";
+import SignupUI from "components/authentification/UI/SignupUI";
+import TermsAndCondition from "components/modal/TermsCondition";
+
+import { Button } from "react-bootstrap";
+import "../../helper/axiosConfig";
+import {
+  EmailVerification,
+  PasswordVerification,
+  UsernameVerification,
+} from "helper/detailsVerification";
+import { returnHeader } from "helper/customMixin";
+import { setStyle, clearStyle } from "helper/dynamicCss";
+import "customcss/signup.css";
 
 function Signup(props) {
   const [email, setEmail] = useState("");
@@ -39,7 +48,6 @@ function Signup(props) {
   const labelPasswd2 = useRef(null);
   const dispatch = useDispatch();
 
-  
   const handleEmail = (event) => {
     setEmail(event.target.value);
   };
@@ -63,7 +71,21 @@ function Signup(props) {
       setCheckBoxErr(false);
     }
   };
-
+  const returnTermsAndCondition = () => {
+    return (
+      <TermsAndCondition display={modalDisplay}>
+        <Button
+          block
+          className="btn-fill pull-right"
+          type="submit"
+          variant="info"
+          onClick={() => setShowModal(false)}
+        >
+          close
+        </Button>
+      </TermsAndCondition>
+    );
+  };
   const handleEmailFocus = () => {
     emailRef.current.classList.add("field--not-empty");
     clearStyle(emailInp, emailRef, emailLabel);
@@ -98,7 +120,7 @@ function Signup(props) {
     }
   };
 
-  const handlePasswordFocus= () => {
+  const handlePasswordFocus = () => {
     passwd.current.classList.add("field--not-empty");
     clearStyle(pwd, passwd, labelPasswd);
     setDisabled(false);
@@ -133,19 +155,19 @@ function Signup(props) {
       setDisabled2(true);
     }
   };
-  
+
   const handleSubmit = () => {
     let err = false;
     if (check === "off") {
       setCheckBoxErr(true);
       err = true;
-    } 
+    }
     if (!PasswordVerification(password)) {
       setStyle(pwd, passwd, labelPasswd);
       setDisabled(true);
       err = true;
     }
-    if(password.length > 1  && password != password2){
+    if (password.length > 1 && password != password2) {
       setStyle(pwd2, passwd2, labelPasswd2);
       setDisabled2(true);
       err = true;
@@ -183,10 +205,10 @@ function Signup(props) {
           },
         });
 
-        props.history.push(`/confEmail/${res.data.id}`, '');
+        props.history.push(`/confEmail/${res.data.id}`, "");
       })
       .catch((err) => {
-        setnotifMess(err.response.data.message);
+        setnotifMess(err?.response?.data?.message || "An error occured");
         setVariant("danger");
         setNotif(true);
       });
@@ -202,57 +224,57 @@ function Signup(props) {
   };
 
   return (
-    <SignupUI 
-
-    showModal={showModal}
-    setShowModal ={setShowModal}
-    modalDisplay ={modalDisplay}
-    notif={notif}
-    setNotif={setNotif}
-    notifMess={notifMess}
-    loginImage={loginImage}
-    emailRef={emailRef}
-    emailLabel={emailLabel}
-    email={email}
-    emailInp={emailInp}
-    handleEmailFocus={handleEmailFocus}
-    handleEmailBlur={handleEmailBlur}
-    handleEmail={handleEmail}
-    emailErr={emailErr}
-    userRef={userRef}
-    userLabel={userLabel}
-    username={username}
-    userInp={userInp}
-    handleUserFocus={handleUserFocus}
-    handleUserBlur={handleUserBlur}
-    handleUsername={handleUsername}
-    passwd={passwd}
-    labelPasswd={labelPasswd}
-    pwd={pwd}
-    password={password}
-    handlePasswordFocus={handlePasswordFocus}
-    handlePasswordBlur={handlePasswordBlur}
-    handlePassword={handlePassword}
-    passwd2={passwd2}
-    labelPasswd2={labelPasswd2}
-    password2={password2}
-    pwd2={pwd2}
-    handlePassword2Focus={handlePassword2Focus}
-    handlePassword2Blur={handlePassword2Blur}
-    handlePassword2={handlePassword2}
-    disabled2={disabled2}
-    handleCheckBox={handleCheckBox}
-    check={check}
-    handleTerms={handleTerms}
-    handlePrivacy={handlePrivacy}
-    handleSubmit={handleSubmit}
-    variant={variant}
-    userErr={userErr}
-    disabled={disabled}
-    checkBoxErr={checkBoxErr}
-
+    <SignupUI
+      returnHeader={returnHeader()}
+      returnTermsAndCondition={returnTermsAndCondition()}
+      showModal={showModal}
+      setShowModal={setShowModal}
+      modalDisplay={modalDisplay}
+      notif={notif}
+      setNotif={setNotif}
+      notifMess={notifMess}
+      loginImage={loginImage}
+      emailRef={emailRef}
+      emailLabel={emailLabel}
+      email={email}
+      emailInp={emailInp}
+      handleEmailFocus={handleEmailFocus}
+      handleEmailBlur={handleEmailBlur}
+      handleEmail={handleEmail}
+      emailErr={emailErr}
+      userRef={userRef}
+      userLabel={userLabel}
+      username={username}
+      userInp={userInp}
+      handleUserFocus={handleUserFocus}
+      handleUserBlur={handleUserBlur}
+      handleUsername={handleUsername}
+      passwd={passwd}
+      labelPasswd={labelPasswd}
+      pwd={pwd}
+      password={password}
+      handlePasswordFocus={handlePasswordFocus}
+      handlePasswordBlur={handlePasswordBlur}
+      handlePassword={handlePassword}
+      passwd2={passwd2}
+      labelPasswd2={labelPasswd2}
+      password2={password2}
+      pwd2={pwd2}
+      handlePassword2Focus={handlePassword2Focus}
+      handlePassword2Blur={handlePassword2Blur}
+      handlePassword2={handlePassword2}
+      disabled2={disabled2}
+      handleCheckBox={handleCheckBox}
+      check={check}
+      handleTerms={handleTerms}
+      handlePrivacy={handlePrivacy}
+      handleSubmit={handleSubmit}
+      variant={variant}
+      userErr={userErr}
+      disabled={disabled}
+      checkBoxErr={checkBoxErr}
+      MainHeader={returnHeader()}
     />
-
   );
 }
 

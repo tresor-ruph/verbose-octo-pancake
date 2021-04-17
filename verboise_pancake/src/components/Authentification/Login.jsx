@@ -3,7 +3,10 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import firebase from "firebase";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import loginImage from "resources/Images/login.jpg";
+import loginImage from "assets/images/background/login.jpg";
+import {returnHeader} from "helper/customMixin"
+ import "customcss/login.css";
+
 import LoginUI from "components/authentification/UI/LoginUI";
 
 import "helper/axiosConfig";
@@ -93,7 +96,7 @@ function Login(props) {
           }
         })
         .catch((err) => {
-          setnotifMess(err.response.data.message);
+          setnotifMess(err?.response?.data?.message || 'An error occured');
           setVariant("danger");
           setNotif(true);
         });
@@ -102,6 +105,7 @@ function Login(props) {
 
   return (
     <LoginUI
+    MainHeader={returnHeader()}
       notif={notif}
       variant={variant}
       setNotif={setNotif}

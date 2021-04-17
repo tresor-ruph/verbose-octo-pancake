@@ -10,7 +10,7 @@ module.exports = () => {
 
 
   const getOneUser = async function (param, state = false) {
-    console.log(param)
+
     let user;
     !state ? (
       user = await User.findAll({
@@ -67,14 +67,14 @@ module.exports = () => {
       })
     return user
   }
-  const updatePassword = async function (userObject) {
+  const updatePassword = async function (password, id) {
     const user = await User.update({
-      password: userObject.body.password
+      password: password
     },
       {
         where:
         {
-          UserId: userObject.body.userId
+          UserId: id
         }
       })
     return user

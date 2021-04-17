@@ -17,13 +17,12 @@ module.exports = () => {
   const fetchOne = async (param) => {
 
     let isHTML = RegExp.prototype.test.bind(/'(<([^>]+)>)'/i)
-
     if (isHTML(param) || param.length < 3 || param.length > 30) {
       return -1
     }
-
     const response = await UsersRepo.getOneUser(param)
     return response
+
   }
 
 
@@ -43,7 +42,8 @@ module.exports = () => {
       validMod.value.Accountstatus = 'waiting'
       const response = await UsersRepo.addUser(validMod.value)
       const token = await tokenManager.encode(response)
-      const link = `http://localhost:8000/api/confirmEmail/${token},${response}`
+      // const link = `http://localhost:8000/api/confirmEmail/${token}`
+      const link = `https://verbose-octo-pancake.herokuapp.com/api/confirmEmail/${token}`
       mail.send(validMod.value.email, link, validMod.value.username)
       return { token: token, id: response }
 
@@ -53,6 +53,7 @@ module.exports = () => {
   }
 
   const login = async (request) => {
+
     let values = JSON.parse(request.params.user)
     let response;
     if (values.social) {
@@ -72,21 +73,23 @@ module.exports = () => {
       if (response.length === 0) {
         return 0
       }
-     
+
       if (!passWordManager.comparePassword(values.password, response[0].dataValues.password)) {
         return ({ code: -2 })
       }
       if (response[0].dataValues.Accountstatus == 'waiting') {
         const token = await tokenManager.encode(response[0].dataValues)
-        return { id: response[0].dataValues.UserId, token, code:-1 }
+        return { id: response[0].dataValues.UserId, token, code: -1 }
       }
     }
     const token = await tokenManager.encode(response[0].dataValues.UserId)
     return { id: response[0].dataValues.UserId, token }
+
   }
 
 
   const update = async (request) => {
+
     let token = tokenManager.decode(request)
     if (token.error) {
       return "access_D"
@@ -104,15 +107,20 @@ module.exports = () => {
     return response
   }
 
-  const updatePassword= async (request)=>{
-    
-    console.log(request.body.userId)
-    const getOneUser = await UsersRepo.getOneUser(request.body.userId)
+  const updatePassword = async (request) => {
+
+    let id = tokenManager.decode(request)
+    if (id.error) {
+      return "error"
+    }
+
+    const getOneUser = await UsersRepo.getOneUser(id)
     if (getOneUser.length === 0) {
       return 0
     }
+
     request.body.password = passWordManager.hashPassword(request.body.password)
-    const response = await UsersRepo.updatePassword(request)
+    const response = await UsersRepo.updatePassword(request.body.password, id)
     return response
 
 
@@ -121,40 +129,36 @@ module.exports = () => {
   const confirm = async (request) => {
 
     let value = (request.params.id)
-    arr = value.split(',')
-    let valid = tokenManager.simpleCheck(arr[0])
+
+    // arr = value.split(',')
+    let valid = tokenManager.simpleCheck(value)
     if (valid.error) {
       return -1
     }
-    const response = await UsersRepo.confirmUser(arr[1])
+    const response = await UsersRepo.confirmUser(valid.data)
     return response
 
   }
 
   const sendLink = async (request) => {
-    console.log(request.params)
-    const param = JSON.parse(request.params.obj)
 
+    const param = JSON.parse(request.params.obj)
     const username = param.userName
     const email = param.email
-    // const link = `http://localhost:8000/api/confirmEmail/${param.token},${param.userId}`
-    const link = `https://verbose-octo-pancake.herokuapp.com/api/${param.token},${param.userId}`
-
-    console.log(username)
-
-
+    // const link = `http://localhost:8000/api/confirmEmail/${param.token}`
+    const link = `https://verbose-octo-pancake.herokuapp.com/api/confirmEmail/${param.token}`
     mail.send(email, link, username)
   }
 
-  const reset= async (request)=>{
+  const reset = async (request) => {
     response = await UsersRepo.getOneUser(request.params.email)
-    console.log(response)
-    const token = await tokenManager.encode(response[0].dataValues.UserId)
-
-    // let link =`http://localhost:3000/resetpassword/${token},${response[0].dataValues.UserId}`
-    let link =` https://verbose-pancake-4fb37.web.app/resetpassword/${token},${response[0].dataValues.UserId}`
-
-     mail.send(request.params.email, link, "",true)
+    if (response.length === 0) {
+      return -1
+    }
+    const token = await tokenManager.encode(response[0].dataValues.UserId, Math.floor(Date.now() / 1000) + (30 * 60))
+    // let link = `http://localhost:3000/resetpassword/${token}`
+    let link = `https://verbose-pancake-4fb37.web.app/resetpassword/${token}`
+    mail.send(request.params.email, link, "", true)
 
   }
 
@@ -174,5 +178,14 @@ module.exports = () => {
     const response = await UsersRepo.removeUser(param)
     return response
   }
-  return ({ fetchAll, fetchOne, create, login, update, deleteUser, confirm,updatePassword, sendLink,reset })
+  const redirectPassword = async (req) => {
+    // console.log(req)    
+    let response = tokenManager.simpleCheck(req.params.id)
+    if (response.error) {
+      return -1
+    }
+    return req.params.id
+  }
+
+  return ({ fetchAll, fetchOne, create, login, update, deleteUser, redirectPassword, confirm, updatePassword, sendLink, reset })
 }
