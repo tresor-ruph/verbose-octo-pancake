@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation, useHistory } from "react-router";
-import Header from "layouts/header";
+import Header from "../../layouts/header";
 
 const MainHeader = (props) => {
   const route = useLocation();
@@ -12,7 +12,7 @@ const MainHeader = (props) => {
         <Header>
           <a
             // href="#"
-            style={{ color: "#42D0ED", textDecoration: "none" }}
+            style={{ color: "#42D0ED", fontSize: '1.1rem', textDecoration: "none" }}
             onClick={() => history.push("/signup")}
           >
             Create an account

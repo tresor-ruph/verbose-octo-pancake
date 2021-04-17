@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<nav
+  className="navbar navbar-expand-lg navbar-dark"
+  style={
+    Object {
+      "backgroundColor": "#343A40",
+      "height": "12vh",
+      "left": "0px",
+    }
+  }
+>
+  <a
+    className="navbar-brand"
+    href="#"
+    onClick={[Function]}
+  >
+    Verbose
+  </a>
+  <div
+    className="mr-auto navbar-nav"
+    onKeyDown={[Function]}
+  />
+  <div
+    className="navbar-nav"
+    onKeyDown={[Function]}
+  />
+</nav>
+`;

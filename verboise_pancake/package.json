@@ -7,13 +7,16 @@
     "@fortawesome/fontawesome-free": "5.15.2",
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
+    "@material-ui/lab": "^4.0.0-alpha.57",
+    "@mdi/font": "^5.9.55",
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
     "chartist": "0.10.1",
-    "firebase": "^8.3.1",
+    "compass-mixins": "^0.12.10",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6",
+    "firebase": "^8.4.1",
+    "flag-icon-css": "^3.5.0",
     "gulp": "4.0.2",
     "gulp-append-prepend": "1.0.8",
     "local-storage": "^2.0.0",
@@ -28,6 +31,7 @@
     "react-router": "5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
+    "react-test-renderer": "^17.0.2",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.9",
     "redux-persist": "^6.0.0",
@@ -41,7 +45,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest",
     "eject": "react-scripts eject",
     "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start",
     "compile:scss": "node-sass src/assets/scss/light-bootstrap-dashboard-react.scss src/assets/css/light-bootstrap-dashboard-react.css",
@@ -60,6 +64,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {}
+  }
 }

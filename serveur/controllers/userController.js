@@ -136,7 +136,8 @@ module.exports = () => {
 
     }
 
-    res.status(200).redirect(`http://localhost:${process.env.PORT}/login`)
+    // res.status(200).redirect(`http://localhost:3000/login`)
+    res.status(200).redirect(`https://verbose-pancake-4fb37.web.app/login`) 
 
   }
 
@@ -149,21 +150,41 @@ module.exports = () => {
       return
     }
 
+
     res.status(200).send(JSON.stringify({message: 'link send'}))
 
   }
   const resetPassword= async(req, res)=> {
-    const request = req
-    const response = await userServices.reset(request)
+  
+    const response = await userServices.reset(req)
     if (response == 0) {
       res.status(404).send(JSON.stringify({ message: 'an error occured' }))
       return
+    }else if(response === -1){
+      res.status(404).send(JSON.stringify({ message: 'user does not exist' }))
+      return
+    }else if(response === 'error'){
+      res.status(403).send(JSON.stringify({ message: 'an error occured' }))
+      return
     }
+
 
     res.status(200).send(JSON.stringify({message: 'email send'}))
   }
 
-  return ({ listAllUsers, getUser, deleteUser, userLogin, createUser, updatePassword, updateUser, confirmEmail, resendLink,resetPassword })
+  const redirectPassword = async(req, res)=> {
+
+    const response = await userServices.redirectPassword(req)
+   if(response === -1){
+      res.status(200).send(JSON.stringify({message: 'invalid'}))
+      return
+
+    }
+    res.status(200).send(JSON.stringify({message: 'valid'}))
+
+  }
+
+  return ({ listAllUsers, getUser, deleteUser, userLogin, createUser, updatePassword, updateUser, confirmEmail, resendLink,resetPassword, redirectPassword })
 
 }
 

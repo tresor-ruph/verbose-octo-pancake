@@ -4,7 +4,6 @@ import { useLocation, Route, Switch } from "react-router-dom";
 
 import AdminNavbar from "components/Navbars/AdminNavbar";
 import Sidebar from "components/Sidebar/Sidebar";
-
 import routes from "routes/DashboardRoutes";
 
 

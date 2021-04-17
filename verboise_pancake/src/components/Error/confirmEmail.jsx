@@ -4,6 +4,7 @@ import "helper/axiosConfig";
 import { useLocation, useHistory } from "react-router";
 import ConfirmEmailUI from "components/Error/UI/ConfirmEmailUI";
 import { useSelector } from "react-redux";
+import {returnHeader} from "helper/customMixin"
 
 export default function ConfirmMail(props) {
   const { sessionId, userId, user } = useSelector(
@@ -40,13 +41,14 @@ export default function ConfirmMail(props) {
         setNotif(true);
       })
       .catch((err) => {
-        setnotifMess(err.response.data.message);
+        setnotifMess(err?.response?.data?.message || 'An error occured');
         setVariant("success");
         setNotif(true);
       });
   };
   return (
     <ConfirmEmailUI
+    returnHeader={returnHeader}
       fromLoging={fromLoging}
       email={user.email}
       handleSendLink={handleSendLink}

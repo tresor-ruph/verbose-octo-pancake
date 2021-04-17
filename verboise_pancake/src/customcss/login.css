@@ -1,3 +1,7 @@
+
+.main-login {
+  background-color: white;
+}
 .half,
 .half .container > .row {
   height: 100vh;
@@ -93,6 +97,7 @@
   position: relative;
   top: 2px;
   font-size: 14px;
+  color: #888;
 }
 
 .caption {
@@ -103,7 +108,11 @@
 }
 
 .login-i {
-  margin-top: 10vh;
+  margin-top: 8vh;
+}
+.log-form {
+  margin-top: 4vh;
+  overflow-y: hidden;
 }
 .test {
   margin-bottom: 2px;
@@ -123,4 +132,9 @@
 }
 a:hover {
 cursor: pointer;
+}
+.notifText {
+  text-align: center;
+  /* position: fixed; */
+  width: 100%;
 }
