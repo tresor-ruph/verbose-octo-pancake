@@ -26,7 +26,7 @@ module.exports = {
 
 
     },
-    eventId: Sequelize.INTEGER(11),
+    // eventId: Sequelize.INTEGER(11),
     createdAt: Sequelize.DATE,
     updatedAt: Sequelize.DATE
   })

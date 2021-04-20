@@ -2,26 +2,31 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return queryInterface.createTable("Events", {
-      eventId: {
+    return queryInterface.createTable("Questions", {
+      questionId: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
+
       },
-      title: {
+      question: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      eventType: {
+      answers: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
+      // pollId: Sequelize.INTEGER(11),
+
       createdAt: Sequelize.DATE,
       updatedAt: Sequelize.DATE
+
     })
   },
 
   down: async (queryInterface, Sequelize) => {
-  return queryInterface.dropTable("Events")
+    return queryInterface.dropTable("Questions")
+
   }
 };

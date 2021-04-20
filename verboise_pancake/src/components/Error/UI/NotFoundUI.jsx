@@ -1,10 +1,10 @@
 import React from "react";
 
 const NotFoundUI = (props) => {
-  const { expireLink, MainHeader } = props;
+  const { expireLink } = props;
   return (
     <div>
-      {MainHeader}
+    
       {!expireLink ? (
         <div className="container bootstrap snippet">
           <div className="main-div">

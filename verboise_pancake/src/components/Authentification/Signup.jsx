@@ -7,7 +7,6 @@ import SignupUI from "components/authentification/UI/SignupUI";
 import TermsAndCondition from "components/modal/TermsCondition";
 
 import { Button } from "react-bootstrap";
-import "../../helper/axiosConfig";
 import {
   EmailVerification,
   PasswordVerification,
@@ -16,6 +15,7 @@ import {
 import { returnHeader } from "helper/customMixin";
 import { setStyle, clearStyle } from "helper/dynamicCss";
 import "customcss/signup.css";
+import "../../helper/axiosConfig";
 
 function Signup(props) {
   const [email, setEmail] = useState("");

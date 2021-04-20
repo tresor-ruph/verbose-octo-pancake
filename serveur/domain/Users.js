@@ -11,9 +11,9 @@ module.exports = (email, password, username) => {
   const { error, value } = schema.validate({ email: email, password: password, username: username })
 
   if (error) {
-    return {error: error.details}
+    return { error: error.details }
   }
-  return {value: value}
+  return { value: value }
 
 
 

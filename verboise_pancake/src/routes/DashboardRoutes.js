@@ -11,7 +11,7 @@ import Icons from "views/Icons.js";
 const dashboardRoutes = [
  
   {
-    path: "/dashboard",
+    path: "/dashboard/event",
     name: "Dashboard",
     icon: "nc-icon nc-chart-pie-35",
     component: Dashboard,

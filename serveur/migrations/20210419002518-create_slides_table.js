@@ -2,17 +2,14 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return queryInterface.createTable("Events", {
-      eventId: {
+    return queryInterface.createTable("Slides", {
+      slideId: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
+
       },
-      title: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      eventType: {
+      link: {
         type: Sequelize.STRING,
         allowNull: false,
       },
@@ -22,6 +19,7 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-  return queryInterface.dropTable("Events")
+    return queryInterface.dropTable("Slides")
+
   }
 };

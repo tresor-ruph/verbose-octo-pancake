@@ -1,28 +1,27 @@
 const Sequelize = require('sequelize');
-const dbConnection = require('./../dbConnection')
-module.exports =   dbConnection.define("User", {
+const dbConnection = require('../dbConnection')
+module.exports =   dbConnection.define("Polls", {
    
-    userId: {
+    pollId: {
       type: Sequelize.UUID,
       defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
 
     },
-    email: {
+    defaultLayout: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    password: {
+    waitingTime: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    },
+    resultFormat: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    username: {
+    questions: {
       type: Sequelize.STRING,
-      allowNull: false,
-    },
-    Accountstatus: {
-      type: Sequelize.STRING,
-      allowNull: false,
     }
   },
 

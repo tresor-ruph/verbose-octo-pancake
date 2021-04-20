@@ -15,7 +15,7 @@ module.exports = () => {
     !state ? (
       user = await User.findAll({
         where: {
-          [Op.or]: [{ userName: param }, { email: param },{UserId: param}]
+          [Op.or]: [{ userName: param }, { email: param },{userId: param}]
         }
       })
     ) : (user = await User.findAll({
@@ -51,7 +51,7 @@ module.exports = () => {
 
   const addUser = async function (userObject) {
     const user = await User.create(userObject)
-    return user.dataValues.UserId
+    return user.dataValues.userId
   }
 
 
@@ -74,7 +74,7 @@ module.exports = () => {
       {
         where:
         {
-          UserId: id
+          userId: id
         }
       })
     return user
@@ -87,7 +87,6 @@ module.exports = () => {
           userId: val
         }
       })
-    console.log(user)
     return user
   }
 

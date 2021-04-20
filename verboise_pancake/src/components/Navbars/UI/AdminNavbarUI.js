@@ -69,12 +69,6 @@ const AdminNavbarUI = (props) => {
                 <Dropdown.Item className="dropdown-item preview-item d-flex align-items-center border-0 mt-2" onClick={evt => evt.preventDefault()}>
                   <span>Manage Accounts</span>
                 </Dropdown.Item>
-                <Dropdown.Item className="dropdown-item preview-item d-flex align-items-center border-0" onClick={evt => evt.preventDefault()}>
-                  <span>Change Password</span>
-                </Dropdown.Item>
-                <Dropdown.Item className="dropdown-item preview-item d-flex align-items-center border-0" onClick={evt => evt.preventDefault()}>
-                  <span>Check Inbox</span>
-                </Dropdown.Item>
                 <Dropdown.Item className="dropdown-item preview-item d-flex align-items-center border-0" onClick={() => handleLogOut()}>
                   <span>Sign Out</span>
                 </Dropdown.Item>

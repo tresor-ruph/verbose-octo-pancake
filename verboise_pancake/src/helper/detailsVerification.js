@@ -21,7 +21,7 @@
 
       const UsernameVerification = (username) => {
         let bol = false;
-        if (username.length > 3) {
+        if ((username.length > 3)&&(username.length <20)) {
           bol = true;
         }
         return bol;
