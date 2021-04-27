@@ -5,7 +5,7 @@ const Polls = require('./polls')
 const Reactions = require('./reactions')
 const Questions = require('./questions')
 const Slides = require('./slides')
-const Data = require('./data')
+// const Data = require('./data')
 
 User.hasMany(Event, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
 Event.belongsTo(User, {
@@ -35,8 +35,8 @@ Questions.belongsTo(Polls, {
     }
 })
 
-Reactions.hasOne(Data, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
-Data.belongsTo(Reactions, { foreignKey: { allowNull: true } })
+// Reactions.hasOne(Data, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+// Data.belongsTo(Reactions, { foreignKey: { allowNull: true } })
 
 Slides.belongsToMany(Event, { through: 'Slides_Event' })
 Event.belongsToMany(Slides, { through: 'Slides_Event' })
@@ -49,5 +49,5 @@ module.exports = {
     Reactions,
     Questions,
     Slides,
-    Data
+    // Data
 }

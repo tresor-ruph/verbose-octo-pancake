@@ -7,12 +7,12 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 module.exports = () => {
+    
     const create = async (request) => {
         let decodedToken = tokenManager.decode(request)
         if (decodedToken.error) {
             return "access_D"
         }
-        console.log(decodedToken)
         let values = Object.values(request.body)
         const validMod = eventModel(...values)
         if (validMod.error) {
@@ -23,8 +23,9 @@ module.exports = () => {
         if (eventExist.length === 0) {
             let eventLink = eventCode.generateEventCode()
             let response = await EventRepo.addEvent(decodedToken.data, validMod.value, eventLink)
+            // console.log(response)
             if (response.length !== 0) {
-                return { message: eventLink }
+                return { eventId:response.dataValues.eventId, link: eventLink }
             } else {
                 return { code: 0, message: 'an error occured' }
             }

@@ -21,6 +21,7 @@ function Dashboard(props) {
   const [time, setTime] = useState('')
   const [questionArr, setQuestionArr] = useState([])
   const [leo, setLeo] = useState(0)
+  const [eventId, setEventId] = useState('')
 
   useEffect(() => {
 
@@ -33,7 +34,7 @@ function Dashboard(props) {
     let url = process.env.REACT_APP_EVENTBASEURL + x
     setLink(url)
   }
- 
+
 
   const handleTitle = (event) => {
     setTitle(event.target.value)
@@ -62,8 +63,9 @@ function Dashboard(props) {
     axios.post('/createEvent', data).then(res => {
 
       if (res.status === 200) {
-
-        generateLink(res.data.message)
+        console.log(res)
+        generateLink(res.data.link)
+        setEventId(res.data.eventId)
         setLoaded(true)
         setNext(true)
       }
@@ -82,7 +84,7 @@ function Dashboard(props) {
 
   const createQuestion = () => {
     questionCount++
-    setQuestionArr(prevState => [...prevState, <div key={questionCount}><Questions questionKey={questionCount} handleQuestions={handleQuestions} rmvQuestion={rmvQuestion} questionCount={questionCount} handleOptionChange={handleOptionChange} removeFieldArray={removeFieldArray}/>
+    setQuestionArr(prevState => [...prevState, <div key={questionCount}><Questions questionKey={questionCount} handleQuestions={handleQuestions} rmvQuestion={rmvQuestion} questionCount={questionCount} handleOptionChange={handleOptionChange} removeFieldArray={removeFieldArray} />
     </div>])
     setLeo(p => p + 1)
   }
@@ -94,9 +96,9 @@ function Dashboard(props) {
   }
 
   const handleOptionChange = (id, elt, event) => {
-    
+
     optionArr[id].questionId = id
-    optionArr[id].answers[elt] = {id:elt, value:event.target.value}
+    optionArr[id].answers[elt] = { id: elt, value: event.target.value }
   }
 
   const postQuestions = () => {
@@ -104,17 +106,21 @@ function Dashboard(props) {
     console.log(optionArr)
 
   }
-const removeFieldArray = (x,y)=>{
+  const removeFieldArray = (x, y) => {
 
-console.log(x)
-optionArr[y].answers =optionArr[y].answers.filter(elt => elt.id != x)
-console.log(optionArr)
+    console.log(x)
+    optionArr[y].answers = optionArr[y].answers.filter(elt => elt.id != x)
+    console.log(optionArr)
 
-}
+  }
   const handleSubmit2 = () => {
     const data = {
-      mode, layout, time
+      layout,time,mode ,eventId
     }
+    axios.post('/createPoll', data).then(res => {
+      console.log(res)
+    }).catch(err => console.log(err?.response))
+    console.log(data)
 
   }
 
@@ -142,12 +148,12 @@ console.log(optionArr)
 
           {next && <div>
             <select className="form-select" aria-label="Default select example" onChange={(event) => handleSelectedLayout(event)}>
-              <option value="polls">barChart</option>
-              <option value="reactions">PieChart</option>
+              <option value="barChart">barChart</option>
+              <option value="pieChart">pieChart</option>
             </select><br />
             <select className="form-select" aria-label="Default select example" onChange={(event) => handleSelectedMode(event)}>
-              <option value="polls">automatique</option>
-              <option value="reactions">manual</option>
+              <option value="automatique">automatique</option>
+              <option value="manual">manual</option>
             </select><br />
 
             <label htmlFor="exampleFormControlInput1" className="form-label">waiting Time</label>
@@ -156,10 +162,8 @@ console.log(optionArr)
             <button className='btn-primary' onClick={() => createQuestion()}>create question</button><br /><br />
             {questionCount > 0 && questionArr}
             <button className='btn-primary' onClick={() => postQuestions()}>Envoyer</button>
-
           </div>}
-
-          <button className='btn-primary' onClick={() => { console.log(questionArr) }}>test code</button>
+          <button className='btn-primary' onClick={() => { handleSubmit2() }}>test code</button>
         </div>
       </div>
     </div>

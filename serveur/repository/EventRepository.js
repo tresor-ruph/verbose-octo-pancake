@@ -3,10 +3,10 @@ const { Op } = require("sequelize")
 
 module.exports = () => {
 
-    const eventExist = async function (title) {
+    const eventExist = async function (identif) {
         const event = await Event.findAll({
             where: {
-                title: title
+                [Op.or]: [{title: identif}, {eventId: identif}]
             }
         })
         return event

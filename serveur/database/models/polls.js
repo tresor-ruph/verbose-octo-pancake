@@ -8,21 +8,18 @@ module.exports =   dbConnection.define("Polls", {
       primaryKey: true,
 
     },
-    defaultLayout: {
+    defaultResultLayout: {
       type: Sequelize.STRING,
       allowNull: false,
     },
     waitingTime: {
       type: Sequelize.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
-    resultFormat: {
+    Mode: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    questions: {
-      type: Sequelize.STRING,
-    }
   },
 
   )

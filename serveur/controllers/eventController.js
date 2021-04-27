@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 dotenv.config()
 
 module.exports = () => {
+    console.log('event bang')
     const createEvent = async (req, res) => {
         const response = await eventServices.create(req)
         if (response == 0) {
@@ -12,24 +13,27 @@ module.exports = () => {
         if (response.code) {
             res.status(400).send(JSON.stringify({ message: response.message }))
             return
+        } else if (response === "access_D") {
+            res.status(401).send(JSON.stringify({ message: response.message }))
+            return
         }
         res.status(200).send(JSON.stringify(response))
     }
 
-    const getEvent = async(req, res)=> {
-     
+    const getEvent = async (req, res) => {
+
         const response = await eventServices.fetchOne(req)
-    
+
         if (response.length === 0) {
-          res.status(404).send(JSON.stringify({ message: 'requested resource not found' }))
-          return
+            res.status(404).send(JSON.stringify({ message: 'requested resource not found' }))
+            return
         }
-    
+
         else if (response === -1) {
-          res.status(400).send(JSON.stringify({ message: 'invalid request' }))
-          return
+            res.status(400).send(JSON.stringify({ message: 'invalid request' }))
+            return
         }
-    
+
         res.status(200).send(JSON.stringify(response, null, 2))
     }
 
