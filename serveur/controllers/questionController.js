@@ -1,10 +1,10 @@
-const { pollServices } = require('../use_cases');
+const { questionServices } = require('../use_cases');
 const dotenv = require('dotenv');
 dotenv.config()
 
 module.exports = () => {
-    const createPoll = async (req, res) => {
-        const response = await pollServices.create(req)
+    const addQuestion = async (req, res) => {
+        const response = await questionServices.create(req)
          if (response === "access_D") {
             res.status(403).send(JSON.stringify({ message: response.message }))
             return
@@ -32,6 +32,6 @@ module.exports = () => {
     //     res.status(200).send(JSON.stringify(response, null, 2))
     // }
 
-    return ({ createPoll })
+    return ({ addQuestion })
 
 }

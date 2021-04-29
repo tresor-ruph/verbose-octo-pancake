@@ -2,7 +2,6 @@ const Joi = require('joi')
 
 module.exports = (defaultResultLayout, waitingTime, mode, eventId) => {
   const layout_validator = (value, helpers) => {
-    console.log(value)
     if (value === 'barChart' || value === 'pieChart') {
       return value
     } else {

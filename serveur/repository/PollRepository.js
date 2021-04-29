@@ -14,6 +14,15 @@ module.exports = () => {
       return newPoll
     }
 
+    const PollExist= async function(pollId){
+      const poll = await Polls.findAll({
+           where: {
+              pollId: pollId
+           }
+       })
+       return poll
+   }
+
     // const getOneEvent= async function(code, userId){
     //    const event = await Event.findAll({
     //         where: {
@@ -23,5 +32,5 @@ module.exports = () => {
     //     return event
     // }
 
-    return ({addPoll})
+    return ({addPoll, PollExist})
 }

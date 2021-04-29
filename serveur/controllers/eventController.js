@@ -3,7 +3,6 @@ const dotenv = require('dotenv');
 dotenv.config()
 
 module.exports = () => {
-    console.log('event bang')
     const createEvent = async (req, res) => {
         const response = await eventServices.create(req)
         if (response == 0) {

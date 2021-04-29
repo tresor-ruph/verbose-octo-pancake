@@ -27,7 +27,6 @@ export default function Reset(props) {
       setReset(false);
     } else {
       let arr = link.split("/");
-      console.log(arr);
       axios
         .get(`/verifLink/${arr[2]}`)
         .then((res) => {

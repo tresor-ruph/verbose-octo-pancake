@@ -22,6 +22,7 @@ function Dashboard(props) {
   const [questionArr, setQuestionArr] = useState([])
   const [leo, setLeo] = useState(0)
   const [eventId, setEventId] = useState('')
+  const [pollId, setPollId] = useState('')
 
   useEffect(() => {
 
@@ -102,15 +103,27 @@ function Dashboard(props) {
   }
 
   const postQuestions = () => {
-    console.log(newArr)
-    console.log(optionArr)
+  
+    newArr.forEach(elt =>{
+      optionArr.forEach(opt => {
+        if(elt.id === opt.questionId){
+          elt.options = opt.answers.filter(elt => elt != null)
+          elt.pollId = pollId === undefined ? '' : pollId
+          return
+        }
+      })
+    })
 
+    newArr = newArr.filter(elt => elt != null)
+    newArr.forEach(elt => {
+      axios.post('/addQuestions', elt).then(res=> {
+        console.log(res)
+      }).catch(err => console.log(err.response))
+    })
   }
   const removeFieldArray = (x, y) => {
 
-    console.log(x)
     optionArr[y].answers = optionArr[y].answers.filter(elt => elt.id != x)
-    console.log(optionArr)
 
   }
   const handleSubmit2 = () => {
@@ -119,8 +132,9 @@ function Dashboard(props) {
     }
     axios.post('/createPoll', data).then(res => {
       console.log(res)
+      setPollId(res.data.pollId)
+
     }).catch(err => console.log(err?.response))
-    console.log(data)
 
   }
 
@@ -164,6 +178,7 @@ function Dashboard(props) {
             <button className='btn-primary' onClick={() => postQuestions()}>Envoyer</button>
           </div>}
           <button className='btn-primary' onClick={() => { handleSubmit2() }}>test code</button>
+
         </div>
       </div>
     </div>

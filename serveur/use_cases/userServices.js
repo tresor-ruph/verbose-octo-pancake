@@ -62,9 +62,7 @@ module.exports = () => {
         values.password = passWordManager.hashPassword(values.password)
         values.Accountstatus = 'social'
         const response = await UsersRepo.addUser(values)
-        console.log(response)
         const token = await tokenManager.encode(response)
-        console.log(response)
         return { token: token, id: response }
 
       }

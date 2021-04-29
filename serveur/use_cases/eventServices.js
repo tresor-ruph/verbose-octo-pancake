@@ -23,7 +23,6 @@ module.exports = () => {
         if (eventExist.length === 0) {
             let eventLink = eventCode.generateEventCode()
             let response = await EventRepo.addEvent(decodedToken.data, validMod.value, eventLink)
-            // console.log(response)
             if (response.length !== 0) {
                 return { eventId:response.dataValues.eventId, link: eventLink }
             } else {
@@ -38,7 +37,6 @@ module.exports = () => {
         if (decodedToken.error) {
             return "access_D"
         }
-        console.log(decodedToken)
         const response = await EventRepo.getOneEvent(req.params.id, decodedToken.data)
         return response
     }
