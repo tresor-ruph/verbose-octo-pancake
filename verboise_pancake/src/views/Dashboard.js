@@ -1,186 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { QRCode } from 'react-qr-svg'
-import axios from 'axios'
-import Questions from "components/Questions"
-import "helper/axiosConfig"
+// import StepZilla from "react-stepzilla";
+// import '../customcss/stepZilla.css'
+import EventModal from '../components/Events/EventModal'
 
-
-let arrtest = []
-let questionCount = 0
-let optionArr = []
-let newArr = []
 function Dashboard(props) {
 
-  const [title, setTitle] = useState('')
-  const [selected, setSelected] = useState('')
-  const [link, setLink] = useState('')
-  const [loaded, setLoaded] = useState(false)
-  const [next, setNext] = useState(false)
-  const [mode, setMode] = useState('')
-  const [layout, setLayout] = useState('')
-  const [time, setTime] = useState('')
-  const [questionArr, setQuestionArr] = useState([])
-  const [leo, setLeo] = useState(0)
-  const [eventId, setEventId] = useState('')
-  const [pollId, setPollId] = useState('')
+  const steps =
+    [
+      { name: 'Step 1', component: <button>step</button> },
+      { name: 'Step 2', component: <h1>step2</h1> },
+      { name: 'Step 3', component: <h1>step3</h1> },
+      { name: 'Step 4', component: <h1>step4</h1> },
+      { name: 'Step 5', component: <h1>step5</h1> }
+    ]
 
-  useEffect(() => {
-
-    if (leo > 0) {
-      arrtest = questionArr
-    }
-  }, [leo])
-
-  const generateLink = (x) => {
-    let url = process.env.REACT_APP_EVENTBASEURL + x
-    setLink(url)
-  }
-
-
-  const handleTitle = (event) => {
-    setTitle(event.target.value)
-  }
-
-  const handleSelected = (event) => {
-    setSelected(event.target.value)
-  }
-  const handleSelectedMode = (event) => {
-    setMode(event.target.value)
-  }
-  const handleSelectedLayout = (event) => {
-    setLayout(event.target.value)
-  }
-  const handleTime = (event) => {
-    setTime(event.target.value)
-  }
-
-  const handleSubmit = () => {
-    const data = {
-      title: title,
-      selected: selected
-    }
-
-
-    axios.post('/createEvent', data).then(res => {
-
-      if (res.status === 200) {
-        console.log(res)
-        generateLink(res.data.link)
-        setEventId(res.data.eventId)
-        setLoaded(true)
-        setNext(true)
-      }
-    }).catch(err => {
-      console.log(err.response)
-    })
-
-  }
-  const rmvQuestion = (x) => {
-    arrtest = arrtest.filter(elt => elt.key != x.toString())
-    newArr = newArr.filter(elt => elt.id != x);
-    questionCount++
-    setQuestionArr(arrtest)
-
-  }
-
-  const createQuestion = () => {
-    questionCount++
-    setQuestionArr(prevState => [...prevState, <div key={questionCount}><Questions questionKey={questionCount} handleQuestions={handleQuestions} rmvQuestion={rmvQuestion} questionCount={questionCount} handleOptionChange={handleOptionChange} removeFieldArray={removeFieldArray} />
-    </div>])
-    setLeo(p => p + 1)
-  }
-
-
-  const handleQuestions = (questionId, event) => {
-    newArr[questionId] = { id: questionId, question: event.target.value }
-    optionArr[questionId] = { questionId: '', answers: [] }
-  }
-
-  const handleOptionChange = (id, elt, event) => {
-
-    optionArr[id].questionId = id
-    optionArr[id].answers[elt] = { id: elt, value: event.target.value }
-  }
-
-  const postQuestions = () => {
-  
-    newArr.forEach(elt =>{
-      optionArr.forEach(opt => {
-        if(elt.id === opt.questionId){
-          elt.options = opt.answers.filter(elt => elt != null)
-          elt.pollId = pollId === undefined ? '' : pollId
-          return
-        }
-      })
-    })
-
-    newArr = newArr.filter(elt => elt != null)
-    newArr.forEach(elt => {
-      axios.post('/addQuestions', elt).then(res=> {
-        console.log(res)
-      }).catch(err => console.log(err.response))
-    })
-  }
-  const removeFieldArray = (x, y) => {
-
-    optionArr[y].answers = optionArr[y].answers.filter(elt => elt.id != x)
-
-  }
-  const handleSubmit2 = () => {
-    const data = {
-      layout,time,mode ,eventId
-    }
-    axios.post('/createPoll', data).then(res => {
-      console.log(res)
-      setPollId(res.data.pollId)
-
-    }).catch(err => console.log(err?.response))
-
-  }
 
   return (
     <div className="container bootstrap snippet">
-      <div className="main-div">
-        <div className="center-div">
-          <label htmlFor="exampleFormControlInput1" className="form-label">Titre</label>
-          <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="title" onChange={(event) => handleTitle(event)} />
-          <select className="form-select" aria-label="Default select example" onChange={(event) => handleSelected(event)}>
-            <option value="polls">Polls</option>
-            <option value="reactions">Reaction</option>
-          </select><br />
-          <button className='btn-primary' onClick={() => handleSubmit()}>submit</button>
-          {loaded && <div>
-            <h3>{link}</h3>
-            <QRCode bgColor="#FFFFFF"
-              fgColor="#000000"
-              level="Q"
-              style={{ width: 256 }}
-              value={link} />
-          </div>}
-
-
-
-          {next && <div>
-            <select className="form-select" aria-label="Default select example" onChange={(event) => handleSelectedLayout(event)}>
-              <option value="barChart">barChart</option>
-              <option value="pieChart">pieChart</option>
-            </select><br />
-            <select className="form-select" aria-label="Default select example" onChange={(event) => handleSelectedMode(event)}>
-              <option value="automatique">automatique</option>
-              <option value="manual">manual</option>
-            </select><br />
-
-            <label htmlFor="exampleFormControlInput1" className="form-label">waiting Time</label>
-            <input type="Number" className="form-control" id="exampleFormControlInput1" placeholder="title" onChange={(event) => handleTime(event)} />
-
-            <button className='btn-primary' onClick={() => createQuestion()}>create question</button><br /><br />
-            {questionCount > 0 && questionArr}
-            <button className='btn-primary' onClick={() => postQuestions()}>Envoyer</button>
-          </div>}
-          <button className='btn-primary' onClick={() => { handleSubmit2() }}>test code</button>
-
-        </div>
-      </div>
+      <EventModal />
     </div>
   );
 }
