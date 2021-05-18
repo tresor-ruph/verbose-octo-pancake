@@ -10,7 +10,7 @@ module.exports = (defaultResultLayout, waitingTime, mode, eventId) => {
   }
 
   const mode_validator = (value, helpers) => {
-    if (value === 'automatic' || value === 'manual') {
+    if (value === 'automatique' || value === 'manual') {
       return value
     } else {
       throw new Error('invalid mode option')

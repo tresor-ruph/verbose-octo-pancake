@@ -11,6 +11,7 @@ const INITIAL_STATE = {
         mode: '',
         question: [],
         options: [],
+        id: '',
     }
 }
 

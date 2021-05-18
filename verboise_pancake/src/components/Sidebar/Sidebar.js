@@ -35,6 +35,12 @@ const Sidebar = () => {
                         <span className="menu-title">HOME PAGE</span>
                     </a>
                 </li>
+                <li className={'nav-item'}>
+                    <a className="nav-link" onClick={() => history.push('/dashboard/poll')}>
+                        <HomeIcon />
+                        <span className="menu-title">POLL </span>
+                    </a>
+                </li>
 
 
             </ul>

@@ -6,6 +6,7 @@ import { QRCode } from 'react-qr-svg'
 
 import axios from 'axios'
 import "helper/axiosConfig"
+import './step3.scss'
 
 let eventId = null
 let pollId = null
@@ -36,6 +37,7 @@ const Step3 = () => {
             if (res.status === 200) {
                 generateLink(res.data.link)
                 eventId = res.data.eventId
+                // console.log('eventResponse', res)
             }
         }).catch(err => {
             console.log(err.response)
@@ -69,6 +71,7 @@ const Step3 = () => {
                     mode: '',
                     question: [],
                     options: [],
+                    id: eventId,
                 },
 
             },
@@ -108,24 +111,30 @@ const Step3 = () => {
     }
 
     return (
-        <div>
+        <div className='step3'>
             {!loaded ?
-                (<Spinner animation="border" role="status" variant="primary">
+                (<div className='spinner'><Spinner animation="border" role="status" variant="primary" size='x-lg'>
                     <span className="sr-only">Loading...</span>
-                </Spinner>) :
+                </Spinner></div>) :
 
                 (<div className='row'>
-                    <div className='col md-5'>
-                        <div>
+                    <div className='col md-4'>
+                        
+                        <div className='qr'>
+                        <span class='qr-text'>Scan code </span>
 
                             <QRCode bgColor="#FFFFFF"
                                 fgColor="#000000"
                                 level="Q"
-                                style={{ width: 256 }}
+                                style={{ width: 350 }}
                                 value={eventUrl} />
                         </div>
                     </div>
-                    <div className='col md-5'>
+                    <div className='col md-2 url-or' >
+                        <span> - OR -</span>
+                        </div>
+                    <div className='col md-4 url-txt' >
+                    
                         <h3>{eventUrl}</h3>
                     </div>
 

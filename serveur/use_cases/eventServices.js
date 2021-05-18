@@ -41,6 +41,44 @@ module.exports = () => {
         return response
     }
 
-    return ({ create, fetchOne })
+    const fetchEventPoll = async (req)=> {
+        let decodedToken = tokenManager.decode(req)
+        if (decodedToken.error) {
+            return "access_D"
+        }
+
+        const response = await EventRepo.getEventPoll(req.params.id, decodedToken.data)
+        const polls =response[0].dataValues.Polls
+        const questions =polls[0].dataValues.Questions
+
+
+        const event = {
+            id:response[0].dataValues.eventId,
+            title:response[0].dataValues.title,
+            type:response[0].dataValues.eventType,
+            code:response[0].dataValues.code,
+            createdAt:response[0].dataValues.createdAt
+        }
+        const poll ={
+            id: polls[0].dataValues.pollId,
+            layout:polls[0].dataValues.defaultResultLayout,
+            time:polls[0].dataValues.waitingTime,
+            mode:polls[0].dataValues.Mode,
+            createdAt:polls[0].dataValues.createdAt,
+        }
+        let questionsList =[]
+        Array.from(questions).forEach(elt => {
+            questionsList.push({id: elt.dataValues.questionId, question:elt.dataValues.question, options: JSON.parse(elt.dataValues.options)})
+        })
+
+        const data = {
+            event, poll, questions:questionsList
+        }
+
+      
+        return data
+    }
+
+    return ({ create, fetchOne, fetchEventPoll })
 
 }

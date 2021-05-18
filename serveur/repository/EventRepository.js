@@ -1,4 +1,4 @@
-const { Event } = require('../database/models')
+const { Event, Polls,Questions  } = require('../database/models')
 const { Op } = require("sequelize")
 
 module.exports = () => {
@@ -33,5 +33,26 @@ module.exports = () => {
         return event
     }
 
-    return ({eventExist,getOneEvent, addEvent})
+    const getEventPoll= async function(id, userId){
+        const event = await Event.findAll({
+             where: {
+                eventId: id
+             },
+             include : [
+                 {
+                     model:Polls,
+                     include: [
+                         {
+                             model: Questions
+                         }
+                     ]
+                     
+                 }
+             ]
+         })
+         return event
+     }
+    
+
+    return ({eventExist,getOneEvent, addEvent, getEventPoll})
 }

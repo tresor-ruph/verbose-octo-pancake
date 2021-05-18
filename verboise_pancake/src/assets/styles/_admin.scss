@@ -1,0 +1,31 @@
+
+.dash-min{
+
+position: fixed;
+top: $navbar-height;
+left: 70px;
+height: 100vh;
+width: 100%;
+background-color: white;
+
+
+}
+
+.dash-max {
+position: fixed;
+top: $navbar-height;
+left: $sidebar-width-lg;
+width: 100%;
+background-color: white;
+
+}
+
+@media screen and (max-width: 991px) {
+    .dash-min{
+        left: 0px;
+    }
+    .dash-max {
+        left: 0px;
+    }
+  }
+  

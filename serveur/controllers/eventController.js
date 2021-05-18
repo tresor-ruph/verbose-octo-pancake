@@ -36,6 +36,22 @@ module.exports = () => {
         res.status(200).send(JSON.stringify(response, null, 2))
     }
 
-    return ({ createEvent, getEvent })
+    const getEventPoll = async (req, res) => {
+        const response = await eventServices.fetchEventPoll(req)
+
+        if (response.length === 0) {
+            res.status(404).send(JSON.stringify({ message: 'requested resource not found' }))
+            return
+        }
+
+        else if (response === -1) {
+            res.status(400).send(JSON.stringify({ message: 'invalid request' }))
+            return
+        }
+
+        res.status(200).send(JSON.stringify(response, null, 2))
+    }
+
+    return ({ createEvent, getEvent,getEventPoll })
 
 }

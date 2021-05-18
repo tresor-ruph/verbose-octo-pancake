@@ -7,6 +7,7 @@ import { store, persistor } from "store";
 import reportWebVitals from "./reportWebVitals";
 import { PersistGate } from "redux-persist/integration/react";
 import { BrowserRouter } from "react-router-dom";
+import './helper/fontAwesome'
 
 import Main from "routes";
 
