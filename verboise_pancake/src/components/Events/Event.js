@@ -20,7 +20,7 @@ const Event = () => {
 
         } else {
             axios.get(`/getEvent/${paths[2]}`).then(res => {
-                console.log(res)
+                // console.log(res)
                 setEventStatus(res.data[0].status)
                 setEventType(res.data[0].eventType)
             }).catch(err => console.log(err.response))
@@ -42,7 +42,8 @@ const Event = () => {
 
     return (
         <div>
-            {renderEvent()}
+            {/* {renderEvent()} */}
+            <Polls />
         </div>
     );
 };

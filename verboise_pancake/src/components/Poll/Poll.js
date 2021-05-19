@@ -9,56 +9,104 @@ import 'helper/firebaseConfig'
 
 import firebase from 'firebase';
 import 'firebase/firestore';
-import { error } from 'jquery'
 
 const db = firebase.firestore();
 
-let pollId =''
-let currentQuestion= ''
-let index = 0;
+let pollId = ''
+let currentQuestion = ''
+
 const Poll = () => {
     const eventState = useSelector(state => state.EventReducer.event)
     const [event, setEvent] = useState({})
     const [poll, setPoll] = useState({})
     const [question, setQuestion] = useState([])
+    const [index, setIndex]= useState(0)
+    const [label, setLabel] = useState([''])
+    const [data, setData] = useState([])
+    const [chatText, setChatText] = useState([])
 
     let pollRef = db.collection('polls')
-    useEffect( () => {
-      loadEvent()
-         
+
+    useEffect(() => {
+        loadEvent()
+
     }, [])
 
-    const registerFireStore =(pollId, currQuest) => {
-    try {
-            const unsubscribe = pollRef.doc(`${poll.id}`).collection('question').doc(`${currentQuestion}`).onSnapshot((doc) => {
-                console.log('current data:', doc.data())
+    const registerFireStore = (pollId, currQuest) => {
+        try {
+            const unsubscribe = pollRef.doc(pollId).collection(currQuest.id).onSnapshot((querySnapshot) => {
+               
+                const data =[];
+                querySnapshot.forEach(doc => {
+                    // console.log(doc.data())
+                    data.push( parseInt(doc.data().answer))
+                })
+                const map = data.reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map());
+                let test =[...map.entries()]
+console.log(currQuest.options)
+console.log(test)
+                let tempArr = []
+                for(let i of currQuest.options){
+                    for(let j of test){
+                        console.log(j)
+                        if(i.id == j[0]){
+                            tempArr.push({x: i.value, y:j[1]})
+                        }
+                    }
+                }
+                console.log(tempArr)
+                setLabel(tempArr)
+                
 
-                return () => unsubscribe()
+
+
+
+                // console.info([...map.values()])
+                //  querySnapshot.docChanges().filter(({ type}) => type === 'added').map(({doc}) => {
+                //     console.log(doc.data)
+                // })
+
+                try {
+                    return () => unsubscribe()
+                }catch(error){
+                    console.log('subscribe err', error)
+                }
             })
-        }catch(error){
+        } catch (error) {
             console.log(error)
         }
     }
 
+    const handleStart = () => {
+        pollRef.doc(pollId).collection(currentQuestion).add({message: 'test'})
+    }
+
     const loadEvent = async () => {
         await axios.get('/getEventPoll/' + eventState.id).then(res => {
+            console.log(res.data)
             setEvent(res.data.event)
             setPoll(res.data.poll)
             setQuestion(res.data.questions)
-            pollId =res.data.poll.id
-            currentQuestion = res.data.questions[index].id
-            registerFireStore(pollId,currentQuestion)
+            pollId = res.data.poll.id
+            currentQuestion = res.data.questions[index]
+            registerFireStore(pollId, currentQuestion)
 
         }).catch(err => {
             console.log(err);
             console.log(err.response)
         })
     }
-    const data = {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+
+    const calculate = () => {
+
+    }
+
+
+    let chartData = {
+        // labels: label ,
         datasets: [{
             label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
+            data: label,
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -101,8 +149,9 @@ const Poll = () => {
 
     return (<div>
         <div className='chart'>
-            <Button >Start Event</Button>
-            {/* <Bar  data={data} options={options}  /> */}
+            <Bar  data={chartData} options={options}  />
+            <Button onClick ={() =>handleStart()}>Start Event</Button>
+
 
         </div>
     </div>)
