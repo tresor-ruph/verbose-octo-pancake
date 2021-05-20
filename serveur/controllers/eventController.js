@@ -38,7 +38,7 @@ module.exports = () => {
 
     const getEventPoll = async (req, res) => {
         const response = await eventServices.fetchEventPoll(req)
-
+console.log(req)
         if (response.length === 0) {
             res.status(404).send(JSON.stringify({ message: 'requested resource not found' }))
             return

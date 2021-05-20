@@ -24,10 +24,10 @@ module.exports = () => {
       return newEvent
     }
 
-    const getOneEvent= async function(code, userId){
+    const getOneEvent= async function(code){
        const event = await Event.findAll({
             where: {
-                [Op.and]:[{code: code}, {UserUserId: userId}]
+                code: code
             }
         })
         return event

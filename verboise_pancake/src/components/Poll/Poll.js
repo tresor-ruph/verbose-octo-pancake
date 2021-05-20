@@ -14,46 +14,64 @@ const db = firebase.firestore();
 
 let pollId = ''
 let currentQuestion = ''
+let signalDocRef = ''
+
 
 const Poll = () => {
     const eventState = useSelector(state => state.EventReducer.event)
+    const sessState = useSelector(state => state.SessionReducer)
+
     const [event, setEvent] = useState({})
     const [poll, setPoll] = useState({})
     const [question, setQuestion] = useState([])
     const [index, setIndex] = useState(0)
     const [dataSet, setDataSet] = useState([''])
     const [eventStart, setEventStart] = useState(false)
+    const [connect, setConnect] = useState(0)
 
 
     let pollRef = db.collection('polls')
 
     useEffect(() => {
-        loadEvent()
-
+        loadEvent()       
     }, [index])
 
     const registerFireStore = (pollId, currQuest) => {
         try {
             const unsubscribe = pollRef.doc(pollId).collection(currQuest.id).onSnapshot((querySnapshot) => {
-
+                let numbConnection = []
                 let data = [];
                 let message = ''
                 querySnapshot.forEach(doc => {
-
                     if (doc.data().message === 'startEvent') {
                         setEventStart(true)
-                    } 
+                    }
                     else if (doc.data().message === 'next-question') {
                         message = 'next question'
-                        data = []
                     }
+                    else if(doc.data().message === 'new_connection'){
+                        message = 'connection'
+                        numbConnection.push(doc.data().connection)
+                    }
+                    
                     else {
                         data.push(parseInt(doc.data().answer))
+                        message = 'data'
 
                     }
 
+
                 })
-                if (data.length > 0 && message == '') {
+                if(numbConnection.length > 0){
+                    let val =0
+                    numbConnection.forEach(elt => {
+                        val +=parseInt(elt)
+                    } )
+                    setConnect(val)
+
+                }
+
+                if (message == 'data') {
                     const map = data.reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map());
                     let test = [...map.entries()]
                     let tempArr = []
@@ -67,6 +85,7 @@ const Poll = () => {
                     setDataSet(tempArr)
                 }
                 try {
+                
                     return () => unsubscribe()
                 } catch (error) {
                     console.log('subscribe err', error)
@@ -78,14 +97,17 @@ const Poll = () => {
     }
 
     const handleStart = () => {
-        
-        pollRef.doc(pollId).collection(currentQuestion.id).add({ message: 'startEvent' })
 
-        const data ={
+        pollRef.doc(pollId).collection(currentQuestion.id).add({ message: 'startEvent' }).then(docRef => {
+            console.log('doc written with id;', docRef.id)
+            signalDocRef = docRef.id
+        }).catch(err => console.log('error adding', err))
+
+        const data = {
             id: event.id,
             status: 'active'
         }
-        axios.put('/updateStatus', data).then(res=> {
+        axios.put('/updateStatus', data).then(res => {
             console.log(res)
         }).catch(err => {
             console.log(err.response)
@@ -93,10 +115,9 @@ const Poll = () => {
     }
 
     const loadEvent = async () => {
-        await axios.get('/getEventPoll/' + eventState.id).then(res => {
+        await axios.get(`/getEventPoll/${eventState.eventId}/${sessState.userId}`).then(res => {
             setEvent(res.data.event)
             setPoll(res.data.poll)
-            console.log('poll', res.data.poll.questionIndex)
             setIndex(res.data.poll.questionIndex)
             setQuestion(res.data.questions)
             pollId = res.data.poll.id
@@ -109,27 +130,37 @@ const Poll = () => {
         })
     }
 
-    const nextQuestion =async () => {
+    const nextQuestion = async () => {
 
-        pollRef.doc(pollId).collection(currentQuestion.id).add({ message: 'next-question' })
+        if (signalDocRef == '') {
+            console.log('an error occured')
+            return
+        }
+
+        pollRef.doc(pollId).collection(currentQuestion.id).doc(signalDocRef).set({ message: 'next-question' })
         setIndex(prev => prev + 1);
         currentQuestion = question[index]
-        console.log('index',index)
+        console.log('index', index)
         const data = {
-            id : poll.id,
-            questionIndex: index +1,
+            id: poll.id,
+            questionIndex: index + 1,
         }
-       await axios.put('/questionCount', data).then(res => {
+        await axios.put('/questionCount', data).then(res => {
             console.log(res)
         }).catch(err => {
             console.log(err.response)
         })
-        
-        
+
+
     }
 
     const revealAnswers = () => {
-        pollRef.doc(pollId).collection(currentQuestion.id).add({ message: 'reveal' })
+
+        if (signalDocRef == '') {
+            console.log('an error occured')
+            return
+        }
+        pollRef.doc(pollId).collection(currentQuestion.id).doc(signalDocRef).set({ message: 'reveal' })
 
     }
 
@@ -180,13 +211,15 @@ const Poll = () => {
 
     return (<div>
         <div className='chart'>
+            <h1>{'number of connected', connect}</h1>
+
             {eventStart && <div>Event Started</div>}
             <h1>{question[index]?.question || 'hahahah '}</h1>
             <Bar data={chartData} options={options} redraw={false} />
             <div style={{ marginBottom: "5%" }}><Button onClick={() => handleStart()}>Start Event</Button></div>
-           <div> <Button style={{ marginBottom: "5%" }} onClick={() => revealAnswers()}>Reveal Answers</Button></div>
+            <div> <Button style={{ marginBottom: "5%" }} onClick={() => revealAnswers()}>Reveal Answers</Button></div>
 
-            {! (index === question.length )? <Button onClick={() => nextQuestion()}>Next question</Button> :<Button onClick={() => endEvent()}>End Event</Button> }
+            {!(index === question.length -1) ? <Button onClick={() => nextQuestion()}>Next question</Button> : <Button onClick={() => endEvent()}>End Event</Button>}
         </div>
     </div>)
 

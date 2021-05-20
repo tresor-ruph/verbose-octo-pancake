@@ -3,11 +3,21 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from 'react-router'
 import 'helper/axiosConfig'
 import EventStatus from './EventStatus'
-import Polls from './Polls'
-import Reactions from './Reactions'
+import JoinPolls from './JoinPoll'
+import { useSelector, useDispatch } from 'react-redux'
 
+import Reactions from './Reactions'
+// import Name from './Name'
 
 const Event = () => {
+
+    const eventState = useSelector(state => state.EventReducer.event)
+    const sessState = useSelector(state => state.SessionReducer)
+    const dispatch = useDispatch()
+    const [pseudo, setPseudo] = useState('')
+    const [revealPoll, setRevealPoll] = useState(false)
+    const [eventId, setEventId] = useState(null)
+    const [loaded, setLoaded] = useState(false)
 
     const location = useLocation()
     const [eventStatus, setEventStatus] = useState('')
@@ -15,35 +25,51 @@ const Event = () => {
 
     useEffect(() => {
         const paths = location.pathname.split('/')
-        if (paths[2].length !== 6) {
-            console.log('invalid event code')
+        axios.get(`/getEvent/${paths[2]}`).then(res => {
+            setEventId(res.data[0].eventId)
+            setEventStatus(res.data[0].status)
+            setEventType(res.data[0].eventType)
+            eventState.eventId = res.data[0].eventId
+            if(eventState.pseudo === null || eventState.pseudo === undefined){
+            eventState.pseudo = Math.random().toString(36).substring(7)
+            }
+            dispatch({
+                type: "NEW_EVENT",
+                payload: {
+                    event: eventState,
 
-        } else {
-            axios.get(`/getEvent/${paths[2]}`).then(res => {
-                // console.log(res)
-                setEventStatus(res.data[0].status)
-                setEventType(res.data[0].eventType)
-            }).catch(err => console.log(err.response))
-        }
+                },
+            });
+            setLoaded(true)
 
-    })
 
-    const renderEvent = () => {
-        if (eventStatus === 'inactive' || eventStatus === 'completed') {
-            return (<EventStatus status={eventStatus} />)
-        } else if (eventStatus === 'ongoing' && evenType === 'reactions') {
-            return (<Reactions />)
-        } else if (eventStatus === 'ongoing' && evenType === 'polls') {
-            return (<Polls />)
-        }else {
-            return(<h1>An error occured</h1>)
-        }
-    }
+        }).catch(err => {
+            console.error(err)
+        })
+
+
+    }, [])
+
+
+    // const renderEvent = () => {
+    //     if (eventStatus === 'inactive' || eventStatus === 'completed') {
+    //         return (<EventStatus status={eventStatus} />)
+    //     } else if (eventStatus === 'ongoing' && evenType === 'reactions') {
+    //         return (<Reactions />)
+    //     } else if (eventStatus === 'ongoing' && evenType === 'polls') {
+    //         return (<Polls />)
+    //     } else {
+    //         return (<h1>An error occured</h1>)
+    //     }
+    // }
 
     return (
         <div>
-            {/* {renderEvent()} */}
-            <Polls />
+            {
+                loaded ? <div>
+                    <JoinPolls pseudo={eventState.pseudo} eventId={eventId} /></div>
+                    : <div><h1>hello world</h1></div>}
+
         </div>
     );
 };

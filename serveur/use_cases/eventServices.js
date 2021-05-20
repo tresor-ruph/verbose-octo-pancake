@@ -33,21 +33,16 @@ module.exports = () => {
         }
     }
     const fetchOne = async (req) => {
-        let decodedToken = tokenManager.decode(req)
-        if (decodedToken.error) {
-            return "access_D"
-        }
-        const response = await EventRepo.getOneEvent(req.params.id, decodedToken.data)
+     
+       
+        const response = await EventRepo.getOneEvent(req.params.eventCode)
         return response
     }
 
     const fetchEventPoll = async (req)=> {
-        let decodedToken = tokenManager.decode(req)
-        if (decodedToken.error) {
-            return "access_D"
-        }
-
-        const response = await EventRepo.getEventPoll(req.params.id, decodedToken.data)
+      console.log('///////////////////')
+      console.log(req.params)
+        const response = await EventRepo.getEventPoll(req.params.eventCode, req.params.userId)
         const polls =response[0].dataValues.Polls
         const questions =polls[0].dataValues.Questions
 
