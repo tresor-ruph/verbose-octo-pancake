@@ -17,8 +17,8 @@ module.exports = () => {
         if (validMod.error) {
             return { code: -1, message: validMod.error[0].message }
         }
-     
-         const pollExist = await PollRepo.PollExist(validMod.value.pollId)
+
+        const pollExist = await PollRepo.PollExist(validMod.value.pollId)
         if (pollExist.length != 0) {
             validMod.value.options = JSON.stringify(validMod.value.options)
             let response = await QuestionRepo.addQuestion(validMod.value)
@@ -31,7 +31,7 @@ module.exports = () => {
             return { code: 1, message: 'the Poll does not exist' }
         }
     }
-   
+
 
     return ({ create })
 

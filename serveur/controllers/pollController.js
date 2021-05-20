@@ -14,24 +14,23 @@ module.exports = () => {
         }
         res.status(200).send(JSON.stringify(response))
     }
+    const questionIndex = async (req, res) => {
+        const response = await pollServices.questionIndex(req)
+    
+        if (response == 0) {
+          res.status(404).send(JSON.stringify({ message: 'an error occured' }))
+          return
+        }
+        else if (response == "access_D") {
+          res.status(403).send('Access Denied')
+          return
+        }
+    
+        res.status(200).send(JSON.stringify({ message: 'index updated' }))
+    
+      }
 
-    // const getEvent = async (req, res) => {
-
-    //     const response = await eventServices.fetchOne(req)
-
-    //     if (response.length === 0) {
-    //         res.status(404).send(JSON.stringify({ message: 'requested resource not found' }))
-    //         return
-    //     }
-
-    //     else if (response === -1) {
-    //         res.status(400).send(JSON.stringify({ message: 'invalid request' }))
-    //         return
-    //     }
-
-    //     res.status(200).send(JSON.stringify(response, null, 2))
-    // }
-
-    return ({ createPoll })
+   
+    return ({ createPoll,questionIndex })
 
 }

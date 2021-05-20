@@ -17,9 +17,7 @@ const Step3 = () => {
     const eventState = useSelector(state => state.EventReducer.event)
 
     useEffect(() => {
-        console.log(eventState)
         makeRequest(eventState)
-        console.log('requests done')
 
     }, [])
 
@@ -47,10 +45,13 @@ const Step3 = () => {
     const postPoll = async (x) => {
         const data = {
             layout: x.defaultResultLayout,
-            time: x.waitingTime,
+            time: x.waitingTime || 0,
             mode: x.mode,
-            eventId: eventId
+            eventId: eventId,
+            questionIndex:0,
+
         }
+        console.log('polldata', data)
 
         await axios.post('/createPoll', data).then(res => {
             pollId = res.data.pollId
@@ -95,9 +96,10 @@ const Step3 = () => {
 
         x.question = x.question.filter(elt => elt != null)
         x.question.forEach(elt => {
+            console.log(elt)
             axios.post('/addQuestions', elt).then(res => {
                 console.log(res)
-            }).catch(err => console.log(err))
+            }).catch(err => console.log(err.response))
         })
 
 
@@ -121,7 +123,7 @@ const Step3 = () => {
                     <div className='col md-4'>
                         
                         <div className='qr'>
-                        <span class='qr-text'>Scan code </span>
+                        <span className='qr-text'>Scan code </span>
 
                             <QRCode bgColor="#FFFFFF"
                                 fgColor="#000000"

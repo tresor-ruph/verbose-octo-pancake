@@ -12,7 +12,7 @@ module.exports = () => {
         return event
     }
     const addEvent = async function (id, data, code) {
-      
+
       const newEvent = await Event.create({
           title: data.title,
           eventType: data.type,
@@ -52,7 +52,20 @@ module.exports = () => {
          })
          return event
      }
+
+     const startEvent = async function (id,status) {
+        const event = await Event.update({
+          status: status
+        },
+          {
+            where:
+            {
+              eventId: id
+            }
+          })
+        return event
+      }
     
 
-    return ({eventExist,getOneEvent, addEvent, getEventPoll})
+    return ({eventExist,getOneEvent, addEvent, getEventPoll,startEvent})
 }

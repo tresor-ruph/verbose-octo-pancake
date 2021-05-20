@@ -16,10 +16,6 @@ module.exports = dbConnection.define("Questions", {
         type: Sequelize.STRING,
         allowNull: false,
     },
-    answers: {
-        type: Sequelize.STRING,
-        allowNull: true,
-    },
  
 },
 

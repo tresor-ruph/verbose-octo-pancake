@@ -17,7 +17,7 @@ const EventModal = ({ show, hide }) => {
     const [stepMessage, setStepMessage] = useState('')
 
     const nextStep = () => {
-        console.log(eventState)
+        // console.log(eventState)
         if (step === 0) {
             if (eventState.title === "" || eventState.eventType === "") {
                 setStepError(true)

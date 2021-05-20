@@ -9,6 +9,7 @@ module.exports = () => {
         defaultResultLayout:data.defaultResultLayout,
         waitingTime:data.waitingTime,
         Mode: data.mode,
+        questionIndex: data.questionIndex,
         EventEventId: data.eventId
       })
       return newPoll
@@ -22,6 +23,18 @@ module.exports = () => {
        })
        return poll
    }
+   const questionIndex = async function (id,idx) {
+    const poll = await Polls.update({
+      questionIndex: idx
+    },
+      {
+        where:
+        {
+          pollId: id
+        }
+      })
+    return poll
+  }
 
     // const getOneEvent= async function(code, userId){
     //    const event = await Event.findAll({
@@ -32,5 +45,5 @@ module.exports = () => {
     //     return event
     // }
 
-    return ({addPoll, PollExist})
+    return ({addPoll, PollExist,questionIndex})
 }

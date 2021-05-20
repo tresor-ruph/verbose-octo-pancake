@@ -67,6 +67,7 @@ module.exports = () => {
       })
     return user
   }
+  
   const updatePassword = async function (password, id) {
     const user = await User.update({
       password: password

@@ -4,7 +4,7 @@ const { Op } = require("sequelize")
 module.exports = () => {
 
     const addQuestion = async function (data) {
-
+        
         const newQuestions = await Questions.create({
             question: data.question,
             options: data.options,

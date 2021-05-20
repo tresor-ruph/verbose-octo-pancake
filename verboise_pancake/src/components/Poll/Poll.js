@@ -20,55 +20,55 @@ const Poll = () => {
     const [event, setEvent] = useState({})
     const [poll, setPoll] = useState({})
     const [question, setQuestion] = useState([])
-    const [index, setIndex]= useState(0)
-    const [label, setLabel] = useState([''])
-    const [data, setData] = useState([])
-    const [chatText, setChatText] = useState([])
+    const [index, setIndex] = useState(0)
+    const [dataSet, setDataSet] = useState([''])
+    const [eventStart, setEventStart] = useState(false)
+
 
     let pollRef = db.collection('polls')
 
     useEffect(() => {
         loadEvent()
 
-    }, [])
+    }, [index])
 
     const registerFireStore = (pollId, currQuest) => {
         try {
             const unsubscribe = pollRef.doc(pollId).collection(currQuest.id).onSnapshot((querySnapshot) => {
-               
-                const data =[];
+
+                let data = [];
+                let message = ''
                 querySnapshot.forEach(doc => {
-                    // console.log(doc.data())
-                    data.push( parseInt(doc.data().answer))
+
+                    if (doc.data().message === 'startEvent') {
+                        setEventStart(true)
+                    } 
+                    else if (doc.data().message === 'next-question') {
+                        message = 'next question'
+                        data = []
+                    }
+                    else {
+                        data.push(parseInt(doc.data().answer))
+
+                    }
+
                 })
-                const map = data.reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map());
-                let test =[...map.entries()]
-console.log(currQuest.options)
-console.log(test)
-                let tempArr = []
-                for(let i of currQuest.options){
-                    for(let j of test){
-                        console.log(j)
-                        if(i.id == j[0]){
-                            tempArr.push({x: i.value, y:j[1]})
+                if (data.length > 0 && message == '') {
+                    const map = data.reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map());
+                    let test = [...map.entries()]
+                    let tempArr = []
+                    for (let i of currQuest.options) {
+                        for (let j of test) {
+                            if (i.id == j[0]) {
+                                tempArr.push({ x: i.value, y: j[1] })
+                            }
                         }
                     }
+                    setDataSet(tempArr)
                 }
-                console.log(tempArr)
-                setLabel(tempArr)
-                
-
-
-
-
-                // console.info([...map.values()])
-                //  querySnapshot.docChanges().filter(({ type}) => type === 'added').map(({doc}) => {
-                //     console.log(doc.data)
-                // })
-
                 try {
                     return () => unsubscribe()
-                }catch(error){
+                } catch (error) {
                     console.log('subscribe err', error)
                 }
             })
@@ -78,17 +78,29 @@ console.log(test)
     }
 
     const handleStart = () => {
-        pollRef.doc(pollId).collection(currentQuestion).add({message: 'test'})
+        
+        pollRef.doc(pollId).collection(currentQuestion.id).add({ message: 'startEvent' })
+
+        const data ={
+            id: event.id,
+            status: 'active'
+        }
+        axios.put('/updateStatus', data).then(res=> {
+            console.log(res)
+        }).catch(err => {
+            console.log(err.response)
+        })
     }
 
     const loadEvent = async () => {
         await axios.get('/getEventPoll/' + eventState.id).then(res => {
-            console.log(res.data)
             setEvent(res.data.event)
             setPoll(res.data.poll)
+            console.log('poll', res.data.poll.questionIndex)
+            setIndex(res.data.poll.questionIndex)
             setQuestion(res.data.questions)
             pollId = res.data.poll.id
-            currentQuestion = res.data.questions[index]
+            currentQuestion = res.data.questions[res.data.poll.questionIndex]
             registerFireStore(pollId, currentQuestion)
 
         }).catch(err => {
@@ -97,16 +109,37 @@ console.log(test)
         })
     }
 
-    const calculate = () => {
+    const nextQuestion =async () => {
+
+        pollRef.doc(pollId).collection(currentQuestion.id).add({ message: 'next-question' })
+        setIndex(prev => prev + 1);
+        currentQuestion = question[index]
+        console.log('index',index)
+        const data = {
+            id : poll.id,
+            questionIndex: index +1,
+        }
+       await axios.put('/questionCount', data).then(res => {
+            console.log(res)
+        }).catch(err => {
+            console.log(err.response)
+        })
+        
+        
+    }
+
+    const revealAnswers = () => {
+        pollRef.doc(pollId).collection(currentQuestion.id).add({ message: 'reveal' })
 
     }
 
+    const endEvent = () => {
+    }
 
     let chartData = {
-        // labels: label ,
         datasets: [{
             label: '# of Votes',
-            data: label,
+            data: dataSet,
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -127,8 +160,7 @@ console.log(test)
     }
     const options = {
         indexAxis: 'x',
-        // Elements options apply to all of the options unless overridden in a dataset
-        // In this case, we are setting the border of each horizontal bar to be 2px wide
+
         elements: {
             bar: {
                 borderWidth: 1,
@@ -140,8 +172,7 @@ console.log(test)
                 position: 'right',
             },
             title: {
-                display: true,
-                text: 'Chart.js Horizontal Bar Chart',
+                display: false,
             },
         },
     };
@@ -149,10 +180,13 @@ console.log(test)
 
     return (<div>
         <div className='chart'>
-            <Bar  data={chartData} options={options}  />
-            <Button onClick ={() =>handleStart()}>Start Event</Button>
+            {eventStart && <div>Event Started</div>}
+            <h1>{question[index]?.question || 'hahahah '}</h1>
+            <Bar data={chartData} options={options} redraw={false} />
+            <div style={{ marginBottom: "5%" }}><Button onClick={() => handleStart()}>Start Event</Button></div>
+           <div> <Button style={{ marginBottom: "5%" }} onClick={() => revealAnswers()}>Reveal Answers</Button></div>
 
-
+            {! (index === question.length )? <Button onClick={() => nextQuestion()}>Next question</Button> :<Button onClick={() => endEvent()}>End Event</Button> }
         </div>
     </div>)
 

@@ -51,12 +51,12 @@ module.exports = () => {
         const polls =response[0].dataValues.Polls
         const questions =polls[0].dataValues.Questions
 
-
         const event = {
             id:response[0].dataValues.eventId,
             title:response[0].dataValues.title,
             type:response[0].dataValues.eventType,
             code:response[0].dataValues.code,
+            status:response[0].dataValues.status,
             createdAt:response[0].dataValues.createdAt
         }
         const poll ={
@@ -64,6 +64,7 @@ module.exports = () => {
             layout:polls[0].dataValues.defaultResultLayout,
             time:polls[0].dataValues.waitingTime,
             mode:polls[0].dataValues.Mode,
+            questionIndex:polls[0].dataValues.questionIndex,
             createdAt:polls[0].dataValues.createdAt,
         }
         let questionsList =[]
@@ -79,6 +80,17 @@ module.exports = () => {
         return data
     }
 
-    return ({ create, fetchOne, fetchEventPoll })
+    const startEvent = async (request) => {
+
+        let token = tokenManager.decode(request)
+        if (token.error) {
+          return "access_D"
+        }
+
+        const response = await EventRepo.startEvent(request.body.id,request.body.status)
+        return response
+      }
+
+    return ({ create, fetchOne, fetchEventPoll, startEvent })
 
 }

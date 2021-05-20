@@ -51,7 +51,23 @@ module.exports = () => {
 
         res.status(200).send(JSON.stringify(response, null, 2))
     }
+   
+    const startEvent = async (req, res) => {
+        const response = await eventServices.startEvent(req)
+    
+        if (response == 0) {
+          res.status(404).send(JSON.stringify({ message: 'Event not found' }))
+          return
+        }
+        else if (response == "access_D") {
+          res.status(403).send('Access Denied')
+          return
+        }
+    
+        res.status(200).send(JSON.stringify({ message: 'status updated' }))
+    
+      }
 
-    return ({ createEvent, getEvent,getEventPoll })
+    return ({ createEvent, getEvent,getEventPoll,startEvent })
 
 }

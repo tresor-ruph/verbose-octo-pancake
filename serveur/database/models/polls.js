@@ -20,6 +20,11 @@ module.exports =   dbConnection.define("Polls", {
       type: Sequelize.STRING,
       allowNull: false,
     },
+     
+    questionIndex: {
+      type: Sequelize.INTEGER,
+      allowNull: true,
+  }
   },
 
   )

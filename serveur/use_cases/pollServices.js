@@ -30,8 +30,18 @@ module.exports = () => {
             return { code: 1, message: 'the event does not exist' }
         }
     }
- 
+    const questionIndex = async (request) => {
 
-    return ({ create })
+        let token = tokenManager.decode(request)
+        if (token.error) {
+          return "access_D"
+        }
+        console.log(request.body)
+
+        const response = await PollRepo.questionIndex(request.body.id,request.body.questionIndex)
+        return response
+      }
+
+    return ({ create,questionIndex })
 
 }

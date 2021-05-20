@@ -20,7 +20,7 @@ const Step2 = () => {
   const [mode, setMode] = useState(eventState.mode)
 
   useEffect(() => {
-    console.log(eventState)
+    // console.log(eventState)
     if (questCompCount > 0) {
       tempQuestionArr = questionArr
       hideQuestion( questionCount)
