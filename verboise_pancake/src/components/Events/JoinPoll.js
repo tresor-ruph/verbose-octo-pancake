@@ -15,8 +15,9 @@ import 'firebase/firestore';
 const db = firebase.firestore();
 let pollId = ''
 let currentQuestion = ''
+let index = 0;
+let chartDataList = []
 
-let ctrl = 0
 const JoinPolls = ({ eventId, pseudo }) => {
     const eventState = useSelector(state => state.EventReducer.event)
     const sessState = useSelector(state => state.SessionReducer)
@@ -26,113 +27,114 @@ const JoinPolls = ({ eventId, pseudo }) => {
     const [poll, setPoll] = useState({})
     const [question, setQuestion] = useState([])
     const [selectedAns, setSelectedAns] = useState('')
-    const [index, setIndex] = useState(0)
     const [loaded, setLoaded] = useState(false)
-    const [label, setLabel] = useState([''])
+    const [dataSet, setDataSet] = useState([''])
     const [reveal, setReveal] = useState(false)
     const [revealQuestions, setRevealQuestions] = useState(false)
+    const [refresh, setRefresh] = useState(0)
+
     let pollRef = db.collection('polls')
 
     useEffect(() => {
+
+        currentQuestion = question[index]
+
         loadEvent()
-        setReveal(false)
-       
 
-        // return function cleanUp() {
-        //     pollRef.doc(pollId).collection(currentQuestion.id).doc(pseudo).set({ message: 'new_connection', connection: 0 })
-
-        // }
-    }, [index])
+    }, [refresh])
 
     const registerFireStore = (pollId, currQuest) => {
         try {
             const unsubscribe = pollRef.doc(pollId).collection(currQuest.id).onSnapshot((querySnapshot) => {
-                let data = [];
-                let message = ''
-                querySnapshot.forEach(doc => {
-                    if (doc.data().message === 'startEvent' && doc.data().ctrl == ctrl) {
-                        // console.log('start')
+
+                querySnapshot.docChanges().filter(({ type }) => type === "added").map(({ doc }) => {
+
+                    if (doc.data().message === 'NEW_CONNECTION') {
+                        return 'new connection'
+                    }
+                    else if (doc.data().message === 'START_EVENT') {
                         setRevealQuestions(true)
-                        ctrl ++
-
-                    } else if (doc.data().message === 'reveal') {
-                        console.log('reveal')
+                    }
+                    else if (doc.data().message === 'REVEAL_RESULTS') {
                         setReveal(true)
-                    } else if (doc.data().message === 'next-question') {
-                        
-                        // console.log('big bang')
-                        setIndex(prev => prev + 1)
+                    }
+                    else if (doc.data().message === 'NEXT_QUESTION') {
+                        index = index + 1
+                        setReveal(false)
+                        setRefresh(prev => !prev)
 
                     }
-                    else {
-                        data.push(parseInt(doc.data().answer))
-                        message = 'data'
+                    else if (doc.data().message === 'POLL_DATA') {
 
-                    }
-                })
-
-                if (message == 'data') {
-                    const map = data.reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map());
-                    let test = [...map.entries()]
-                    let tempArr = []
-                    for (let i of currQuest.options) {
-                        for (let j of test) {
-                            if (i.id == j[0]) {
-                                tempArr.push({ x: i.value, y: j[1] })
+                        chartDataList.push(doc.data().answer)
+                        let frequency = chartDataList.reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map());
+                        frequency = [...frequency.entries()]
+                        let tempArr = []
+                        for (let i of currQuest.options) {
+                            for (let j of frequency) {
+                                if (i.id == j[0]) {
+                                    tempArr.push({ x: i.value, y: j[1] })
+                                }
                             }
                         }
+
+                        setDataSet(tempArr)
+
                     }
-                    setLabel(tempArr)
-                }
-                try {
-                    return () => {
-                        unsubscribe()
-                    }
-                } catch (error) {
-                    console.log('subscribe err', error)
+
+                })
+
+                return () => {
+                    unsubscribe()
                 }
             })
-        } catch (error) {
+
+        }
+        catch (error) {
             console.log(error)
         }
     }
 
 
     const loadEvent = async () => {
-        await axios.get(`/getEventPoll/${eventState.eventId}/${sessState.userId}`).then(res => {
-            setEvent(res.data.event)
-            setPoll(res.data.poll)
-            setQuestion(res.data.questions)
-            pollId = res.data.poll.id
-            setIndex(res.data.poll.questionIndex)
-            currentQuestion = res.data.questions[res.data.poll.questionIndex]
-            registerFireStore(pollId, currentQuestion)
-            setLoaded(true)
-            if (event.status === 'active') {
-                setRevealQuestions(true)
-            }
 
-        }).catch(err => {
-            console.log(err);
-            console.log(err.response)
-        })
-        
-       pollRef.doc(pollId).collection(currentQuestion.id).doc(pseudo).set({ message: 'new_connection', connection: 1 })
+        if (index === 0) {
+            await axios.get(`/getEventPoll/${eventState.eventId}/${sessState.userId}`).then(res => {
+                setEvent(res.data.event)
+                setPoll(res.data.poll)
+                setQuestion(res.data.questions)
+                pollId = res.data.poll.id
+                currentQuestion = res.data.questions[index]
+                registerFireStore(pollId, currentQuestion)
+                setLoaded(true)
+
+            }).catch(err => {
+                console.log(err.response)
+            })
+
+            pollRef.doc(pollId).collection(currentQuestion.id).add({ message: 'NEW_CONNECTIONS', connection: 1 })
+
+        }
+        else {
+            registerFireStore(pollId, currentQuestion)
+        }
     }
+
+    const sendAnswer = () => {
+        pollRef.doc(pollId).collection(currentQuestion.id).add({ message: 'POLL_DATA', question: question[index].question, answer: selectedAns })
+
+    }
+
 
     const handleOptionChange = (evt) => {
         setSelectedAns(evt.target.value)
     }
 
-    const sendAnswer = () => {
-        pollRef.doc(pollId).collection(currentQuestion.id).add({ question: question[index].question, answer: selectedAns })
-
-    }
 
     let chartData = {
         datasets: [{
             label: '# of Votes',
-            data: label,
+            data: dataSet,
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -178,9 +180,8 @@ const JoinPolls = ({ eventId, pseudo }) => {
                 <div className="center-div">
                     {revealQuestions ? <div> <p className="text-res">{question[index]?.question || 'test'}</p>
                         <div >
-                            {console.log(index)}
-                            {question[index].options.map((elt, index) => (
-                                <div className="form-check" key={index}>
+                            {question[index].options.map((elt, val) => (
+                                <div className="form-check" key={val}>
                                     <label className="form-check-label op-label">
                                         <input type="radio" className="form-check-input" id="poll" value={elt.id} checked={selectedAns == elt.id} onChange={(event) => handleOptionChange(event)} /> {elt.value}
                                         <i className="input-helper"></i>
