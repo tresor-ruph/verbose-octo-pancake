@@ -8,6 +8,7 @@ import Dashboard from "views/Dashboard.js";
 import UserProfile from "views/UserProfile.js";
 import Poll from 'components/Poll/Poll'
 import Notfound from "components/Error/Notfound"
+import Reaction from 'components/Events/Reaction' 
 
 
 
@@ -22,7 +23,9 @@ function Admin() {
       return (<UserProfile />)
     }else if(location.pathname === '/dashboard/poll'){
       return (<Poll />)
-    } 
+    }else if(location.pathname === '/dashboard/gallup'){
+      return(<Reaction />)
+    }
     else {
       return (<Notfound />)
     }

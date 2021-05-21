@@ -41,6 +41,12 @@ const Sidebar = () => {
                         <span className="menu-title">POLL </span>
                     </a>
                 </li>
+                <li className={'nav-item'}>
+                    <a className="nav-link" onClick={() => history.push('/dashboard/gallup')}>
+                        <HomeIcon />
+                        <span className="menu-title">GALLUP </span>
+                    </a>
+                </li>
 
 
             </ul>

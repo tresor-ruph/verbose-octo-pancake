@@ -9,8 +9,9 @@ import Login from "components/authentification/Login"
 import Signup from "components/authentification/Signup"
 import ConfirmMail from "components/Error/confirmEmail"
 import Reset from "components/Error/resetPassword"
-import Event from "components/Events/Event" 
+import Event from "components/Events/Event"
 import Notfound from "components/Error/Notfound"
+
 import { useSelector } from 'react-redux'
 
 function Main(props) {

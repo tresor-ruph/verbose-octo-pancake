@@ -4,6 +4,7 @@ import { useLocation } from 'react-router'
 import 'helper/axiosConfig'
 import EventStatus from './EventStatus'
 import JoinPolls from './JoinPoll'
+import Gallup from 'components/Gallup/Gallup'
 import { useSelector, useDispatch } from 'react-redux'
 
 import Reactions from './Reactions'
@@ -64,12 +65,15 @@ const Event = () => {
     // }
 
     return (
-        <div>
-            {
-                loaded ? <div>
-                    <JoinPolls pseudo={eventState.pseudo} eventId={eventId} /></div>
-                    : <div><h1>hello world</h1></div>}
+        // <div>
+        //     {
+        //         loaded ? <div>
+        //             <JoinPolls pseudo={eventState.pseudo} eventId={eventId} /></div>
+        //             : <div><h1>hello world</h1></div>}
 
+        // </div>
+        <div>
+            <Gallup />
         </div>
     );
 };
