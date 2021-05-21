@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Bar, Pie } from 'react-chartjs-2'
-import { Button } from 'react-bootstrap'
+import { Button, Spinner } from 'react-bootstrap'
 import './polls.scss'
 import axios from 'axios'
 import 'helper/axiosConfig'
@@ -15,12 +15,11 @@ const db = firebase.firestore();
 let pollId = ''
 let currentQuestion = ''
 let signalDocRef = ''
-
+let connectionCtrl = 0
 
 const Poll = () => {
     const eventState = useSelector(state => state.EventReducer.event)
     const sessState = useSelector(state => state.SessionReducer)
-
     const [event, setEvent] = useState({})
     const [poll, setPoll] = useState({})
     const [question, setQuestion] = useState([])
@@ -28,12 +27,14 @@ const Poll = () => {
     const [dataSet, setDataSet] = useState([''])
     const [eventStart, setEventStart] = useState(false)
     const [connect, setConnect] = useState(0)
+    const [loaded, setLoaded] = useState(false)
 
 
     let pollRef = db.collection('polls')
 
     useEffect(() => {
-        loadEvent()       
+        loadEvent()
+        console.log('indexxxxxx', index)
     }, [index])
 
     const registerFireStore = (pollId, currQuest) => {
@@ -49,11 +50,11 @@ const Poll = () => {
                     else if (doc.data().message === 'next-question') {
                         message = 'next question'
                     }
-                    else if(doc.data().message === 'new_connection'){
-                        message = 'connection'
+                    else if (doc.data().message === 'new_connection') {
                         numbConnection.push(doc.data().connection)
+                        console.log(numbConnection)
                     }
-                    
+
                     else {
                         data.push(parseInt(doc.data().answer))
                         message = 'data'
@@ -62,12 +63,19 @@ const Poll = () => {
 
 
                 })
-                if(numbConnection.length > 0){
-                    let val =0
+
+
+                if (numbConnection.length > 0) {
+                    let val = 0
                     numbConnection.forEach(elt => {
-                        val +=parseInt(elt)
-                    } )
-                    setConnect(val)
+                        val += parseInt(elt)
+                    })
+
+                    if (index ===0) {
+                        connectionCtrl = val
+                        setConnect(val)
+
+                    }
 
                 }
 
@@ -85,7 +93,7 @@ const Poll = () => {
                     setDataSet(tempArr)
                 }
                 try {
-                
+
                     return () => unsubscribe()
                 } catch (error) {
                     console.log('subscribe err', error)
@@ -98,8 +106,7 @@ const Poll = () => {
 
     const handleStart = () => {
 
-        pollRef.doc(pollId).collection(currentQuestion.id).add({ message: 'startEvent' }).then(docRef => {
-            console.log('doc written with id;', docRef.id)
+        pollRef.doc(pollId).collection(currentQuestion.id).add({ message: 'startEvent', ctrl: 0 }).then(docRef => {
             signalDocRef = docRef.id
         }).catch(err => console.log('error adding', err))
 
@@ -118,11 +125,14 @@ const Poll = () => {
         await axios.get(`/getEventPoll/${eventState.eventId}/${sessState.userId}`).then(res => {
             setEvent(res.data.event)
             setPoll(res.data.poll)
-            setIndex(res.data.poll.questionIndex)
             setQuestion(res.data.questions)
             pollId = res.data.poll.id
-            currentQuestion = res.data.questions[res.data.poll.questionIndex]
+            console.log('hheheheheh')
+            if (index === 0) {
+                currentQuestion = res.data.questions[res.data.poll.questionIndex]
+            }
             registerFireStore(pollId, currentQuestion)
+            setLoaded(true)
 
         }).catch(err => {
             console.log(err);
@@ -133,14 +143,12 @@ const Poll = () => {
     const nextQuestion = async () => {
 
         if (signalDocRef == '') {
-            console.log('an error occured')
             return
         }
 
         pollRef.doc(pollId).collection(currentQuestion.id).doc(signalDocRef).set({ message: 'next-question' })
         setIndex(prev => prev + 1);
-        currentQuestion = question[index]
-        console.log('index', index)
+        currentQuestion = question[index + 1]
         const data = {
             id: poll.id,
             questionIndex: index + 1,
@@ -209,19 +217,33 @@ const Poll = () => {
     };
 
 
-    return (<div>
-        <div className='chart'>
-            <h1>{'number of connected', connect}</h1>
+    return (
+        <div>
+            <div className='chart'>
+                {loaded ?
+                    <div>
+                        <h3 style={{ marginBottom: '10%' }}>{`Number of participants  ${connect}`}</h3>
 
-            {eventStart && <div>Event Started</div>}
-            <h1>{question[index]?.question || 'hahahah '}</h1>
-            <Bar data={chartData} options={options} redraw={false} />
-            <div style={{ marginBottom: "5%" }}><Button onClick={() => handleStart()}>Start Event</Button></div>
-            <div> <Button style={{ marginBottom: "5%" }} onClick={() => revealAnswers()}>Reveal Answers</Button></div>
-
-            {!(index === question.length -1) ? <Button onClick={() => nextQuestion()}>Next question</Button> : <Button onClick={() => endEvent()}>End Event</Button>}
+                        {
+                            !eventStart ?
+                                <div style={{ marginBottom: "5%" }}><Button onClick={() => handleStart()}>Start Event</Button></div>
+                                :
+                                <div>
+                                    <h1>{question[index]?.question || ''}</h1><Bar data={chartData} options={options} redraw={false} />
+                                    <div> <Button style={{ marginBottom: "5%" }} onClick={() => revealAnswers()}>Reveal Answers</Button></div>
+                                    {!(index === question.length - 1) ?
+                                        <Button onClick={() => nextQuestion()}>Next question</Button>
+                                        :
+                                        <Button onClick={() => endEvent()}>End Event</Button>}</div>
+                        }
+                    </div>
+                    :
+                    <div className='spinner'><Spinner animation="border" role="status" variant="primary" size='x-lg'>
+                        <span className="sr-only">Loading...</span>
+                    </Spinner></div>}
+            </div>
         </div>
-    </div>)
+    )
 
 }
 
