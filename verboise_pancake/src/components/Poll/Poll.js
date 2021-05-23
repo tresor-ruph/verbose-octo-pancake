@@ -148,8 +148,6 @@ const Poll = () => {
                console.log(err.response)
            })
        */
-
-
     }
 
     const revealAnswers = () => {
