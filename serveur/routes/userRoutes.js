@@ -6,7 +6,6 @@ module.exports = (app) => {
     app.get('/api/user/:username', userController.getUser)
     app.delete('/api/user/:username', userController.deleteUser)
     app.put('/api/user', userController.updateUser)
-    app.put('/api/user', userController.updatePassword)
     app.get('/api/Login/:user', userController.userLogin)
     app.post('/api/Signin', userController.createUser)
     app.get('/api/confirmEmail/:id', userController.confirmEmail)
@@ -14,9 +13,7 @@ module.exports = (app) => {
     app.get('/api/resetpassword/:email',userController.resetPassword)
     app.put('/api/password', userController.updatePassword)
     app.get('/api/verifLink/:id', userController.redirectPassword)
-
-
-    
+    app.delete('/api/deleteUser/:id', userController.redirectPassword)
 
 
 }

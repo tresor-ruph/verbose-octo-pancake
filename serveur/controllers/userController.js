@@ -117,6 +117,10 @@ module.exports = () => {
       res.status(404).send(JSON.stringify({ message: 'User not found' }))
       return
     }
+    else if(response.code){
+      res.status(500).send(JSON.stringify({ message: 'old password not correct' }))
+      return
+    }
     res.status(200).send(JSON.stringify({ message: 'password updated' }))
 
   }

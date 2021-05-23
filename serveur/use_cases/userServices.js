@@ -90,36 +90,50 @@ module.exports = () => {
   const update = async (request) => {
 
     let token = tokenManager.decode(request)
+    
     if (token.error) {
       return "access_D"
     }
+
     let values = Object.values(request.body)
     const validMod = userModel(...values)
+
     if (validMod.error) {
       return { code: -1, message: validMod.error[0].message }
     }
     const getOneUser = await UsersRepo.getOneUser(values[2])
+
     if (getOneUser.length === 0) {
       return 0
     }
+
     const response = await UsersRepo.updateUser(validMod.value)
     return response
+    
   }
 
   const updatePassword = async (request) => {
 
     let id = tokenManager.decode(request)
+
     if (id.error) {
       return "error"
     }
 
-    const getOneUser = await UsersRepo.getOneUser(id)
+    const getOneUser = await UsersRepo.getOneUser(id.data)
+
     if (getOneUser.length === 0) {
       return 0
     }
 
+    if (request.body.from_settings) {
+      if (!passWordManager.comparePassword(request.body.oldPassword, getOneUser[0].dataValues.password)) {
+        return ({ code: -2 })
+      }
+    }
+
     request.body.password = passWordManager.hashPassword(request.body.password)
-    const response = await UsersRepo.updatePassword(request.body.password, id)
+    const response = await UsersRepo.updatePassword(request.body.password, id.data)
     return response
 
 

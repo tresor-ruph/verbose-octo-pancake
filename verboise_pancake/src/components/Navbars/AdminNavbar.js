@@ -37,7 +37,7 @@ const handleSettings = () => {
   }
 
   return (
-    <AdminNavbarUI handleSettings={handleSettings} handleLogOut={handleLogOut} toggleOffcanvas={toggleOffcanvas} toggleClass={toggleClass} avatar={avatar} userName ={usersInfo.username} showModal={showModal} onHide={hideModal} />
+    <AdminNavbarUI handleSettings={handleSettings} handleLogOut={handleLogOut} toggleOffcanvas={toggleOffcanvas} toggleClass={toggleClass} avatar={avatar} userName ={usersInfo.username} showModal={showModal} onHide={hideModal} profilePicture ={usersInfo?.picture || ''} />
   );
 }
 

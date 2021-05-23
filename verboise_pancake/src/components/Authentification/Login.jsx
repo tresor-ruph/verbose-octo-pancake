@@ -86,6 +86,7 @@ function Login(props) {
               user: {
                 username: data.username ? data.username : username,
                 isLogged: res.status == 200 ? true : false,
+                picture: res.data.imageUrl,
               },
             },
           });
