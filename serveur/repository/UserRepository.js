@@ -55,14 +55,15 @@ module.exports = () => {
   }
 
 
-  const updateUser = async function (userObject) {
+  const updateUser = async function (id,userObject) {
     const user = await User.update({
-      password: userObject.password
+      imageUrl: userObject.imageUrl,
+      username: userObject.userName
     },
       {
         where:
         {
-          username: userObject.username
+          userId: id
         }
       })
     return user

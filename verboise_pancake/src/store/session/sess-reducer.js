@@ -24,9 +24,9 @@ const SessionReducer = (state = INITIAL_STATE, action) => {
                 user: action.payload.user
             }
 
-        case actionTypes.LOG_OUT:    
-            ls.remove('token')    
-            console.log('log out')      
+        case actionTypes.LOG_OUT:
+            ls.remove('token')
+            console.log('log out')
             return {
                 ...state,
                 sessionId: "",
@@ -35,9 +35,21 @@ const SessionReducer = (state = INITIAL_STATE, action) => {
                     username: "",
                     email: "",
                     isLogged: false,
-                    picture:""
+                    picture: ""
                 }
             }
+
+        case actionTypes.UPDATE_USER:
+            return {
+                ...state,
+                sessionId: state.user.sessionId,
+                user: {
+                    username: action.payload.username,
+                    picture: action.payload.picture,
+                    isLogged: true,
+                }
+            }
+
         default:
             return state
     }

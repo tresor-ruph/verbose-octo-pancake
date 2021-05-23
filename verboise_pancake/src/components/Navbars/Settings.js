@@ -1,7 +1,9 @@
 import { useState, useRef } from 'react'
-import { Modal, Button } from 'react-bootstrap'
-import {useSelector,useDispatch} from 'react-redux'
+import { Modal, Button, Popover, OverlayTrigger } from 'react-bootstrap'
+import { useSelector, useDispatch } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { storage } from 'helper/firebaseConfig'
+import { PasswordVerification } from "helper/detailsVerification";
 import Avatar from './Avatar'
 import axios from 'axios'
 import "helper/axiosConfig"
@@ -14,10 +16,69 @@ const UserSettings = ({ show, onHide }) => {
     const [newPassword, setNewPassword] = useState('')
     const [confDelete, setConfDelete] = useState(false)
     const [revealDeleteButton, setRevealDeleteButton] = useState(false)
+    const [imgSrc, setImgSrc] = useState(null)
+    const [file, setFile] = useState(null)
+    const [imgUrl, setImgUrl] = useState(null)
+    const [passwordErr, setPasswordErr] = useState(false)
+
     const dispatch = useDispatch();
 
     const user = useRef(null);
 
+    //-------------------------------------Avater select and upload functions --------------------------
+
+
+    const handleUploadImage = (e) => {
+        e.preventDefault();
+        const reader = new FileReader();
+        const file = e.target.files[0];
+        reader.onloadend = () => {
+            setImgSrc(reader.result)
+            setFile(file)
+        }
+        reader.readAsDataURL(file)
+        console.log(file)
+
+
+    }
+
+    const handleUpdateUserInfo = () => {
+
+        const uploadTask = storage.ref(`images/${file.name}`).put(file)
+        uploadTask.on('state_changed', (snapshot) => {
+
+        }, (error) => {
+
+        }, () => {
+            storage.ref('images').child(file.name).getDownloadURL().then(url => {
+                setImgUrl(url)
+                console.log('success')
+                if (userName.length < 3) {
+                    console.log('please enter username')
+                    return
+                }
+                let data = {
+                    username: userName,
+                    imageUrl: url
+                }
+                axios.put('/user', data).then(res => {
+                    console.log(res)
+                    dispatch({
+                        type: "UPDATE_USER",
+                        payload: {
+                            username: userName,
+                            picture: url
+                        },
+                    });
+
+                }).catch(err => {
+                    console.log(err)
+                    console.log(err.response)
+                })
+            })
+        })
+    }
+    //-------------------------------------Avater select and upload functions --------------------------
     const handleName = (event) => {
         setUserName(event.target.value)
     }
@@ -28,13 +89,12 @@ const UserSettings = ({ show, onHide }) => {
     const handleNewPassword = (event) => {
         setNewPassword(event.target.value)
     }
-
-    const handleUpdateUserInfo = () => {
-
+    const handleNewPasswordFocus = () => {
+        setPasswordErr(false)
     }
     const handlePasswordUpdate = () => {
-        if (oldPassword == '' || newPassword == '') {
-            console.log('passwords cannot be null')
+        if (!PasswordVerification(newPassword)) {
+            setPasswordErr(true)
             return
         }
         const data =
@@ -58,21 +118,33 @@ const UserSettings = ({ show, onHide }) => {
     const handleConfirmDelete = (event) => {
         if (event.target.value === 'delete') {
             setRevealDeleteButton(true)
+        } else {
+            setRevealDeleteButton(false)
+
         }
     }
     const handleRemoveAccount = () => {
-        console.log('test',userInfo.username)
+        console.log('test', userInfo.username)
         axios.delete(`/user/${userInfo.username}`).then(res => {
             dispatch({
                 type: "LOG_OUT",
-              });
-            
-        }).catch(err=> {
+            });
+
+        }).catch(err => {
             console.log(err)
             console.log(err.response)
         })
 
     }
+    const popover = (
+        <Popover id="popover-basic">
+            <Popover.Content>
+                your password should contain atleast. 1 capital letter 1 small letter and
+                6 characters
+          </Popover.Content>
+        </Popover>
+    );
+
     return (
         <div>
             <Modal size="lg" aria-labelledby="contained-modal-title-vcenter" centered show={show} onHide={onHide} backdrop="static" scrollable={true} dialogClassName="modal-90w" contentClassName='mod-content'>
@@ -85,10 +157,10 @@ const UserSettings = ({ show, onHide }) => {
                             <div className='item-title content-title'> Edit your user name and profile picture</div>
                             <div className='row user-info'>
                                 <div className='col-md-3'>
-                                    <Avatar />
+                                    <Avatar imgSrc={userInfo.picture} handleUploadImage={handleUploadImage} />
                                 </div>
                                 <div className='col-md-5 username-info'>
-                                    <input type='text' className='form-control username-inp field--not-empty' placeholder='Username' onChange={(event) => handleName(event)} ref={user} />
+                                    <input type='text' className='form-control username-inp field--not-empty' placeholder='Username' onChange={(event) => handleName(event)} required />
 
                                 </div>
 
@@ -108,7 +180,28 @@ const UserSettings = ({ show, onHide }) => {
                                     <input type='text' className='form-control username-inp field--not-empty' placeholder='Enter your old password' onChange={(event) => handleOldPassword(event)} />
                                 </div>
                                 <div className='col-md-5 username-info'>
-                                    <input type='text' className='form-control username-inp field--not-empty' placeholder='Enter your new password' onChange={(event) => handleNewPassword(event)} />
+                                    <div className='row' style={{ width: '30vw' }}>
+                                        <div className='col-md-9'>
+                                            <input type='text' className='form-control username-inp field--not-empty' placeholder='Enter your new password' onChange={(event) => handleNewPassword(event)} onFocus={() => handleNewPasswordFocus()} />
+                                            {passwordErr && (
+                                                <span className="pwd-inv-mess">password not valid</span>
+                                            )}
+                                        </div>
+                                        <div className='col-md-1'>
+                                            <OverlayTrigger
+                                                rootClose={true}
+                                                trigger="click"
+                                                placement="right"
+                                                overlay={popover}
+                                            >
+                                                <i
+                                                    id="password"
+                                                    className="far fa-question-circle title-i"
+                                                    style={{ marginTop: '15px', color: '#888' }}
+                                                ></i>
+                                            </OverlayTrigger>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div className='username-info '>

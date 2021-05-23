@@ -90,26 +90,26 @@ module.exports = () => {
   const update = async (request) => {
 
     let token = tokenManager.decode(request)
-    
+
     if (token.error) {
       return "access_D"
     }
+    console.log(request.body)
 
-    let values = Object.values(request.body)
-    const validMod = userModel(...values)
+    if ((request.body.username.length < 3 && request.body.username.length > 30) || (request.body.username.length < 10)) {
+      return { code: -1, message: 'incorrect parameters' }
 
-    if (validMod.error) {
-      return { code: -1, message: validMod.error[0].message }
     }
-    const getOneUser = await UsersRepo.getOneUser(values[2])
+    console.log(token)
+    const getOneUser = await UsersRepo.getOneUser(token.data)
 
     if (getOneUser.length === 0) {
       return 0
     }
 
-    const response = await UsersRepo.updateUser(validMod.value)
+    const response = await UsersRepo.updateUser(token.data,request.body)
     return response
-    
+
   }
 
   const updatePassword = async (request) => {

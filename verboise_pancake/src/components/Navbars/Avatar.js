@@ -1,24 +1,10 @@
 import { useState } from 'react'
 import avatar from 'assets/images/default-avatar.png'
 import 'customcss/Avatar.scss'
-const Avatar = () => {
-  const [imgSrc, setImgSrc] = useState(null)
-  const [file, setFile] = useState(null)
+import { storage} from 'helper/firebaseConfig'
 
-  const handleUploadImage = (e) => {
-    e.preventDefault();
-    const reader = new FileReader();
-    const file = e.target.files[0];
-    reader.onloadend = () => {
-      setImgSrc(reader.result)
-      setFile(file)
-    }
-    reader.readAsDataURL(file)
-    console.log(reader.result)
-    console.log(file)
-
-
-  }
+const Avatar = ({imgSrc , handleUploadImage}) => {
+  
   return (
     <label htmlFor="photo-upload" className="custom-file-upload fas">
       <div className="img-wrap img-upload" >
