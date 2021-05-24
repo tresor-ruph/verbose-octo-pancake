@@ -27,7 +27,8 @@ module.exports = () => {
     const getOneEvent= async function(code){
        const event = await Event.findAll({
             where: {
-                code: code
+                [Op.or]: [{code: code}, {UserUserId: code}]
+               
             }
         })
         return event
@@ -65,7 +66,16 @@ module.exports = () => {
           })
         return event
       }
+      const removeEvent = async function (param) {
+
+        const event = await Event.destroy({
+          where: {
+            eventId: param
+          }
+        })
+        return event
+      }
     
 
-    return ({eventExist,getOneEvent, addEvent, getEventPoll,startEvent})
+    return ({eventExist,getOneEvent, addEvent, getEventPoll,startEvent,removeEvent})
 }

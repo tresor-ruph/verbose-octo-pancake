@@ -21,7 +21,7 @@ const AdminNavbarUI = (props) => {
           <li className="nav-item  nav-profile border-0">
             <Dropdown>
               <Dropdown.Toggle className="nav-link count-indicator bg-transparent">
-                <img className="img-xs rounded-circle" src={ profilePicture|| avatar} width='45%' alt="Profile" />
+                <img className="img-xs rounded-circle" src={ profilePicture|| avatar} alt="Profile" />
               </Dropdown.Toggle>
               <Dropdown.Menu className="preview-list navbar-dropdown pb-3">
                 <Dropdown.Item className='admin-options user-option' >

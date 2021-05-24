@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import avatar from 'assets/images/default-avatar.png'
 import 'customcss/Avatar.scss'
-import { storage} from 'helper/firebaseConfig'
 
 const Avatar = ({imgSrc , handleUploadImage}) => {
   

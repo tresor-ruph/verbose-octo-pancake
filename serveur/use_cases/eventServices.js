@@ -35,7 +35,7 @@ module.exports = () => {
     const fetchOne = async (req) => {
      
        
-        const response = await EventRepo.getOneEvent(req.params.eventCode)
+        const response = await EventRepo.getOneEvent(req.params.id)
         return response
     }
 
@@ -85,7 +85,15 @@ module.exports = () => {
         const response = await EventRepo.startEvent(request.body.id,request.body.status)
         return response
       }
+      const deleteEvent = async (req) => {
+        if (tokenManager.decode(req).error) {
+          return "access_D"
+        }
+    
+        const response = await EventRepo.removeEvent(req.id)
+        return response
+      }
 
-    return ({ create, fetchOne, fetchEventPoll, startEvent })
+    return ({ create, fetchOne, fetchEventPoll, startEvent,deleteEvent })
 
 }

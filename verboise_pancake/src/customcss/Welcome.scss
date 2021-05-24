@@ -1,0 +1,34 @@
+.home {
+    margin-left: 0;
+    // margin-top: 25vh;
+    height: 100%;
+    
+}
+.content {
+    background-color: white;
+
+    margin-top: 25vh;
+    margin-left: 25vw;
+    width: 50vw;
+    height: 40vh;
+}
+.welcome-title {
+    font-size: 2rem;
+    justify-content: center;
+    color: gray;
+    margin-top: 10%;
+    text-align: center;
+    font-weight: 500;
+}
+.welcome-content {
+    margin-top: 2vh;
+    color: #888;
+    font-size: 1.2rem;
+    margin-bottom: 5vh;
+    text-align: center;
+}
+.start-btn {
+    margin-left: 17vw;
+    height: 15vh;
+    font-size: larger;
+}

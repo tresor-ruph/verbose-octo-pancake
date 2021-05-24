@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import EventModal from '../components/Events/EventModal'
-
+import Homepage from '../components/Home/Homepage'
 function Dashboard(props) {
 
   const [show, setShow] = useState(false)
@@ -13,10 +13,11 @@ function Dashboard(props) {
   return (
 
     <div>
-      <EventModal show={show} hide={handleHide} />
+      {/* <EventModal show={show} hide={handleHide} />
       <div >
         <button onClick={() => { setShow(true) }}>open Modal</button>
-      </div>
+      </div> */}
+      <Homepage />
     </div>
   );
 }

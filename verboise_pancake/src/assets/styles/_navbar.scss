@@ -2,7 +2,7 @@
 
 .navbar {
   font-family: $type1;
-  left: $sidebar-width-lg;
+  // left: $sidebar-width-lg;
 
   .navbar-menu-wrapper {
     transition: width $action-transition-duration
@@ -16,9 +16,10 @@
     color: $navbar-menu-color;
     padding-left: 15px;
     padding-right: 15px;
-    width: calc(100% - #{$sidebar-width-lg});
+    width: 100%;
+    // width: calc(100% - #{$sidebar-width-lg});
     height: $navbar-height;
-    background: $navbar-bg;
+    background: #3070C5;
     @media (max-width: 991px) {
       width: 100%;
       padding-left: 11px;

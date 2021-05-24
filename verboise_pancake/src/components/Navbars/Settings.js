@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import { Modal, Button, Popover, OverlayTrigger } from 'react-bootstrap'
+import { Modal, Button, Popover, OverlayTrigger, Accordion } from 'react-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { storage } from 'helper/firebaseConfig'
@@ -44,39 +44,63 @@ const UserSettings = ({ show, onHide }) => {
 
     const handleUpdateUserInfo = () => {
 
-        const uploadTask = storage.ref(`images/${file.name}`).put(file)
-        uploadTask.on('state_changed', (snapshot) => {
+        if (file === null) {
+            let data = {
+                username: userName,
+                imageUrl: userInfo.picture
+            }
+            axios.put('/user', data).then(res => {
+                console.log(res)
+                dispatch({
+                    type: "UPDATE_USER",
+                    payload: {
+                        username: userName,
+                        picture: userInfo.picture
+                    },
+                });
+                alert('update succesful')
 
-        }, (error) => {
+            }).catch(err => {
+                console.log(err)
+                console.log(err.response)
+            })
+        }
+        else {
+            const uploadTask = storage.ref(`images/${file.name}`).put(file)
+            uploadTask.on('state_changed', (snapshot) => {
 
-        }, () => {
-            storage.ref('images').child(file.name).getDownloadURL().then(url => {
-                setImgUrl(url)
-                console.log('success')
-                if (userName.length < 3) {
-                    console.log('please enter username')
-                    return
-                }
-                let data = {
-                    username: userName,
-                    imageUrl: url
-                }
-                axios.put('/user', data).then(res => {
-                    console.log(res)
-                    dispatch({
-                        type: "UPDATE_USER",
-                        payload: {
-                            username: userName,
-                            picture: url
-                        },
-                    });
+            }, (error) => {
 
-                }).catch(err => {
-                    console.log(err)
-                    console.log(err.response)
+            }, () => {
+                storage.ref('images').child(file.name).getDownloadURL().then(url => {
+                    setImgUrl(url)
+                    console.log('success')
+                    if (userName.length < 3) {
+                        console.log('please enter username')
+                        return
+                    }
+                    let data = {
+                        username: userName,
+                        imageUrl: url
+                    }
+                    axios.put('/user', data).then(res => {
+                        console.log(res)
+                        dispatch({
+                            type: "UPDATE_USER",
+                            payload: {
+                                username: userName,
+                                picture: url
+                            },
+                        });
+
+                    }).catch(err => {
+                        console.log(err)
+                        console.log(err.response)
+                    })
                 })
             })
-        })
+        }
+
     }
     //-------------------------------------Avater select and upload functions --------------------------
     const handleName = (event) => {
@@ -153,7 +177,7 @@ const UserSettings = ({ show, onHide }) => {
                 <Modal.Body>
                     <div className='settings'>
                         <div className='setting-elt'>
-                            <div className='item-title main-title'><FontAwesomeIcon icon='info-circle' style={{ marginRight: '10px' }} /><span style={{ fontWeight: 'bolder' }}>User Info</span></div>
+                            <div className='item-title main-title'><FontAwesomeIcon icon='info-circle' style={{ marginRight: '10px' }} /><span style={{ fontWeight: 'bolder', }}>User Info</span></div>
                             <div className='item-title content-title'> Edit your user name and profile picture</div>
                             <div className='row user-info'>
                                 <div className='col-md-3'>

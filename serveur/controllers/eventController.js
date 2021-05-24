@@ -67,7 +67,28 @@ console.log(req)
         res.status(200).send(JSON.stringify({ message: 'status updated' }))
     
       }
+      const deleteEvent = async () => {
+        const response = await eventServices.deleteEvent(req)
 
-    return ({ createEvent, getEvent,getEventPoll,startEvent })
+        if (response.code) {
+          res.status(400).send(JSON.stringify({ message: response.message }))
+          return
+        }
+    
+        else if (response === 0) {
+          res.status(404).send(JSON.stringify({ message: 'event not found' }))
+          return
+        }
+    
+        else if (response == "access_D") {
+          res.status(403).send("Access denied")
+          return
+        }
+
+        res.status(200).send(JSON.stringify({ message: "event deleted" }))
+
+      }
+
+    return ({ createEvent, getEvent,getEventPoll,startEvent,deleteEvent })
 
 }

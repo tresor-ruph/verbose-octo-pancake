@@ -10,7 +10,7 @@ import {
     faUserAlt,
     faInfoCircle,
     faShieldAlt,
-    faUpload
+    faUpload,
     
 }
 from '@fortawesome/free-solid-svg-icons'
@@ -28,7 +28,7 @@ library.add(
     faUserAlt,
     faInfoCircle,
     faShieldAlt,
-    faUpload
+    faUpload,
     
 
 )
