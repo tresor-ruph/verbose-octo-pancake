@@ -86,11 +86,13 @@ module.exports = () => {
         return response
       }
       const deleteEvent = async (req) => {
+
         if (tokenManager.decode(req).error) {
           return "access_D"
         }
-    
-        const response = await EventRepo.removeEvent(req.id)
+        
+        console.log('test',req.params)
+        const response = await EventRepo.removeEvent(req.params.id)
         return response
       }
 

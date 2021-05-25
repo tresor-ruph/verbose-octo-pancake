@@ -67,7 +67,7 @@ console.log(req)
         res.status(200).send(JSON.stringify({ message: 'status updated' }))
     
       }
-      const deleteEvent = async () => {
+      const deleteEvent = async (req,res) => {
         const response = await eventServices.deleteEvent(req)
 
         if (response.code) {
