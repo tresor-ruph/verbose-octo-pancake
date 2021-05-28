@@ -39,7 +39,7 @@ describe("Page2", () => {
         cy.findAllByText('terms and condition').should("exist")
         cy.findAllByText('terms and condition').click()
         cy.findAllByText('close').should('exist')
-        cy.findAllByText('close').click()
+        cy.findAllByText('close').click();
     })
     
 
