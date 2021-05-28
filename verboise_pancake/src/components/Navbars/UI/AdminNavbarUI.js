@@ -1,8 +1,8 @@
 import React from 'react'
 import {Dropdown } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import Settings from 'components/Navbars/Settings'
-
+// import Settings from 'components/Navbars/Settings'
+import Settings from '../../Navbars/Settings'
 const AdminNavbarUI = (props) => {
   const { handleLogOut, toggleOffcanvas, avatar, toggleClass, userName, showModal,onHide,handleSettings,profilePicture } = props
 

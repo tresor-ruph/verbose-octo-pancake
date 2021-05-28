@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div>
+  <div
+    className="home"
+  >
+    <div
+      className="card content p-shadow-23"
+    >
+      <span
+        className="welcome-title"
+      >
+        Welcome undefined  !
+      </span>
+      <div
+        className="welcome-content"
+      >
+        Create your first event now and include your audience
+      </div>
+      <div
+        className="start-btn"
+      >
+        <button
+          className="test btn btn-primary btn-lg"
+          disabled={false}
+          onClick={[Function]}
+          type="button"
+        >
+          <span
+            style={
+              Object {
+                "fontSize": "1.1rem",
+                "fontWeight": "bold",
+              }
+            }
+          >
+            Create your first Event
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
