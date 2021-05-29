@@ -15,7 +15,4 @@ module.exports = (app) => {
     app.get('/api/verifLink/:id', userController.redirectPassword)
 
 
-    
-
-
 }
