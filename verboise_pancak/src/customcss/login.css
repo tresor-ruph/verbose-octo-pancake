@@ -1,0 +1,140 @@
+
+.main-login {
+  background-color: white;
+}
+.half,
+.half .container > .row {
+  height: 100vh;
+}
+
+@media (max-width: 991.98px) {
+  .half .bg {
+    height: 500px;
+  }
+}
+
+.half .contents,
+.half .bg {
+  /* margin-top: -2%; */
+  width: 50%;
+}
+@media (max-width: 1199.98px) {
+  .half .contents,
+  .half .bg {
+    width: 100%;
+  }
+}
+.half .contents .frm-log,
+.half .bg .frm-log {
+  margin-bottom: 0;
+  border: none;
+  border-bottom: 1px solid #c2c2c1;
+  position: relative;
+}
+.half .contents .form-group .label,
+.half .bg .form-group .label {
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  -webkit-transition: 0.3s all ease;
+  -o-transition: 0.3s all ease;
+  transition: 0.3s all ease;
+}
+.half .contents .form-group input:focus + .label,
+.half .bg .form-group input:focus + .label {
+  margin-top: -20px;
+}
+
+.half .contents .form-group.last,
+.half .bg .form-group.last {
+  /* */
+}
+.half .contents .form-group .label,
+.half .bg .form-group .label {
+  font-size: 12px;
+  display: block;
+  margin-bottom: 0;
+  color: #b3b3b3;
+}
+.half .contents .form-group.field--not-empty .label,
+.half .bg .form-group.field--not-empty .label {
+  margin-top: -20px;
+}
+.half .contents .form-control,
+.half .bg .form-control {
+  border: none;
+  padding: 0;
+  font-size: 16px;
+  border-radius: 0;
+}
+.half .contents .form-control:active,
+.half .contents .form-control:focus,
+.half .bg .form-control:active,
+.half .bg .form-control:focus {
+  outline: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.half .bg {
+  background-size: cover;
+  background-position: center;
+}
+
+.half a {
+  color: #888;
+  text-decoration: underline;
+}
+
+.half .btn {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.half .forgot-pass {
+  position: relative;
+  top: 2px;
+  font-size: 14px;
+  color: #888;
+}
+
+.caption {
+  position: relative;
+  top: 0.2rem;
+  color: #888;
+  font-size: 14px;
+}
+
+.login-i {
+  margin-top: 8vh;
+}
+.log-form {
+  margin-top: 4vh;
+  overflow-y: hidden;
+}
+.test {
+  margin-bottom: 2px;
+}
+
+@media screen and (max-width: 900px){
+  .login-i{
+    display: none;
+  }
+}
+
+@media screen and (max-width: 1024px){
+
+  .login-i {
+    margin-top: 15vh;
+  }
+}
+a:hover {
+cursor: pointer;
+}
+.notifText {
+  text-align: center;
+  /* position: fixed; */
+  width: 100%;
+}
