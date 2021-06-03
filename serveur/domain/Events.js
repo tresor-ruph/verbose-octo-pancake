@@ -2,7 +2,7 @@ const Joi = require('joi')
 
 module.exports = (title, type) => {
   const eventType_validator = (value, helpers) => {
-    if (value === 'polls' || value === 'reactions') {
+    if (value === 'ranking' || value === 'polls' || value === 'gallup') {
       return value
     } else {
       throw new Error('invalid event type')

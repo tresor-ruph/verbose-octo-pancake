@@ -11,6 +11,10 @@ import {
     faInfoCircle,
     faShieldAlt,
     faUpload,
+    faChartBar,
+    faChartLine,
+    faTrophy,
+    faChartPie,
     
 }
 from '@fortawesome/free-solid-svg-icons'
@@ -29,6 +33,11 @@ library.add(
     faInfoCircle,
     faShieldAlt,
     faUpload,
+    faChartBar,
+    faChartLine,
+    faTrophy,
+    faChartPie,
+
     
 
 )

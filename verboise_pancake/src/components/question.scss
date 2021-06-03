@@ -1,40 +1,16 @@
-.ques-opt{
-    margin-left: 12%;
-    width: 78%;
-    margin-bottom: 1vh;
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    border-bottom: solid 1px #888;
-    
-    
+.questions-input {
+    width: 80%;
 }
-.ques-opt::placeholder {
-    font-size: small;
+.option-div {
+    width: 75%;
+    margin-left: 5%; 
+    margin-top: 5px;
+
 }
-.del-opt{
-    color: red;
-}
-.new-quest {
-    width: 90%;
-    height: 40px;
+.add-option {
+    margin-left: 5%;
+    margin-top: 1vh;
     margin-bottom: 2vh;
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    border-bottom: solid 1px #888;
+
 }
 
-.new-quest::placeholder {
-    font-size: small;
-    
-}
-.add-icon {
-    margin-left: 12%;
-}
-.hide-options  {
-    display: none;
-}
-.options-list {
-    display: block;
-}

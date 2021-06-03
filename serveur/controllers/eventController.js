@@ -23,12 +23,8 @@ module.exports = () => {
 
         const response = await eventServices.fetchOne(req)
 
-        if (response.length === 0) {
-            res.status(404).send(JSON.stringify({ message: 'requested resource not found' }))
-            return
-        }
-
-        else if (response === -1) {
+      
+        if (response === -1) {
             res.status(400).send(JSON.stringify({ message: 'invalid request' }))
             return
         }

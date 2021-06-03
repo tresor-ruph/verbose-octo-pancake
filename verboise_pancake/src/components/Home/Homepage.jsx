@@ -6,7 +6,6 @@ import WelcomeMessage from "./WelcomeMessage";
 import EventList from "./Eventlist";
 import axios from "axios";
 import "helper/axiosConfig";
-import { TramRounded } from "@material-ui/icons";
 
 const HomePage = () => {
   const [eventData, setEventData] = useState("");
@@ -18,10 +17,12 @@ const HomePage = () => {
       .get(`/getEvent/${userInfo.userId}`)
       .then((res) => {
         setEventData(res.data);
-        setLoaded(TramRounded);
+        setLoaded(true);
       })
       .catch((err) => {
         console.log(err);
+        console.log(err.response);
+
       });
   }, []);
 

@@ -13,11 +13,11 @@ function Dashboard(props) {
   return (
 
     <div>
-      {/* <EventModal show={show} hide={handleHide} />
+      <EventModal show={show} hide={handleHide} />
       <div >
         <button onClick={() => { setShow(true) }}>open Modal</button>
-      </div> */}
-      <Homepage />
+      </div>
+      {/* <Homepage /> */}
     </div>
   );
 }
