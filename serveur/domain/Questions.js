@@ -1,17 +1,18 @@
 const Joi = require('joi')
 
 
-module.exports = (id, question, options, pollId) => {
+module.exports = (order, question, image, answer,pollId) => {
   const schema = Joi.object({
-    id: Joi.number(),
+    order: Joi.number(),
     question: Joi.string().min(3).required(),
-    options: Joi.array().min(2).required(),
+    image: Joi.string(),
+    answer: Joi.number().required(),
     pollId: Joi.string().min(10).required(),
 
 
   })
 
-  const { error, value } = schema.validate({id, question, options, pollId })
+  const { error, value } = schema.validate({order, question, image, answer,pollId })
   if (error) {
     return { error: error.details }
   }

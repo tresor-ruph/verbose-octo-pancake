@@ -2,6 +2,7 @@ const users = require('./userRoutes');
 const events = require('./eventRoutes')
 const polls = require('./PollRoutes')
 const question = require('./questions')
+const option = require('./optionsRoutes')
 
 module.exports = (app) => {
 
@@ -9,6 +10,7 @@ module.exports = (app) => {
     events(app);
     polls(app);
     question(app)
+    option(app)
 }
 
 

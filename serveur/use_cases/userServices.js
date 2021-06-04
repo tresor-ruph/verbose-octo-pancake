@@ -39,7 +39,8 @@ module.exports = () => {
     if (userExist.length === 0) {
 
       validMod.value.password = passWordManager.hashPassword(validMod.value.password)
-      validMod.value.Accountstatus = 'waiting'
+      validMod.value.accountStatus = 'waiting'
+      validMod.value.userRole = 'client'
       const response = await UsersRepo.addUser(validMod.value)
       const token = await tokenManager.encode(response)
       const link = `http://localhost:8000/api/confirmEmail/${token}`
@@ -60,7 +61,8 @@ module.exports = () => {
       response = await UsersRepo.getOneUser(values.email, true)
       if (response.length === 0) {
         values.password = passWordManager.hashPassword(values.password)
-        values.Accountstatus = 'social'
+        values.accountStatus = 'social'
+        values.userRole = 'client'
         const response = await UsersRepo.addUser(values)
         const token = await tokenManager.encode(response)
         return { token: token, id: response }

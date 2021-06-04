@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import { Modal, Button, Popover, OverlayTrigger, Accordion } from 'react-bootstrap'
+import { Modal, Button, Popover, OverlayTrigger } from 'react-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { storage } from 'helper/firebaseConfig'

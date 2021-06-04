@@ -7,6 +7,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 module.exports = () => {
+
     const create = async (request) => {
         let decodedToken = tokenManager.decode(request)
         if (decodedToken.error) {
@@ -23,7 +24,7 @@ module.exports = () => {
             validMod.value.options = JSON.stringify(validMod.value.options)
             let response = await QuestionRepo.addQuestion(validMod.value)
             if (response.length !== 0) {
-                return { message: "Questions added" }
+                return { response }
             } else {
                 return { code: 0, message: 'an error occured' }
             }

@@ -4,12 +4,11 @@ const { Op } = require("sequelize")
 module.exports = () => {
 
     const addPoll = async function (data) {
-      
       const newPoll = await Polls.create({
         defaultResultLayout:data.defaultResultLayout,
+        timer: data.timer,
         waitingTime:data.waitingTime,
-        Mode: data.mode,
-        questionIndex: data.questionIndex,
+        resultInPercent: data.resultInPercent,
         EventEventId: data.eventId
       })
       return newPoll

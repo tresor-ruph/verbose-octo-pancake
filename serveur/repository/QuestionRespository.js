@@ -6,8 +6,10 @@ module.exports = () => {
     const addQuestion = async function (data) {
         
         const newQuestions = await Questions.create({
+            order: data.order,
             question: data.question,
-            options: data.options,
+            image:data.image,
+            answer:data.answer,
             PollPollId: data.pollId
         })
         return newQuestions

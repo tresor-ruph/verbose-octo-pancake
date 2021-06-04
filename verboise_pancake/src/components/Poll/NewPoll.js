@@ -2,104 +2,144 @@ import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Card } from 'primereact/card';
 import { Button } from 'react-bootstrap'
-
+import CreateQuestion from 'components/CreateQuestions'
 import { InputSwitch } from 'primereact/inputswitch';
 import { InputNumber } from 'primereact/inputnumber';
-import Questions from 'components/Questions'
+import { useSelector, useDispatch } from 'react-redux'
 
-import 'customcss/survey.scss'
-
-let tempQuestionArr = [] //A temporary array that allows me to manipulate questionArr without producing undesirable sideeffects
-let questionCount = 0 // Keep count of the number of questions
-let optionList = [] //array containing the options
-let questionList = [] // array containing the questions
+import axios from 'axios'
+import "helper/axiosConfig"
 
 const NewPoll = () => {
 
     const [resultFormat, setResultFormat] = useState(false)
     const [timerMode, setTimerMode] = useState(false)
     const [time, setTime] = useState(0)
-    const [questionArr, setQuestionArr] = useState([]) //contain de component Question
-    const [questCompCount, setquestCompCount] = useState(0) //Keep count of the number of Question components
-    
-    useEffect(() => {
-        // console.log(eventState)
-        if (questCompCount > 0) {
-            tempQuestionArr = questionArr
-            hideQuestion(questionCount)
+
+
+    const [layout, setLayout] = useState(null)
+    const [layoutErr, setLayoutErr] = useState(false)
+    const eventState = useSelector(state => state.EventReducer.event)
+
+
+
+
+    const handleSelect = (x) => {
+
+        let allCards = document.getElementsByClassName('layout-display')
+        Array.from(allCards).forEach(elt => {
+            elt.style.backgroundColor = 'white'
+        })
+        let selectedCard = document.getElementsByClassName(`card-${x}`)
+        Array.from(selectedCard)[0].style.backgroundColor = 'rgba(255,0,0,0.2)'
+        setLayout(x)
+        setLayoutErr(false)
+
+    }
+
+    const handleTest = async () => {
+        if (!eventState.questionList) {
+            let optionErr = document.getElementById('null-question')
+            if (optionErr !== null) optionErr.style.display = 'inline'
+            return
+        } else {
+            let optionErr = document.getElementById('null-question')
+            if (optionErr !== null) optionErr.style.display = 'none'
+        }
+        if (!eventState.optionList) {
+            let optionErr = document.getElementById(`inv-option${eventState.questionList.length - 1}`)
+            if (optionErr !== null) optionErr.style.display = 'inline'
+            return
+        } else {
+            let optionErr = document.getElementById(`inv-option${eventState.questionList.length - 1}`)
+            if (optionErr !== null) optionErr.style.display = 'none'
 
         }
-    }, [questCompCount])
 
-    const rmvQuestion = (x) => {
-        tempQuestionArr = tempQuestionArr.filter(elt => elt.key != x.toString())
-        questionList = questionList.filter(elt => elt.id != x);
-        optionList = optionList.filter(elt => elt.questionId != x);
-           setQuestionArr(tempQuestionArr)
-           questionCount --
+        if (eventState.optionList[eventState.optionList.length - 1].questionId === "") {
+            let optionErr = document.getElementById(`inv-quest${eventState.questionList.length - 1}`)
+            if (optionErr !== null) optionErr.style.display = 'inline'
+            return
+        } else {
+            let optionErr = document.getElementById(`inv-quest${eventState.questionList.length - 1}`)
+            if (optionErr !== null) optionErr.style.display = 'none'
 
-    }
-    const removeFieldArray = (x, y) => {
-        if(optionList[y] !== undefined)
-        optionList[y].answers = optionList[y].answers.filter(elt => elt.id != x)
-
-    }
-    const handleCorrectAnswer = (x,y) => {
-        questionList[x].answer = y
-    }
-
-    const handleOptionChange = (id, elt, event) => {
-       
-        optionList[id].questionId = id
-        optionList[id].answers[elt] = { id: elt, value: event.target.value }
-
-    }
-
-    const handleQuestions = (questionId, event) => {
-        questionList[questionId].id =questionId;
-        questionList[questionId].question =event.target.value;
-        // optionList[questionId] = { questionId: '', answers: [] }
+        }
+        if (eventState.questionList[eventState.questionList.length - 1].answer === "") {
+            let optionErr = document.getElementById(`inv-answ${eventState.questionList.length - 1}`)
+            if (optionErr !== null) optionErr.style.display = 'inline'
+            return
+        } else {
+            let optionErr = document.getElementById(`inv-answ${eventState.questionList.length - 1}`)
+            if (optionErr !== null) optionErr.style.display = 'none'
+        }
 
 
-    }
-
-    const hideQuestion = (id) => {
-        let idt = 'option' + id
-        let optionsDiv = document.getElementsByClassName('options-list')
-        let currentOption = document.getElementById(`${idt}`)
-        Array.from(optionsDiv).forEach(elt => {
-            elt.style.display = 'none'
-        });
+        const questions = eventState.questionList.filter(elt => elt.id != "")
+        const options = eventState.optionList.filter(elt => elt.id != "")
+        console.log(questions, options)
+        if(layout === null){
+            setLayoutErr(true)   
+            return
+        }
         
-        if(currentOption != null) currentOption.style.display = 'block'
-        let questDiv = document.getElementsByClassName('edit-quests')
-        Array.from(questDiv).forEach(elt => {
-            if(elt !=null) elt.style.display = 'inline'
-        })
-       const editQuest = document.getElementById('edit-quest' + questionCount)
-       if(editQuest !=null) editQuest.style.display = 'none'
-    }
 
-    const createQuestion = () => {
+        // for (let i of questions) {
+        //     for (let j of options) {
+        //         if (i.id === j.questionId) {
+        //             i.option = j.answers.filter(elt => elt.id != undefined)
+        //         }
+        //     }
+        // }
+        // console.log('question', questions)
 
-        questionCount++
-        questionList[questionCount]={id:'', question:'', answer:''}
+        // const data = {
+        //     layout: layout,
+        //     percentage: resultFormat,
+        //     timerMode: timerMode,
+        //     time: time,
+        //     eventId: eventState[0].eventId
 
-        optionList[questionCount] = { questionId: '', answers: [] }
+        // }
+        // console.log(questions, options, data)
+        // await axios.post('/createPoll', data).then(res => {
+        //     questions.forEach(elt => {
+        //         let data1 = {
+        //             order: elt.id,
+        //             question: elt.question,
+        //             image: elt.picture.length < 3 ? '' : questions[0].picture,
+        //             answer: elt.answer,
+        //             pollId: res.data.pollId
+        //         }
+        //         console.log('data poll', data1)
 
-        setQuestionArr(prevState =>
-            [...prevState, <div key={questionCount}>
-                <Questions questionKey={questionCount} handleQuestions={handleQuestions}
-                    rmvQuestion={rmvQuestion} handleCorrectAnswer={handleCorrectAnswer}
-                    questionCount={questionCount} handleOptionChange={handleOptionChange} removeFieldArray={removeFieldArray} />
-            </div>])
-        setquestCompCount(p => p + 1)
+        //         axios.post('/addQuestions', data1).then(res => {
+        //             elt.option.forEach(elt2 => {
+        //                 let data2 = {
+        //                     order: elt2.id,
+        //                     optionText: elt2.value,
+        //                     questionId: res.data.response.questionId
+        //                 }
+        //                 console.log('option', data2)
+        //                 axios.post('/addOption', data2).then(res => {
+        //                     console.log(res)
+        //                 }).catch(err => {
+        //                     console.log(err.response)
 
-    }
+        //                 })
+        //             })
 
-    const handleTest = () => {
-        console.log('questionList', questionList)
-        console.log('optionList', optionList)
+
+        //         }).catch(err => {
+        //             console.log(err)
+        //         })
+
+
+        //     })
+
+        // }).catch(err => {
+        //     console.log(err)
+        // })
     }
 
     return (
@@ -107,12 +147,8 @@ const NewPoll = () => {
             <div className='row survey-container'>
                 <div className='col-7 survey-questions'>
 
-                    <div>
-                        <Button variant="success" onClick={() => createQuestion()}>{!questionCount > 0 ? 'Add Questions' : 'New Question'}</Button><br /><br />
-                        {questionCount > 0 && questionArr}
-                    </div>
 
-
+                    <CreateQuestion />
 
                 </div>
                 <div className='col-3 survey-config'>
@@ -125,24 +161,24 @@ const NewPoll = () => {
                         <span className='result-layout-title'> Result layout</span>
                         <div className='row'>
 
-                            <Card className='layout-display'>
-                                <a onClick={() => handleSelect("polls")}>
+                            <Card className='layout-display card-bar-chart'>
+                                <a className='stretched-link' onClick={() => handleSelect("bar-chart")}>
                                     <div>
                                         <FontAwesomeIcon icon='chart-bar' color='gray' size="1x" />
                                     </div>
                                     Bar char
                                 </a>
                             </Card>
-                            <Card className='layout-display'>
-                                <a onClick={() => handleSelect("polls")}>
+                            <Card className='layout-display card-pie-chart'>
+                                <a className='stretched-link' onClick={() => handleSelect("pie-chart")}>
                                     <div>
                                         <FontAwesomeIcon icon='chart-pie' color='gray' size="1x" />
                                     </div>
                                     Pie chart
                                 </a>
                             </Card>
-                            <Card className='layout-display'>
-                                <a onClick={() => handleSelect("polls")}>
+                            <Card className='layout-display card-donut'>
+                                <a className='stretched-link' onClick={() => handleSelect("donut")}>
                                     <div>
                                         <FontAwesomeIcon icon='chart-bar' color='gray' size="1x" />
                                     </div>
@@ -151,7 +187,7 @@ const NewPoll = () => {
                             </Card>
 
                         </div>
-
+                        {layoutErr && <small className="p-error p-d-block" >Please select your result layout.</small>}
                         <div className='result-format'>
                             <span className='format-text'>Result in percentage :</span><br />
 
@@ -161,19 +197,22 @@ const NewPoll = () => {
                         <div className='survey-timer'>
                             <span className='survey-timer-name'>Timer mode :  </span><br />
                             <InputSwitch checked={timerMode} onChange={(e) => setTimerMode(e.value)} className='survey-mode-input' />
-                            <div className="p-field timer-div">
+                            {timerMode && <div className="p-field timer-div">
                                 <label htmlFor="minmax-buttons" className='time-label'>Time</label>
                                 <InputNumber id="minmax-buttons" value={time} onValueChange={(e) => setTime(e.value)} mode="decimal" showButtons min={0} max={100} size={1} className='timer-input' />
-                            </div>
+                            </div>}
                         </div>
 
 
                     </div>
                 </div>
-                <Button  className="primary" onClick={() => handleTest()}>Test</Button>
+
+                <Button className="primary" onClick={() => handleTest()}>Start Event</Button>
 
             </div>
-
+            <div className='post-questiion'>
+                {/* <Button className="primary"  onClick={() => handleTest()}>Save For Later</Button> */}
+            </div>
         </div>
     )
 

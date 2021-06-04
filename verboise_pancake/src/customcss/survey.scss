@@ -4,9 +4,12 @@
   height: 100vh;
   overflow-y: auto;
   overflow-x: hidden;
+  // background-color: white;
 }
 .survey-container {
   margin-top: 2vh;
+  height: 85vh;
+  // background-color: blue;
 }
 .survey-questions {
 //   background-color: red;
@@ -72,4 +75,9 @@
 }
 .timer-div {
     margin-top: 1vh;
+}
+.post-questiion {
+  height: 50vh;
+  width: 50vh;
+  // background-color: red;
 }

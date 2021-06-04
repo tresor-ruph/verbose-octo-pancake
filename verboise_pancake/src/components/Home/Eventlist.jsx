@@ -10,7 +10,7 @@ import axios from "axios";
 import "helper/axiosConfig";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import NewEvent from "../Events/NewEvent";
-
+import { useDispatch} from 'react-redux'
 
 
 const EventList = ({ userId }) => {
@@ -21,6 +21,7 @@ const EventList = ({ userId }) => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [reload, setReload] = useState(false);
   const history = useHistory();
+  const dispatch = useDispatch()
 
   useEffect(() => {
     axios
@@ -100,7 +101,14 @@ const EventList = ({ userId }) => {
     setShowModal(true)
   }
   const openEvent = () => {
-    history.push("/dashboard/gallup");
+    history.push("/dashboard/newpoll");
+    dispatch({
+      type: "NEW_EVENT",
+      payload: {
+        event: eventData,
+
+      },
+    });
   };
 
   
@@ -125,7 +133,8 @@ const EventList = ({ userId }) => {
           <Column
             field="title"
             header="EventTitle"
-            editor={(props) => openEvent(props)}
+            editor={() => console.log('')}
+            onBeforeEditorShow ={(props) => openEvent(props)}
             bodyClassName="event-td"
           ></Column>
           <Column

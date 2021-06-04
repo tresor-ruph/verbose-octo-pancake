@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
 const dbConnection = require('../dbConnection')
-module.exports = dbConnection.define("Questions", {
+module.exports = dbConnection.define("Options", {
 
-    questionId: {
+    optionId: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
@@ -12,20 +12,10 @@ module.exports = dbConnection.define("Questions", {
         type: Sequelize.INTEGER,
         allowNull: false,
     },
-    question: {
+    optionText: {
         type: Sequelize.STRING,
         allowNull: false,
-    },
-    image : {
-        type: Sequelize.STRING,
-        allowNull: true,
-    },
-    answer : {
-        type: Sequelize.INTEGER,
-        allowNull: false, 
-    },
- 
- 
+    }, 
 },
 
 )

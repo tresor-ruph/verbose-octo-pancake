@@ -15,6 +15,7 @@ import {
     faChartLine,
     faTrophy,
     faChartPie,
+    faImage,
     
 }
 from '@fortawesome/free-solid-svg-icons'
@@ -37,6 +38,7 @@ library.add(
     faChartLine,
     faTrophy,
     faChartPie,
+    faImage,
 
     
 

@@ -3,16 +3,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { InputText } from 'primereact/inputtext';
 import { RadioButton } from "primereact/radiobutton";
 import { Button } from "primereact/button";
-
+import UploadImage from '../components/modal/UploadImage'
+import { Avatar } from 'primereact/avatar';
+import { AvatarGroup } from 'primereact/avatargroup';
 import './question.scss'
+
 const Questions = (props) => {
     const [count, setCount] = useState(2)
     const [inputField, setInputField] = useState([1, 2])
     const [radioValue1, setRadioValue1] = useState('');
+    const [showQuestModaln, setShowQuestModal] = useState(false)
+    const [picture, setPicture] = useState(null)
+    const [pictureRef, setPictureRef] = useState(null)
 
     const handleRadioValues = (x, y) => {
         setRadioValue1(x)
-        props.handleCorrectAnswer(y,x)
+        props.handleCorrectAnswer(y, x)
     }
     const addField = () => {
         if (inputField.length >= 6) {
@@ -56,24 +62,58 @@ const Questions = (props) => {
         Array.from(optionsDiv).forEach(elt => {
             elt.style.display = 'none'
         });
-        document.getElementById('option' + id).style.display = 'block'
+        let optionStyle = document.getElementById('option' + id)
+        if (optionStyle != null) optionStyle.style.display = 'block'
+
+        let imageStyle = document.getElementById('image' + id)
+        if (imageStyle != null) imageStyle.style.display = 'block'
+
         let questDiv = document.getElementsByClassName('edit-quests')
         Array.from(questDiv).forEach(elt => {
             elt.style.display = 'inline'
         })
+        document.getElementById('edit-quest' + id).style.display = 'none'
+    }
+
+    const onHide = (x, y) => {
+        setShowQuestModal(false)
+        if (x != undefined) {
+            props.handleQuestionImage(props.questionCount, x)
+        }
+        setPicture(x)
+        setPictureRef(y)
+    }
+    const setReveal = () => {
+        setShowQuestModal(true)
+
+    }
+    const deleteImage = () => {
+        setPicture(null)
+        props.deleteQuestionImage(props.questionCount)
+
+        pictureRef.delete().then(() => {
+            console.log('fileDeleted')
+        }).catch(error => {
+            console.log(error)
+        })
+
     }
 
     return (
         <div key={props.questionKey}>
+            {showQuestModaln && <UploadImage eventId={props.eventId} hide={onHide} />}
+            {picture != null && <div className=' options-list' id={'image' + props.questionKey}><Avatar className="p-overlay-badge" image={picture} size="xlarge">
+                <i className="pi pi-times" onClick={() => deleteImage()}></i>
+            </Avatar></div>}
             <div className="p-inputgroup questions-input">
-              
-                    <InputText id={'Question ' + props.questionKey} placeholder={'Question ' + props.questionKey} onChange={(event) => props.handleQuestions(props.questionKey, event)} />
-                    <Button icon="pi pi-pencil" className="p-button-success" onClick={() => revealOptions(props.questionKey)} style={{ display: 'none' }} className='edit-quests' id={'edit-quest' + props.questionKey} />
-                    <Button icon="pi pi-times" className="p-button-danger" onClick={() => props.rmvQuestion(props.questionCount, props.questionKey)} />
-
-
-
+                <Button icon="pi pi-image" className="p-button-secondary" onClick={() => setReveal()} />
+                <InputText id={'Question ' + props.questionKey} placeholder={'Question ' + props.questionKey} onChange={(event) => props.handleQuestions(props.questionKey, event)} />
+                <Button icon="pi pi-pencil" className="p-button-success" onClick={() => revealOptions(props.questionKey)} style={{ display: 'none' }} className='edit-quests' id={'edit-quest' + props.questionKey} />
+                <Button icon="pi pi-times" className="p-button-danger" onClick={() => props.rmvQuestion(props.questionCount, props.questionKey)} />
             </div>
+            <small id="username2-help" className="p-error p-d-block" id={`inv-quest${props.questionKey}`} style={{ display: 'none' }}>Please add your question.</small>
+            <small id="username2-help" className="p-error p-d-block" id={`inv-option${props.questionKey}`} style={{ display: 'none' }}>Please add atleast 2 options.</small>
+            <small id="username2-help" className="p-error p-d-block" id={`inv-answ${props.questionKey}`} style={{ display: 'none' }}>Please select an answer.</small>
 
             <br />
             <div className={'hide-options options-list'} id={'option' + props.questionKey}>
