@@ -30,7 +30,7 @@ const JoinPoll = () => {
 
 
     useEffect(() => {
-        fetchData ? getQuestions() : registerFireStore(poll[0].id, question[questionIndex])
+        fetchData ? getQuestions(true) : registerFireStore(poll[0].id, question[questionIndex])
     }, [reload])
 
     const registerFireStore = (pollId, currQuest) => {
@@ -39,8 +39,9 @@ const JoinPoll = () => {
 
                 querySnapshot.docChanges().filter(({ type }) => type === "added").map(({ doc }) => {
 
-                    if (doc.data().message === 'NEW_CONNECTION') {
-                        return 'new connection'
+                    if (doc.data().message === 'FETCH_QUESTIONS') {
+                        console.log('big bang')
+                        getQuestions(false)
                     }
                     else if (doc.data().message === 'START_EVENT') {
                     }
@@ -91,19 +92,21 @@ const JoinPoll = () => {
 
     }
 
-
-
-    const getQuestions = () => {
+    const getQuestions = (x) => {
         axios.get(`/getAllQuestions/${'z3yu9'}`).then(res => {
-            console.log(res.data)
+            console.log(res.data.poll)
             setPoll(res.data.poll)
             let sorted = res.data.questions.sort(function (a, b) { return a.order - b.order })
 
             setQuestion(sorted)
-            registerFireStore(res.data.poll[0].id, sorted[questionIndex])
-            setFetchData(false)
+            console.log('sorted', sorted)
             setOption(res.data.options)
-            setLoaded(true)
+            questionIndex = res.data.poll[0].questionIndex
+            if (x) {
+                registerFireStore(res.data.poll[0].id, sorted[questionIndex])
+                setFetchData(false)
+                setLoaded(true)
+            }
 
         }).catch(err => {
             console.log(err.response)
@@ -168,6 +171,10 @@ const JoinPoll = () => {
         }
 
     }
+    const validAnswer = () => {
+     let arr =   option.filter(elt => elt.questionId == question[questionIndex].id).filter(elt =>elt.order === question[questionIndex].answer)[0]
+     return arr
+    }
 
     return (
         <div className='join-poll' >
@@ -175,7 +182,7 @@ const JoinPoll = () => {
                 <div>
 
                     {displayGraph ? <div>
-                        <div className='corr-answ-div'> Correct Answer: <span className='ans-val'>{'Test'}</span></div>
+                        <div className='corr-answ-div'> Correct Answer: <span className='ans-val'>{validAnswer().optionText }</span></div>
                         <div className='graph-div'>
                             {renderChart()}
                         </div>

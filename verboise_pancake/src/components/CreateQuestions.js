@@ -13,7 +13,7 @@ let optionList = [] //array containing the options
 let questionList = [] // array containing the questions
 
 
-const CreateQuestions = () => {
+const CreateQuestions = ({ addNew ,setSendQuestion}) => {
     const [questionArr, setQuestionArr] = useState([]) //contain de component Question
     const [questCompCount, setquestCompCount] = useState(0) //Keep count of the number of Question components
     const eventState = useSelector(state => state.EventReducer.event)
@@ -24,6 +24,12 @@ const CreateQuestions = () => {
             tempQuestionArr = questionArr
             hideQuestion(questionCount)
 
+            return () => {
+                questionCount = 0;
+                tempQuestionArr = []
+                optionList = []
+                questionList = []
+            }
         }
     }, [questCompCount])
 
@@ -142,8 +148,8 @@ const CreateQuestions = () => {
     }
 
     const createQuestion = () => {
-
-        if(questionCount >= 10){
+        setSendQuestion(true)
+        if (questionCount >= 10) {
             alert('you cannot create more than 10 questions at once')
             return
         }
@@ -151,6 +157,8 @@ const CreateQuestions = () => {
         console.log(optionList[questionCount])
         if (questionCount > 0 && questionList[questionCount].question === "") {
             console.log('please add your question')
+            console.log('questionCount', questionCount)
+            console.log(eventState)
             let questionErr = document.getElementById(`inv-quest${questionCount}`)
             if (questionErr !== null) questionErr.style.display = 'inline'
             return
