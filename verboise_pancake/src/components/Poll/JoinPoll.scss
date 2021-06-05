@@ -1,0 +1,128 @@
+.join-poll {
+    // background-color: white;
+    height: 100vh;
+    overflow-y: auto;
+}
+.join-poll-body {
+    // background-color: white;
+    height: 100vh;
+    margin-left: 25vw;
+    margin-top: 10vh;
+   
+}
+.text-question-div {
+    font-size: 1.5rem;
+    color: gray;
+    font-weight: 500;
+
+}
+.quest-option-div {
+    margin-top: 5vh;
+    display: block;
+    
+}
+.image-div {
+    margin-top: 3vh;
+}
+.snd-answer {
+    margin-top: 4vh;
+}
+.snd-answ-btn {
+    width: 30%;
+    height: 40px;
+}
+.quest-img {
+  width: 200px;  
+}
+.bar-chart-custom {
+    width: 50%;
+    margin-top: 2vh;
+    margin-left: 3vw;
+}
+.pie-chart-custom {
+    width: 20%;
+    margin-top: 5vh;
+    margin-left: 10vw;
+}
+.graph-div {
+    margin-left: 10vh;
+}
+.corr-answ-div{
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-left: 15vw;
+    margin-top: 20vh;
+}
+.ans-val {
+    color: red;
+    margin-left: 1vw;
+}
+
+@media (min-width: 1500.98px) {
+    .quest-img {
+        width: 300px;  
+      }
+      .text-question-div {
+        font-size: 2rem;
+        color: gray;
+        font-weight: 500;
+    
+    }
+    .join-poll-body {
+        // background-color: white;
+        height: 100vh;
+        margin-left: 30vw;
+        margin-top: 10vh;
+       
+    }
+    .graph-div {
+        margin-top: 10vh;
+        margin-left: 10vh;
+    }
+    .corr-answ-div{
+        font-size: 1.5rem;
+        font-weight: 500;
+        margin-left: 15vw;
+        margin-top: 20vh;
+    }
+}
+
+@media (max-width: 700.98px) {
+    .quest-img {
+        width: 200px;  
+      }
+      .text-question-div {
+        font-size: 1.5rem;
+        color: gray;
+        font-weight: 500;
+    
+    }
+    .join-poll-body {
+        // background-color: white;
+        height: 100vh;
+        margin-left: 13vw;
+        margin-top: 10vh;
+       
+    }
+    .snd-answ-btn {
+        width: 50%;
+        height: 40px;
+    }
+    .bar-chart-custom {
+        width: 90%;
+        margin-left: 0;
+        
+    }
+    .corr-answ-div{
+        font-size: 1.5rem;
+        font-weight: 500;
+        margin-left: 15vw;
+    }
+    .graph-div {
+        margin-left: 0;
+    }
+    .pie-chart-custom {
+        width: 50%;
+        margin-left: 20vw;
+    }
+}

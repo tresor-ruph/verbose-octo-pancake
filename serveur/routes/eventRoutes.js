@@ -7,6 +7,6 @@ module.exports = (app) => {
     app.put('/api/updateStatus', eventController.startEvent)
     app.delete('/api/Event/:id', eventController.deleteEvent)
 
-    app.get('/api/getEventPoll/:eventCode/:userId', eventController.getEventPoll)
+    app.get('/api/getAllQuestions/:eventCode/', eventController.getEventPoll)
 
 }

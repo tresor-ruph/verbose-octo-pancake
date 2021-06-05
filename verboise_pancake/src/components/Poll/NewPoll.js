@@ -37,7 +37,7 @@ const NewPoll = () => {
 
     }
 
-    const handleTest = async () => {
+    const startEvent = async () => {
         if (!eventState.questionList) {
             let optionErr = document.getElementById('null-question')
             if (optionErr !== null) optionErr.style.display = 'inline'
@@ -78,68 +78,69 @@ const NewPoll = () => {
         const questions = eventState.questionList.filter(elt => elt.id != "")
         const options = eventState.optionList.filter(elt => elt.id != "")
         console.log(questions, options)
-        if(layout === null){
-            setLayoutErr(true)   
+        if (layout === null) {
+            setLayoutErr(true)
             return
         }
-        
-
-        // for (let i of questions) {
-        //     for (let j of options) {
-        //         if (i.id === j.questionId) {
-        //             i.option = j.answers.filter(elt => elt.id != undefined)
-        //         }
-        //     }
-        // }
-        // console.log('question', questions)
-
-        // const data = {
-        //     layout: layout,
-        //     percentage: resultFormat,
-        //     timerMode: timerMode,
-        //     time: time,
-        //     eventId: eventState[0].eventId
-
-        // }
-        // console.log(questions, options, data)
-        // await axios.post('/createPoll', data).then(res => {
-        //     questions.forEach(elt => {
-        //         let data1 = {
-        //             order: elt.id,
-        //             question: elt.question,
-        //             image: elt.picture.length < 3 ? '' : questions[0].picture,
-        //             answer: elt.answer,
-        //             pollId: res.data.pollId
-        //         }
-        //         console.log('data poll', data1)
-
-        //         axios.post('/addQuestions', data1).then(res => {
-        //             elt.option.forEach(elt2 => {
-        //                 let data2 = {
-        //                     order: elt2.id,
-        //                     optionText: elt2.value,
-        //                     questionId: res.data.response.questionId
-        //                 }
-        //                 console.log('option', data2)
-        //                 axios.post('/addOption', data2).then(res => {
-        //                     console.log(res)
-        //                 }).catch(err => {
-        //                     console.log(err.response)
-
-        //                 })
-        //             })
 
 
-        //         }).catch(err => {
-        //             console.log(err)
-        //         })
+        for (let i of questions) {
+            for (let j of options) {
+                if (i.id === j.questionId) {
+                    i.option = j.answers.filter(elt => elt.id != undefined)
+                }
+            }
+        }
+        console.log('question', questions)
+
+        const data = {
+            layout: layout,
+            percentage: resultFormat,
+            timerMode: timerMode,
+            time: time,
+            eventId: eventState[0].eventId
+
+        }
+        console.log(questions, options, data)
+        await axios.post('/createPoll', data).then(res => {
+            questions.forEach(elt => {
+                let data1 = {
+                    order: elt.id,
+                    question: elt.question,
+                    image: elt.picture.length < 3 ? '' : questions[0].picture,
+                    answer: elt.answer,
+                    pollId: res.data.pollId
+                }
+
+                axios.post('/addQuestions', data1).then(res => {
+                    setTimeout('', 200)
+                    elt.option.forEach(elt2 => {
+                        let data2 = {
+                            order: elt2.id,
+                            optionText: elt2.value,
+                            questionId: res.data.response.questionId
+                        }
+                        axios.post('/addOption', data2).then(res => {
+                            console.log(res)
+                        }).catch(err => {
+                            console.log(err.response)
+
+                        })
+                    })
 
 
-        //     })
+                }).catch(err => {
+                    console.log(err)
+                    console.log(err.response)
+                })
 
-        // }).catch(err => {
-        //     console.log(err)
-        // })
+
+            })
+
+        }).catch(err => {
+            console.log(err.response)
+
+        })
     }
 
     return (
@@ -205,14 +206,13 @@ const NewPoll = () => {
 
 
                     </div>
+                    <div className='post-questiion'>
+            <Button className="primary" onClick={() => startEvent()}>Start Event</Button>
+            </div>
                 </div>
-
-                <Button className="primary" onClick={() => handleTest()}>Start Event</Button>
-
+               
             </div>
-            <div className='post-questiion'>
-                {/* <Button className="primary"  onClick={() => handleTest()}>Save For Later</Button> */}
-            </div>
+           
         </div>
     )
 

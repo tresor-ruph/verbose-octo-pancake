@@ -4,7 +4,7 @@ const Joi = require('joi')
 module.exports = (order, optionText, questionId) => {
   const schema = Joi.object({
     order: Joi.number(),
-    optionText: Joi.string().min(3).required(),
+    optionText: Joi.string().required(),
     questionId: Joi.string().min(10).required(),
 
 

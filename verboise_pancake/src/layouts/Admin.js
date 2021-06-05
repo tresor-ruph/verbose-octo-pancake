@@ -7,6 +7,9 @@ import Sidebar from "components/Sidebar/Sidebar";
 import Dashboard from "views/Dashboard.js";
 import UserProfile from "views/UserProfile.js";
 import Poll from 'components/Poll/Poll'
+import PollTest from 'components/Poll/PollTest'
+import JoinPoll from 'components/Poll/JoinPoll'
+
 import NewPoll from 'components/Poll/NewPoll'
 import Notfound from "components/Error/Notfound"
 import Reaction from 'components/Events/Reaction' 
@@ -29,6 +32,11 @@ function Admin() {
       return(<Reaction />)
     }else if(location.pathname === '/dashboard/newpoll'){
       return (<NewPoll />)
+    } else if(location.pathname === '/dashboard/polltest'){
+      return (<PollTest />)
+    }
+    else if(location.pathname === '/dashboard/joinpoll'){
+      return (<JoinPoll />)
     }
     else {
       return (<Notfound />)
@@ -38,7 +46,7 @@ function Admin() {
   return (
     <div >
         <AdminNavbar />
-        <Sidebar />
+        {/* <Sidebar /> */}
       <div id='dash' className='dash-min dash-max'>
         {renderComponent()}
       </div>

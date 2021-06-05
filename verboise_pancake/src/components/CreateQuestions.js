@@ -143,6 +143,11 @@ const CreateQuestions = () => {
 
     const createQuestion = () => {
 
+        if(questionCount >= 10){
+            alert('you cannot create more than 10 questions at once')
+            return
+        }
+
         console.log(optionList[questionCount])
         if (questionCount > 0 && questionList[questionCount].question === "") {
             console.log('please add your question')
@@ -178,7 +183,7 @@ const CreateQuestions = () => {
         }
         let optionErr = document.getElementById('null-question')
         if (optionErr !== null) optionErr.style.display = 'none'
-        
+
         questionCount++
         questionList[questionCount] = { id: '', question: '', answer: '', picture: '' }
 

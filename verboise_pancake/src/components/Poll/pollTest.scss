@@ -1,0 +1,93 @@
+.poll-main {
+    background-color: white;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    overflow-y: auto;
+
+}
+
+.graphs {
+    margin-top: 10vh;
+    margin-left: 5vw;
+}
+.qr-codes {
+    margin-left: 5vh;
+    margin-top: 5vh;
+    border-left: 10 solid black;
+}
+
+.quest-tab {
+//  margin-left: 8vw;   
+ font-size: 1.2em;
+ border: none;
+
+}
+.join-tab {
+    font-size: 1.2em;
+    border: none;
+}
+.add-quest-tab {
+font-size: 1.2em;
+border: none;
+}
+.scan-div {
+    margin-top: 2vh;
+    text-align: center;
+}
+.qr-text
+{
+    margin-left: 0;
+    font-size: 1.5rem;
+    color: gray;
+    font-weight: 500;
+}
+.qr-code {
+    margin-top: 3vh;
+}
+.or-div {
+    margin-top: 3vh;
+}
+.or-text {
+    font-size: 1.2rem;
+    color: gray;
+    font-weight: 500;
+
+}
+.url-text {
+    font-size: 1.5rem;
+    color: #5F98FA;
+    font-weight: 700;
+}
+.url-div{
+    margin-top: 5vh;
+
+}
+.question-div {
+    margin-top: 3vh;
+    font-size: 1.5em;
+}
+.img-div {
+    margin-top: 5vh;
+}
+
+@media (min-width: 1500.98px) {
+    .graphs {
+        margin-top: 20vh;
+      
+    }
+    .qr-codes {
+        margin-left: 5vh;
+        margin-top: 5vh;
+       
+    }
+    .img-div {
+        margin-top: 10vh;
+    }
+    .scan-div {
+        margin-top: 10vh;
+    }
+    .qr-code {
+        width: 400
+    }
+}

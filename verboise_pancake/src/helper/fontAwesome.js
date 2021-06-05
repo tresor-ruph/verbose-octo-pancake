@@ -16,6 +16,11 @@ import {
     faTrophy,
     faChartPie,
     faImage,
+    faArrowAltCircleRight,
+    faLockOpen,
+    faLock,
+    faUserFriends,
+    
     
 }
 from '@fortawesome/free-solid-svg-icons'
@@ -39,6 +44,11 @@ library.add(
     faTrophy,
     faChartPie,
     faImage,
+    faArrowAltCircleRight,
+    faLockOpen,
+    faLock,
+    faUserFriends
+    
 
     
 
