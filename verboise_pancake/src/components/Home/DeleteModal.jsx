@@ -12,7 +12,6 @@ const DeleteModal = ({ show, selEvent, handleClose,confirmDelete }) => {
         <Modal.Title>Modal heading</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-          {console.log('test2',selEvent)}
         Do you really want to delete the event :{selEvent.title || ''}
       </Modal.Body>
       <Modal.Footer>

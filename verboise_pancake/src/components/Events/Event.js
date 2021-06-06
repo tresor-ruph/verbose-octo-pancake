@@ -7,7 +7,6 @@ import JoinPolls from './JoinPoll'
 import Gallup from 'components/Gallup/Gallup'
 import { useSelector, useDispatch } from 'react-redux'
 
-import Reactions from './Reactions'
 // import Name from './Name'
 
 const Event = () => {
@@ -52,26 +51,10 @@ const Event = () => {
     }, [])
 
 
-    // const renderEvent = () => {
-    //     if (eventStatus === 'inactive' || eventStatus === 'completed') {
-    //         return (<EventStatus status={eventStatus} />)
-    //     } else if (eventStatus === 'ongoing' && evenType === 'reactions') {
-    //         return (<Reactions />)
-    //     } else if (eventStatus === 'ongoing' && evenType === 'polls') {
-    //         return (<Polls />)
-    //     } else {
-    //         return (<h1>An error occured</h1>)
-    //     }
-    // }
+ 
 
     return (
-        // <div>
-        //     {
-        //         loaded ? <div>
-        //             <JoinPolls pseudo={eventState.pseudo} eventId={eventId} /></div>
-        //             : <div><h1>hello world</h1></div>}
-
-        // </div>
+       
         <div>
             <Gallup />
         </div>

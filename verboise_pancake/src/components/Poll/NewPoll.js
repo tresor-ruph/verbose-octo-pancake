@@ -10,7 +10,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import axios from 'axios'
 import "helper/axiosConfig"
 
-const NewPoll = () => {
+const NewPoll = ({handleStartEvent}) => {
 
     const [resultFormat, setResultFormat] = useState(false)
     const [timerMode, setTimerMode] = useState(false)
@@ -35,6 +35,9 @@ const NewPoll = () => {
         setLayout(x)
         setLayoutErr(false)
 
+    }
+    const setSendQuestion = () => {
+        //------
     }
 
     const startEvent = async () => {
@@ -98,7 +101,7 @@ const NewPoll = () => {
             percentage: resultFormat,
             timerMode: timerMode,
             time: time,
-            eventId: eventState[0].eventId
+            eventId: eventState.eventId
 
         }
         console.log(questions, options, data)
@@ -122,6 +125,7 @@ const NewPoll = () => {
                         }
                         axios.post('/addOption', data2).then(res => {
                             console.log(res)
+                            handleStartEvent(true)
                         }).catch(err => {
                             console.log(err.response)
 
@@ -149,7 +153,7 @@ const NewPoll = () => {
                 <div className='col-7 survey-questions'>
 
 
-                    <CreateQuestion />
+                    <CreateQuestion setSendQuestion={setSendQuestion}/>
 
                 </div>
                 <div className='col-3 survey-config'>

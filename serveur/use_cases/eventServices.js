@@ -80,13 +80,7 @@ module.exports = () => {
 
 
 
-        console.log('***********')
-        console.log(poll)
-        console.log('///////////')
-        console.log(questions)
-        console.log('////////')
-        console.log(options)
-        console.log('#############')
+      
 
         return { poll, questions, options}
     }

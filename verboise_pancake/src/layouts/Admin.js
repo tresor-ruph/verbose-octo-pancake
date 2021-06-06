@@ -1,52 +1,44 @@
 
 import React from "react";
 import { useLocation } from "react-router-dom";
-
+import HomePage from 'components/Home/HomePage'
 import AdminNavbar from "components/Navbars/AdminNavbar";
-import Sidebar from "components/Sidebar/Sidebar";
-import Dashboard from "views/Dashboard.js";
-import UserProfile from "views/UserProfile.js";
-import Poll from 'components/Poll/Poll'
-import PollTest from 'components/Poll/PollTest'
-import JoinPoll from 'components/Poll/JoinPoll'
+import Events from "components/Events/Events"
+import PollAnalysis from 'components/Poll/PollAnalysis'
+// import Dashboard from "views/Dashboard";
+// import Poll from 'components/Poll/Poll'
+// import PollTest from 'components/Poll/PollTest'
+// import JoinPoll from 'components/Poll/JoinPoll'
 
-import NewPoll from 'components/Poll/NewPoll'
+// import NewPoll from 'components/Poll/NewPoll'
 import Notfound from "components/Error/Notfound"
-import Reaction from 'components/Events/Reaction' 
+// import Reaction from 'components/Events/Reaction' 
+
 
 
 
 
 function Admin() {
   const location = useLocation();
+  const path = location.pathname.split('/')[1]
+
 
   const renderComponent = () => {
-
-    if (location.pathname === '/dashboard/event') {
-      return (<Dashboard />)
-    } else if (location.pathname === '/dashboard/userprofile') {
-      return (<UserProfile />)
-    }else if(location.pathname === '/dashboard/poll'){
-      return (<Poll />)
-    }else if(location.pathname === '/dashboard/gallup'){
-      return(<Reaction />)
-    }else if(location.pathname === '/dashboard/newpoll'){
-      return (<NewPoll />)
-    } else if(location.pathname === '/dashboard/polltest'){
-      return (<PollTest />)
+    if (path === "Home") {
+      return (<HomePage />)
+    } else if (path === 'Event') {
+      return (<Events />)
+    }else if(path === 'result'){
+      return (<PollAnalysis />)
     }
-    else if(location.pathname === '/dashboard/joinpoll'){
-      return (<JoinPoll />)
-    }
-    else {
+     else {
       return (<Notfound />)
     }
   }
 
   return (
     <div >
-        <AdminNavbar />
-        {/* <Sidebar /> */}
+      <AdminNavbar />
       <div id='dash' className='dash-min dash-max'>
         {renderComponent()}
       </div>

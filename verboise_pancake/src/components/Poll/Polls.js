@@ -12,14 +12,14 @@ import 'helper/axiosConfig'
 import firebase from 'firebase';
 import 'firebase/firestore';
 
-import Test from './Test'
-import './pollTest.scss'
+import PollGraphs from './PollGraphs'
+import './poll.scss'
 
 let chartDataList = []
 const db = firebase.firestore();
 
 let questionIndex = 0
-const PollTest = () => {
+const Poll = ({ code }) => {
     const [activeIndex, setActiveIndex] = useState(0)
     const [option, setOption] = useState(null)
     const [poll, setPoll] = useState(null)
@@ -34,6 +34,7 @@ const PollTest = () => {
     const [sendQuestion, setSendQuestion] = useState()
 
     const eventState = useSelector(state => state.EventReducer.event)
+    
     let pollRef = db.collection('polls')
     useEffect(() => {
         fetchData ? getQuestions(true) : registerFireStore(poll[0].id, question[questionIndex])
@@ -92,7 +93,7 @@ const PollTest = () => {
 
 
     const getQuestions = (x) => {
-        axios.get(`/getAllQuestions/${'z3yu9'}`).then(res => {
+        axios.get(`/getAllQuestions/${code}`).then(res => {
             setPoll(res.data.poll)
             let sorted = res.data.questions.sort(function (a, b) { return a.order - b.order })
             setQuestion(sorted)
@@ -123,15 +124,15 @@ const PollTest = () => {
             chartDataList = []
             setDataSet([])
             setRedraw(true)
-    
+
             setReload(prev => !prev)
         }).catch(err => {
             console.log(err.response)
         })
-      
+
     }
 
-    const handleStopEvent = () => {
+    const handleEndQuestion = () => {
         pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'REVEAL_RESULTS', index: questionIndex })
         setVoteLock(false)
 
@@ -244,7 +245,7 @@ const PollTest = () => {
             {loaded ? <div className=''>
                 <div className='row poll-container'>
                     <div className='col-7 graphs'>
-                        <Test handleNextQuestion={handleNextQuestion} questionIndex={questionIndex} question={question} handleStopEvent={handleStopEvent} voteLock={voteLock} dataSet={dataSet} numbVotes={numbVotes} redraw={redraw} />
+                        <PollGraphs handleNextQuestion={handleNextQuestion} questionIndex={questionIndex} question={question} handleStopEvent={handleEndQuestion} voteLock={voteLock} dataSet={dataSet} numbVotes={numbVotes} redraw={redraw} />
                     </div>
                     <div className='col-4  qr-codes'>
                         <TabView activeIndex={activeIndex} onTabChange={(e) => handleIndex(e)}>
@@ -262,11 +263,11 @@ const PollTest = () => {
                                         level="Q"
                                         style={{ width: 270 }}
                                         className='qr-code'
-                                        value='test' />
+                                        value={`http://localhost:3000/${code}`} />
                                     <div className='or-div' >
                                         <span className='or-text'> -- OR -- </span><br />
                                         <div className='url-div'>
-                                            <span className='url-text'>{`verbosePancake/code`}</span>
+                                            <span className='url-text'>{`verbosePancake/${code}`}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -289,4 +290,4 @@ const PollTest = () => {
     )
 
 }
-export default PollTest
+export default Poll

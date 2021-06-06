@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // import Settings from 'components/Navbars/Settings'
 import Settings from '../../Navbars/Settings'
 const AdminNavbarUI = (props) => {
-  const { handleLogOut, toggleOffcanvas, avatar, toggleClass, userName, showModal,onHide,handleSettings,profilePicture } = props
+  const { handleLogOut, toggleOffcanvas, avatar, toggleClass, userName, showModal,onHide,handleSettings,profilePicture,handleRedirectHome } = props
 
   return (
     <div>
@@ -12,9 +12,8 @@ const AdminNavbarUI = (props) => {
 
     <nav className="navbar col-lg-12 col-12 p-lg-0 fixed-top d-flex flex-row">
       <div className="navbar-menu-wrapper d-flex align-items-center justify-content-between ">
-        {/* <a className="navbar-brand brand-logo-mini align-self-center d-lg-none" href="!#" onClick={evt => evt.preventDefault()}><img src={avatar} alt="logo" /></a> */}
-        <button className="navbar-toggler align-self-center" type="button" onClick={() => toggleClass()}>
-          <i className="mdi mdi-menu"></i>
+        <button className="navbar-toggler align-self-center " type="button" onClick={() => handleRedirectHome()}>
+         verbosePancake
         </button>
 
         <ul className="navbar-nav navbar-nav-right">

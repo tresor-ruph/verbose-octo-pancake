@@ -24,12 +24,12 @@ const CreateQuestions = ({ addNew ,setSendQuestion}) => {
             tempQuestionArr = questionArr
             hideQuestion(questionCount)
 
-            return () => {
-                questionCount = 0;
-                tempQuestionArr = []
-                optionList = []
-                questionList = []
-            }
+            // return () => {
+            //     questionCount = 0;
+            //     tempQuestionArr = []
+            //     optionList = []
+            //     questionList = []
+            // }
         }
     }, [questCompCount])
 
@@ -154,7 +154,6 @@ const CreateQuestions = ({ addNew ,setSendQuestion}) => {
             return
         }
 
-        console.log(optionList[questionCount])
         if (questionCount > 0 && questionList[questionCount].question === "") {
             console.log('please add your question')
             console.log('questionCount', questionCount)

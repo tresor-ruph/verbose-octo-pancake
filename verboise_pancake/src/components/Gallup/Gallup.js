@@ -4,7 +4,6 @@ import 'helper/firebaseConfig'
 import moment, { Moment } from 'moment'
 import firebase from 'firebase';
 import 'firebase/firestore';
-import { TrendingUpRounded } from '@material-ui/icons';
 
 const db = firebase.firestore();
 let r = Math.random().toString(36).substring(7);

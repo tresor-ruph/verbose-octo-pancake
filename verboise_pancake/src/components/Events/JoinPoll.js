@@ -49,7 +49,7 @@ const JoinPolls = ({ eventId, pseudo }) => {
 
                 querySnapshot.docChanges().filter(({ type }) => type === "added").map(({ doc }) => {
 
-                    if (doc.data().message === 'NEW_CONNECTION') {
+                    if (doc.data().message === 'FETCH_QUESTIONS') {
                         return 'new connection'
                     }
                     else if (doc.data().message === 'START_EVENT') {

@@ -3,13 +3,13 @@ import { Button } from "react-bootstrap";
 import NewEvent from "../Events/NewEvent";
 
 import "customcss/Welcome.scss";
-const WelcomeMessage = ({ userName, handleEvent }) => {
+const WelcomeMessage = ({ userName,handleReload }) => {
   const [showModal, setShowModal] = useState(false);
 
   const modalOnHide = (x) => {
     setShowModal(false);
     if(x === 'reload'){
-      window.location.reload("/dashboard/event");
+     handleReload(true)
 
     }
   };
