@@ -8,6 +8,7 @@ const LoadPolls = ({code}) => {
     const [startSurvey, setStartSurvey] = useState(false)
     const handleStartEvent = () => {
         setStartSurvey(true)
+        
     }
 
     return (

@@ -17,7 +17,6 @@ const Events = () => {
     const [loaded, setLoaded] = useState(false)
 
     useEffect(() => {
-        console.log(eventState)
         if (path !== eventState.code) {
             history.push('/Home')
         } else {

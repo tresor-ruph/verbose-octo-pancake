@@ -34,7 +34,7 @@ const LoadGallup = ({ code }) => {
 
     useEffect(() => {
 
-        const unsubscribe = reactionRef.doc('tresor85550').collection('ruphin85550').onSnapshot((querySnapshot) => {
+        const unsubscribe = reactionRef.doc(eventState.eventId).collection(code).onSnapshot((querySnapshot) => {
             querySnapshot.docChanges().filter(({ type }) => type === "added").map(({ doc }) => {
 
                 if (doc.data().message === 'VOTE') {
@@ -78,12 +78,12 @@ const LoadGallup = ({ code }) => {
 
     const average = arr => arr.reduce((p, c) => p + c, 0) / arr.length;
     const handleBlock = (x) => {
-        reactionRef.doc('tresor85550').collection('ruphin85550').add({ message: 'BLOCK', id: x.r })
+        reactionRef.doc(eventState.eventId).collection(code).add({ message: 'BLOCK', id: x.r })
 
     }
 
     const handleUnblock = (x) => {
-        reactionRef.doc('tresor85550').collection('ruphin85550').add({ message: 'UN_BLOCK', id: x.r })
+        reactionRef.doc(eventState.eventId).collection(code).add({ message: 'UN_BLOCK', id: x.r })
     }
 
     const handleIndex = (e) => {

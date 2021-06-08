@@ -4,13 +4,11 @@ const { Op } = require("sequelize")
 module.exports = () => {
 
     const addOption = async function (data) {
-
-        const newOption = await Options.create({
-            order: data.order,
-            optionText: data.optionText,
-
-            QuestionQuestionId: data.questionId
-        })
+        console.log('insert data', data)
+       
+        const newOption = await Options.bulkCreate(
+            data
+        )
         return newOption
     }
 

@@ -1,5 +1,5 @@
-const EventStatus = (props) => {
-    let { status } = props
+const EventStatus = ({status}) => {
+ 
     return (
         <div>
 

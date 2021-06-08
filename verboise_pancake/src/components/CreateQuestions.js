@@ -7,19 +7,31 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import 'customcss/survey.scss'
 
-let tempQuestionArr = [] //A temporary array that allows me to manipulate questionArr without producing undesirable sideeffects
-let questionCount = 0 // Keep count of the number of questions
-let optionList = [] //array containing the options
-let questionList = [] // array containing the questions
+//  tempQuestionArr:  A temporary array that allows me to manipulate questionArr without producing undesirable sideeffects
+//  questionCount: Keep count of the number of questions
+//  optionList: array containing the options
+//  questionList:  array containing the questions
 
+let [tempQuestionArr, questionCount, optionList, questionList] = [[], 0, [], []]
 
-const CreateQuestions = ({ addNew ,setSendQuestion}) => {
+const CreateQuestions = ({ addNew, setSendQuestion }) => {
     const [questionArr, setQuestionArr] = useState([]) //contain de component Question
     const [questCompCount, setquestCompCount] = useState(0) //Keep count of the number of Question components
     const eventState = useSelector(state => state.EventReducer.event)
+
     const dispatch = useDispatch()
 
     useEffect(() => {
+        if (questionArr.length === 0) {
+            tempQuestionArr = eventState.tempQuestionArr
+                questionCount = eventState.questionCount
+                optionList = eventState.optionList
+                questionList = eventState.questionList
+        }
+        console.log('eventState***', eventState)
+        console.log(questionList)
+        console.log('hahahaha', questionArr)
+        console.log('hihihihi', questionCount)
         if (questCompCount > 0) {
             tempQuestionArr = questionArr
             hideQuestion(questionCount)
@@ -147,7 +159,7 @@ const CreateQuestions = ({ addNew ,setSendQuestion}) => {
         if (editQuest != null) editQuest.style.display = 'none'
     }
 
-    const createQuestion = () => {
+    const addQuestions = () => {
         setSendQuestion(true)
         if (questionCount >= 10) {
             alert('you cannot create more than 10 questions at once')
@@ -193,15 +205,16 @@ const CreateQuestions = ({ addNew ,setSendQuestion}) => {
 
         questionCount++
         questionList[questionCount] = { id: '', question: '', answer: '', picture: '' }
-
         optionList[questionCount] = { questionId: '', answers: [] }
 
+        console.log('OOOOOO')
         setQuestionArr(prevState =>
             [...prevState, <div key={questionCount}>
                 <Questions questionKey={questionCount} handleQuestions={handleQuestions} deleteQuestionImage={deleteQuestionImage}
                     rmvQuestion={rmvQuestion} handleCorrectAnswer={handleCorrectAnswer} handleQuestionImage={handleQuestionImage}
                     questionCount={questionCount} handleOptionChange={handleOptionChange} removeFieldArray={removeFieldArray} eventId={eventState.eventId} />
             </div>])
+
         setquestCompCount(p => p + 1)
 
     }
@@ -209,7 +222,7 @@ const CreateQuestions = ({ addNew ,setSendQuestion}) => {
     return (<div>
 
         <div>
-            <Button variant="success" onClick={() => createQuestion()}>{!questionCount > 0 ? 'Add Questions' : 'New Question'}</Button><br /><br />
+            <Button variant="success" onClick={() => addQuestions()}>{!questionCount > 0 ? 'Add Questions' : 'New Question'}</Button><br /><br />
             <small id="username2-help" className="p-error p-d-block" id='null-question' style={{ display: 'none' }}>Please add your question.</small>
 
             {questionCount > 0 && questionArr}

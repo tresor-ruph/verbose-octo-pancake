@@ -68,6 +68,7 @@ const img = {
 const UploadImage = ({ hide, eventId }) => {
     const [files, setFiles] = useState([]);
     const eventState = useSelector(state => state.EventReducer.event)
+    
     const {
         getRootProps,
         getInputProps,
@@ -117,14 +118,14 @@ const UploadImage = ({ hide, eventId }) => {
             return
         }
 
-        const uploadTask = storage.ref(`${eventState[0].eventId}/${files[0].name}`).put(files[0]);
+        const uploadTask = storage.ref(`${eventState.eventId}/${files[0].name}`).put(files[0]);
         uploadTask.on('state_changed', (snapshot)=> {
 
         }, (error) => {
 
         }, () =>{
-            storage.ref(eventState[0].eventId).child(files[0].name).getDownloadURL().then(url => {
-                const imageRef = storage.ref(eventState[0].eventId).child(files[0].name)
+            storage.ref(eventState.eventId).child(files[0].name).getDownloadURL().then(url => {
+                const imageRef = storage.ref(eventState.eventId).child(files[0].name)
                 hide(url, imageRef)
 
             })

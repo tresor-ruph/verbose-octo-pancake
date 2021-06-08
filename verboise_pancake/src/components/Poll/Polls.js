@@ -8,7 +8,7 @@ import CreateQuestion from 'components/CreateQuestions'
 import { Button } from 'react-bootstrap'
 import axios from 'axios'
 import 'helper/axiosConfig'
-
+import { useHistory } from 'react-router'
 import firebase from 'firebase';
 import 'firebase/firestore';
 
@@ -16,28 +16,44 @@ import PollGraphs from './PollGraphs'
 import './poll.scss'
 
 let chartDataList = []
+let ranks =[]
+let votesNumb =[]
+let questionStats =[]
+
 const db = firebase.firestore();
 
 let questionIndex = 0
 const Poll = ({ code }) => {
     const [activeIndex, setActiveIndex] = useState(0)
-    const [option, setOption] = useState(null)
-    const [poll, setPoll] = useState(null)
-    const [question, setQuestion] = useState(null)
+    const [option, setOption] = useState([])
+    const [poll, setPoll] = useState([])
+    const [question, setQuestion] = useState([])
     const [fetchData, setFetchData] = useState(true)
     const [loaded, setLoaded] = useState(false)
     const [reload, setReload] = useState(false)
     const [voteLock, setVoteLock] = useState(true)
     const [dataSet, setDataSet] = useState([])
+    const [defChart, setDefChart] = useState("bar-chart")
+    const [chartLabels, setchartLabels] = useState([1])
+    const [pieChartData, setPieChartData] = useState([1])
     const [numbVotes, setNumbVotes] = useState(0)
-    const [redraw, setRedraw] = useState(false)
-    const [sendQuestion, setSendQuestion] = useState()
+    const [sendQuestion, setSendQuestion] = useState()    
+    let percent = null
 
+    const dispatch = useDispatch()
     const eventState = useSelector(state => state.EventReducer.event)
-    
+    const history = useHistory()
     let pollRef = db.collection('polls')
+
     useEffect(() => {
         fetchData ? getQuestions(true) : registerFireStore(poll[0].id, question[questionIndex])
+
+        // return () => {
+
+        //      chartDataList = []
+        //      ranks =[]
+        //     votesNumb =[]
+        // }
     }, [reload])
 
 
@@ -56,26 +72,51 @@ const Poll = ({ code }) => {
 
                     }
                     else if (doc.data().message === 'NEXT_QUESTION') {
-                        setRedraw(false)
 
                     }
                     else if (doc.data().message === 'POLL_DATA') {
+                        if(doc.data().score !== null && doc.data().score !== null ){
+                            ranks.push(doc.data().score)
+                        }
 
                         chartDataList.push(doc.data().value)
+                        votesNumb.push(doc.data().partCount)
+                        console.log(chartDataList)
                         let frequency = chartDataList.reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map());
                         frequency = [...frequency.entries()]
                         let tempArr = []
+                        let tempLabels = []
+                        let tempPieChart = []
+                        let resultPercent = []
+                        let pieResultPercent = []
+                        let total = 0
+
                         frequency.forEach(elt => {
                             tempArr.push({
                                 x: elt[0], y: elt[1]
                             })
+                            tempLabels.push(elt[0])
+                            tempPieChart.push(elt[1])
+                            total += elt[1]
                         })
-                        setNumbVotes(prev => prev + 1)
-                        setDataSet(tempArr)
 
+                        tempArr.forEach(elt => {
+                            resultPercent.push({ x: elt.x, y: ((parseInt(elt.y) / total) * 100).toFixed(1) })
+                            pieResultPercent.push(((parseInt(elt.y) / total) * 100).toFixed(1))
+                        })
+                        setchartLabels(tempLabels)  
+                        if(percent){
+                            setDataSet(resultPercent)
+                            setPieChartData(pieResultPercent) 
+            
+                        }else {
+                            setDataSet(tempArr)
+                            setPieChartData(tempPieChart)                        
+                        }
+                        console.log('temp',tempArr)
+                        setNumbVotes(prev => prev + 1)
 
                     }
-
                 })
 
                 return () => {
@@ -94,37 +135,47 @@ const Poll = ({ code }) => {
 
     const getQuestions = (x) => {
         axios.get(`/getAllQuestions/${code}`).then(res => {
-            setPoll(res.data.poll)
             let sorted = res.data.questions.sort(function (a, b) { return a.order - b.order })
             setQuestion(sorted)
             setOption(res.data.options)
-
             if (x) {
+                setPoll(res.data.poll)
                 registerFireStore(res.data.poll[0].id, sorted[questionIndex])
                 setLoaded(true)
                 setFetchData(false)
+                setDefChart(res.data.poll[0].layout)
+                percent =res.data.poll[0].resultInPercent
+                if (res.data.poll[0].layout === 'pie-chart' || res.data.poll[0].layout === 'donut') {
+                    setDataSet([1, 1, 1, 1, 1, 1])
+                }
+            } else {
+
+                pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: '' })
+
             }
 
         }).catch(err => {
             console.log(err)
-            console.log(err.response)
         })
 
     }
 
     const handleNextQuestion = () => {
+        questionStats.push({question:question[questionIndex].question, stats: [dataSet] })
         const data = {
             id: poll[0].id,
             questionIndex: questionIndex + 1,
         }
         axios.put('/questionCount', data).then(res => {
-            console.log(res)
-            pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'NEXT_QUESTION', index: ++questionIndex })
-            setVoteLock(true)
-            chartDataList = []
-            setDataSet([])
-            setRedraw(true)
 
+            pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'NEXT_QUESTION', index: ++questionIndex }).then(() => {
+            }).catch(err => {
+                console.log(err)
+            })
+
+            chartDataList = []
+            setVoteLock(true)
+            setDataSet([])
             setReload(prev => !prev)
         }).catch(err => {
             console.log(err.response)
@@ -198,7 +249,7 @@ const Poll = ({ code }) => {
 
 
 
-        questions.forEach(elt => {
+        questions.forEach((elt, idx, array) => {
             let data1 = {
                 order: elt.id + question.length,
                 question: elt.question,
@@ -206,26 +257,37 @@ const Poll = ({ code }) => {
                 answer: elt.answer,
                 pollId: poll[0].id
             }
-
             axios.post('/addQuestions', data1).then(res => {
-                setTimeout('', 200)
+                let optionData = []
+
                 elt.option.forEach(elt2 => {
-                    let data2 = {
+                    optionData.push({
                         order: elt2.id,
                         optionText: elt2.value,
-                        questionId: res.data.response.questionId
-                    }
-                    axios.post('/addOption', data2).then(res => {
-                        console.log(res)
-                        pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'FETCH_QUESTIONS', index: questionIndex })
-                        setActiveIndex(0)
-
-                    }).catch(err => {
-                        console.log(err.response)
-
+                        QuestionQuestionId: res.data.response.questionId
                     })
                 })
+                axios.post('/addOption', optionData).then(res => {
 
+                    if (idx === array.length - 1) {
+                        pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'FETCH_QUESTIONS', index: questionIndex })
+                        setSendQuestion(false)
+                        setActiveIndex(0)
+                        eventState.questionList = []
+                        eventState.optionList = []
+                        dispatch({
+                            type: "NEW_EVENT",
+                            payload: {
+                                event: eventState,
+
+                            },
+                        });
+                    }
+
+                }).catch(err => {
+                    console.log(err.response)
+
+                })
 
             }).catch(err => {
                 console.log(err)
@@ -236,16 +298,38 @@ const Poll = ({ code }) => {
         })
 
     }
+    const handleCloseEvent = () => {
+        const data = {
+            id: eventState.eventId,
+            status: 'Ended'
+        }
+        axios.put('/updateStatus', data).then(res => {
+            pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'END_EVENT' })
+            history.push('/result')
+        }).catch(err => {
+            console.log(err)
+        })
+    }
 
-
+const handleTest = () => {
+    console.log(ranks)
+    let frequency = ranks.reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map());
+    frequency = [...frequency.entries()]
+    console.log('frequency',frequency)
+    console.log('test',votesNumb)
+    const totalPartCount = [...new Set(votesNumb)]
+    console.log(totalPartCount)
+    console.log(questionStats)
+}
 
 
     return (
         <div className='poll-main'>
+            <button onClick ={() =>handleTest()}>Test</button>
             {loaded ? <div className=''>
                 <div className='row poll-container'>
                     <div className='col-7 graphs'>
-                        <PollGraphs handleNextQuestion={handleNextQuestion} questionIndex={questionIndex} question={question} handleStopEvent={handleEndQuestion} voteLock={voteLock} dataSet={dataSet} numbVotes={numbVotes} redraw={redraw} />
+                        <PollGraphs handleNextQuestion={handleNextQuestion} questionIndex={questionIndex} defChart={defChart} question={question} handleStopEvent={handleEndQuestion} voteLock={voteLock} dataSet={dataSet} numbVotes={numbVotes} handleCloseEvent={handleCloseEvent} chartLabels={chartLabels} pieChartData={pieChartData} />
                     </div>
                     <div className='col-4  qr-codes'>
                         <TabView activeIndex={activeIndex} onTabChange={(e) => handleIndex(e)}>

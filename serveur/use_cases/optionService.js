@@ -14,18 +14,15 @@ module.exports = () => {
         if (decodedToken.error) {
             return "access_D"
         }
-        let values = Object.values(request.body)
+        let values = Object.values(request.body[0])
         const validMod = optionModel(...values)
         if (validMod.error) {
             return { code: -1, message: validMod.error[0].message }
         }
 
-        let response = await OptionRepo.addOption(validMod.value)
-        if (response.length !== 0) {
+        let response = await OptionRepo.addOption(request.body)
             return { response }
-        } else {
-            return { code: 0, message: 'an error occured' }
-        }
+         
 
     }
 

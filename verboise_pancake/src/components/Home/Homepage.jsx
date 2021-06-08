@@ -116,10 +116,17 @@ const EventList = () => {
   };
   const openEvent = (event) => {
     history.push(`/Event/${event.columnProps.rowData.code}`);
+    let eventData =event.columnProps.rowData
+    eventData.tempQuestionArr =[]
+    eventData.questionCount =0
+    eventData.optionList =[]
+    eventData.questionList =[]
+    
+    
     dispatch({
       type: "NEW_EVENT",
       payload: {
-        event: event.columnProps.rowData,
+        event: eventData,
       },
     });
   };

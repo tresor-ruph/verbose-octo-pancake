@@ -9,7 +9,7 @@ import Login from "components/authentification/Login"
 import Signup from "components/authentification/Signup"
 import ConfirmMail from "components/Error/confirmEmail"
 import Reset from "components/Error/resetPassword"
-import Event from "components/Events/Event"
+import JoinEvents from "components/Events/JoinEvents"
 import Notfound from "components/Error/Notfound"
 
 import { useSelector } from 'react-redux'
@@ -27,7 +27,7 @@ function Main(props) {
                 <Route path="/Home" render={(props) => isLogged ? (<AdminLayout {...props} />) : <Redirect to='/login' />} />
                 <Route path="/Event" render={(props) => isLogged ? (<AdminLayout {...props} />) : <Redirect to='/login' />} />
                 <Route path="/Result" render={(props) => isLogged ? (<AdminLayout {...props} />) : <Redirect to='/login' />} />
-                <Route path="/Join" render={(props) => <Event {...props} />} />
+                <Route path="/Join" render={(props) => <JoinEvents {...props} />} />
                 <Route exact path="/" render={() => isLogged ? <Redirect to='/Home' />  : <Redirect to='/login' />} />
                 <Route component={Notfound} />
 

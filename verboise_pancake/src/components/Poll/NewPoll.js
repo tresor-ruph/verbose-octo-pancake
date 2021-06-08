@@ -10,12 +10,12 @@ import { useSelector, useDispatch } from 'react-redux'
 import axios from 'axios'
 import "helper/axiosConfig"
 
-const NewPoll = ({handleStartEvent}) => {
+const NewPoll = ({ handleStartEvent }) => {
 
     const [resultFormat, setResultFormat] = useState(false)
     const [timerMode, setTimerMode] = useState(false)
     const [time, setTime] = useState(0)
-
+    const dispatch = useDispatch()
 
     const [layout, setLayout] = useState(null)
     const [layoutErr, setLayoutErr] = useState(false)
@@ -41,6 +41,11 @@ const NewPoll = ({handleStartEvent}) => {
     }
 
     const startEvent = async () => {
+        await postQuestion()
+
+    }
+    const postQuestion = () => {
+
         if (!eventState.questionList) {
             let optionErr = document.getElementById('null-question')
             if (optionErr !== null) optionErr.style.display = 'inline'
@@ -76,8 +81,6 @@ const NewPoll = ({handleStartEvent}) => {
             let optionErr = document.getElementById(`inv-answ${eventState.questionList.length - 1}`)
             if (optionErr !== null) optionErr.style.display = 'none'
         }
-
-
         const questions = eventState.questionList.filter(elt => elt.id != "")
         const options = eventState.optionList.filter(elt => elt.id != "")
         console.log(questions, options)
@@ -94,7 +97,6 @@ const NewPoll = ({handleStartEvent}) => {
                 }
             }
         }
-        console.log('question', questions)
 
         const data = {
             layout: layout,
@@ -104,9 +106,8 @@ const NewPoll = ({handleStartEvent}) => {
             eventId: eventState.eventId
 
         }
-        console.log(questions, options, data)
-        await axios.post('/createPoll', data).then(res => {
-            questions.forEach(elt => {
+        axios.post('/createPoll', data).then(res => {
+            questions.forEach((elt, idx, array) => {
                 let data1 = {
                     order: elt.id,
                     question: elt.question,
@@ -116,21 +117,48 @@ const NewPoll = ({handleStartEvent}) => {
                 }
 
                 axios.post('/addQuestions', data1).then(res => {
-                    setTimeout('', 200)
+
+                    // setTimeout('', 200)
+                    let optionData = []
                     elt.option.forEach(elt2 => {
-                        let data2 = {
+                        optionData.push({
                             order: elt2.id,
                             optionText: elt2.value,
-                            questionId: res.data.response.questionId
-                        }
-                        axios.post('/addOption', data2).then(res => {
-                            console.log(res)
-                            handleStartEvent(true)
-                        }).catch(err => {
-                            console.log(err.response)
-
+                            QuestionQuestionId: res.data.response.questionId
                         })
                     })
+
+                    axios.post('/addOption', optionData).then(res => {
+                        console.log('bit')
+                        console.log(idx)
+                        console.log(array.length - 1)
+                        if (idx === array.length - 1) {
+                            const data = {
+                                id: eventState.eventId,
+                                status: 'In progress'
+                            }
+                            axios.put('/updateStatus', data).then(res => {
+                                eventState.questionList = []
+                                eventState.optionList = []
+                                eventState.questionCount=0
+                                eventState.tempQuestionArr=[]
+                                dispatch({
+                                    type: "NEW_EVENT",
+                                    payload: {
+                                        event: eventState,
+                        
+                                    },
+                                });
+                                handleStartEvent(true)
+                            }).catch(err => {
+                                console.log(err.response)
+                            })
+                        }
+                    }).catch(err => {
+                        console.log(err.response)
+
+                    })
+
 
 
                 }).catch(err => {
@@ -138,13 +166,17 @@ const NewPoll = ({handleStartEvent}) => {
                     console.log(err.response)
                 })
 
-
             })
+
 
         }).catch(err => {
             console.log(err.response)
 
         })
+
+        console.log('lol')
+
+
     }
 
     return (
@@ -153,7 +185,7 @@ const NewPoll = ({handleStartEvent}) => {
                 <div className='col-7 survey-questions'>
 
 
-                    <CreateQuestion setSendQuestion={setSendQuestion}/>
+                    <CreateQuestion setSendQuestion={setSendQuestion} />
 
                 </div>
                 <div className='col-3 survey-config'>
@@ -211,12 +243,12 @@ const NewPoll = ({handleStartEvent}) => {
 
                     </div>
                     <div className='post-questiion'>
-            <Button className="primary" onClick={() => startEvent()}>Start Event</Button>
-            </div>
+                        <Button className="primary" onClick={() => startEvent()}>Start Event</Button>
+                    </div>
                 </div>
-               
+
             </div>
-           
+
         </div>
     )
 
