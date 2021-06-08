@@ -4,6 +4,8 @@ const pollService = require('./pollServices')
 const questionService = require('./questionServices')
 const optionService = require('./optionService')
 const reactionService = require('./reactionServices')
+const surveyResultService = require('./surveyResultService')
+const rankingService = require('./rankingService')
 
 const userServices = userService()
 const eventServices = eventService()
@@ -11,6 +13,6 @@ const pollServices = pollService()
 const questionServices = questionService()
 const optionServices = optionService()
 const reactionServices = reactionService()
-
-
-module.exports= {userServices, eventServices, pollServices, questionServices, optionServices,reactionServices}
+const surveyResultServices = surveyResultService()
+const rankingServices = rankingService()
+module.exports= {userServices, eventServices, pollServices, questionServices, optionServices,reactionServices,surveyResultServices,rankingServices}

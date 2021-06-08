@@ -22,16 +22,13 @@ const CreateQuestions = ({ addNew, setSendQuestion }) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
+        console.log(eventState)
         if (questionArr.length === 0) {
             tempQuestionArr = eventState.tempQuestionArr
                 questionCount = eventState.questionCount
                 optionList = eventState.optionList
                 questionList = eventState.questionList
         }
-        console.log('eventState***', eventState)
-        console.log(questionList)
-        console.log('hahahaha', questionArr)
-        console.log('hihihihi', questionCount)
         if (questCompCount > 0) {
             tempQuestionArr = questionArr
             hideQuestion(questionCount)
@@ -207,7 +204,7 @@ const CreateQuestions = ({ addNew, setSendQuestion }) => {
         questionList[questionCount] = { id: '', question: '', answer: '', picture: '' }
         optionList[questionCount] = { questionId: '', answers: [] }
 
-        console.log('OOOOOO')
+       
         setQuestionArr(prevState =>
             [...prevState, <div key={questionCount}>
                 <Questions questionKey={questionCount} handleQuestions={handleQuestions} deleteQuestionImage={deleteQuestionImage}

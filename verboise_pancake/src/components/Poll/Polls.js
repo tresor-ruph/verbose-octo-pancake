@@ -16,14 +16,15 @@ import PollGraphs from './PollGraphs'
 import './poll.scss'
 
 let chartDataList = []
-let ranks =[]
-let votesNumb =[]
-let questionStats =[]
+let ranks = []
+let votesNumb = []
+let questionStats = []
 
 const db = firebase.firestore();
-
 let questionIndex = 0
+
 const Poll = ({ code }) => {
+
     const [activeIndex, setActiveIndex] = useState(0)
     const [option, setOption] = useState([])
     const [poll, setPoll] = useState([])
@@ -37,7 +38,7 @@ const Poll = ({ code }) => {
     const [chartLabels, setchartLabels] = useState([1])
     const [pieChartData, setPieChartData] = useState([1])
     const [numbVotes, setNumbVotes] = useState(0)
-    const [sendQuestion, setSendQuestion] = useState()    
+    const [sendQuestion, setSendQuestion] = useState()
     let percent = null
 
     const dispatch = useDispatch()
@@ -46,14 +47,9 @@ const Poll = ({ code }) => {
     let pollRef = db.collection('polls')
 
     useEffect(() => {
+
         fetchData ? getQuestions(true) : registerFireStore(poll[0].id, question[questionIndex])
 
-        // return () => {
-
-        //      chartDataList = []
-        //      ranks =[]
-        //     votesNumb =[]
-        // }
     }, [reload])
 
 
@@ -75,13 +71,12 @@ const Poll = ({ code }) => {
 
                     }
                     else if (doc.data().message === 'POLL_DATA') {
-                        if(doc.data().score !== null && doc.data().score !== null ){
+                        if (doc.data().score !== null && doc.data().score !== null) {
                             ranks.push(doc.data().score)
                         }
 
                         chartDataList.push(doc.data().value)
                         votesNumb.push(doc.data().partCount)
-                        console.log(chartDataList)
                         let frequency = chartDataList.reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map());
                         frequency = [...frequency.entries()]
                         let tempArr = []
@@ -104,16 +99,15 @@ const Poll = ({ code }) => {
                             resultPercent.push({ x: elt.x, y: ((parseInt(elt.y) / total) * 100).toFixed(1) })
                             pieResultPercent.push(((parseInt(elt.y) / total) * 100).toFixed(1))
                         })
-                        setchartLabels(tempLabels)  
-                        if(percent){
+                        setchartLabels(tempLabels)
+                        if (percent) {
                             setDataSet(resultPercent)
-                            setPieChartData(pieResultPercent) 
-            
-                        }else {
+                            setPieChartData(pieResultPercent)
+
+                        } else {
                             setDataSet(tempArr)
-                            setPieChartData(tempPieChart)                        
+                            setPieChartData(tempPieChart)
                         }
-                        console.log('temp',tempArr)
                         setNumbVotes(prev => prev + 1)
 
                     }
@@ -144,7 +138,7 @@ const Poll = ({ code }) => {
                 setLoaded(true)
                 setFetchData(false)
                 setDefChart(res.data.poll[0].layout)
-                percent =res.data.poll[0].resultInPercent
+                percent = res.data.poll[0].resultInPercent
                 if (res.data.poll[0].layout === 'pie-chart' || res.data.poll[0].layout === 'donut') {
                     setDataSet([1, 1, 1, 1, 1, 1])
                 }
@@ -161,11 +155,20 @@ const Poll = ({ code }) => {
     }
 
     const handleNextQuestion = () => {
-        questionStats.push({question:question[questionIndex].question, stats: [dataSet] })
+
+        let optionsResults = dataSet
+
+        optionsResults.forEach(elt => {
+            // elt.QuestionQuestionId = question[questionIndex].id
+            questionStats.push({ optionText: elt.x, vote: elt.y, QuestionQuestionId: question[questionIndex].id })
+        })
+
+        optionsResults.questionId = question[questionIndex].questionId
         const data = {
             id: poll[0].id,
             questionIndex: questionIndex + 1,
         }
+
         axios.put('/questionCount', data).then(res => {
 
             pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'NEXT_QUESTION', index: ++questionIndex }).then(() => {
@@ -184,13 +187,14 @@ const Poll = ({ code }) => {
     }
 
     const handleEndQuestion = () => {
-        pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'REVEAL_RESULTS', index: questionIndex })
+        pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'REVEAL_RESULTS', })
         setVoteLock(false)
 
     }
 
 
     const handleIndex = (e) => {
+
         if (e.index == 0 || e.index == 1) {
             setSendQuestion(false)
         }
@@ -275,13 +279,25 @@ const Poll = ({ code }) => {
                         setActiveIndex(0)
                         eventState.questionList = []
                         eventState.optionList = []
+                        eventState.questionCount=0
+                        eventState.tempQuestionArr=[]
+                        eventState.status ='In progress'
                         dispatch({
                             type: "NEW_EVENT",
                             payload: {
                                 event: eventState,
-
+                
                             },
                         });
+                        // eventState.questionList = []
+                        // eventState.optionList = []
+                        // dispatch({
+                        //     type: "NEW_EVENT",
+                        //     payload: {
+                        //         event: eventState,
+
+                        //     },
+                        // });
                     }
 
                 }).catch(err => {
@@ -299,33 +315,45 @@ const Poll = ({ code }) => {
 
     }
     const handleCloseEvent = () => {
-        const data = {
-            id: eventState.eventId,
-            status: 'Ended'
-        }
-        axios.put('/updateStatus', data).then(res => {
-            pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'END_EVENT' })
-            history.push('/result')
-        }).catch(err => {
-            console.log(err)
-        })
-    }
 
-const handleTest = () => {
-    console.log(ranks)
-    let frequency = ranks.reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map());
-    frequency = [...frequency.entries()]
-    console.log('frequency',frequency)
-    console.log('test',votesNumb)
-    const totalPartCount = [...new Set(votesNumb)]
-    console.log(totalPartCount)
-    console.log(questionStats)
-}
+        let frequency = ranks.reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map());
+        frequency = [...frequency.entries()]
+        let usersRanking = []
+        frequency.forEach(elt => {
+            usersRanking.push({
+                pseudo: elt[0], points: elt[1], PollPollId: poll[0].id
+            })
+        })
+
+        // const totalPartCount = [...new Set(votesNumb)]
+        console.log('lol',usersRanking)
+            axios.post('/ranking', usersRanking).then(res => {
+
+            axios.post('/surveyResults', questionStats).then(res => {
+                const data = {
+                    id: eventState.eventId,
+                    status: 'Ended'
+                }
+        
+                axios.put('/updateStatus', data).then(res => {
+                    pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'END_EVENT' })
+                    history.push('/result')
+                }).catch(err => {
+                    console.log(err)
+                })
+            }).catch(err => {
+                console.log(err.response)
+
+            })
+        }).catch(err => {
+            console.log(err.response)
+        })
+
+    }
 
 
     return (
         <div className='poll-main'>
-            <button onClick ={() =>handleTest()}>Test</button>
             {loaded ? <div className=''>
                 <div className='row poll-container'>
                     <div className='col-7 graphs'>

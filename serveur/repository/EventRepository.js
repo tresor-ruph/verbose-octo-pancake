@@ -1,4 +1,4 @@
-const { Event, Polls,Questions,Options  } = require('../database/models')
+const { Event, Polls,Questions,Options ,SurveyResult } = require('../database/models')
 const { Op } = require("sequelize")
 
 module.exports = () => {
@@ -57,6 +57,31 @@ module.exports = () => {
          return event
      }
 
+     const getEventResults= async function(code){
+      const event = await Event.findAll({
+           where: {
+              eventId: code
+           },
+           include : [
+               {
+                   model:Polls,
+                   include: [
+                       {
+                           model: Questions,
+                           include: [
+                            { model: SurveyResult}
+                           ]
+                       }
+                   ]
+                   
+               }
+           ]
+       })
+       return event
+   }
+
+     
+
      const startEvent = async function (id,status) {
         const event = await Event.update({
           status: status
@@ -80,5 +105,5 @@ module.exports = () => {
       }
     
 
-    return ({eventExist,getOneEvent, addEvent, getEventPoll,startEvent,removeEvent})
+    return ({eventExist,getOneEvent, addEvent, getEventPoll,startEvent,removeEvent,getEventResults})
 }

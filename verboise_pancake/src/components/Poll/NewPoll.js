@@ -10,7 +10,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import axios from 'axios'
 import "helper/axiosConfig"
 
-const NewPoll = ({ handleStartEvent }) => {
+const NewPoll = ({handleStartEvent}) => {
 
     const [resultFormat, setResultFormat] = useState(false)
     const [timerMode, setTimerMode] = useState(false)
@@ -20,7 +20,7 @@ const NewPoll = ({ handleStartEvent }) => {
     const [layout, setLayout] = useState(null)
     const [layoutErr, setLayoutErr] = useState(false)
     const eventState = useSelector(state => state.EventReducer.event)
-
+    
 
 
 
@@ -142,6 +142,7 @@ const NewPoll = ({ handleStartEvent }) => {
                                 eventState.optionList = []
                                 eventState.questionCount=0
                                 eventState.tempQuestionArr=[]
+                                eventState.status ='In progress'
                                 dispatch({
                                     type: "NEW_EVENT",
                                     payload: {

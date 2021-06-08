@@ -9,6 +9,7 @@ const Options = require('./options')
 const Ranking = require('./ranking')
 const Data = require('./data')
 const Comment = require('./comments')
+const SurveyResult = require('./SurveyResult')
 
 User.hasMany(Event, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
 Event.belongsTo(User, {
@@ -51,6 +52,13 @@ Options.belongsTo(Questions, {
     }
 })
 
+Questions.hasMany(SurveyResult, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+SurveyResult.belongsTo(Questions, {
+    foreignKey: {
+        allowNull: true
+    }
+})
+
 Reactions.hasMany(Data, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
 Data.belongsTo(Reactions, {
     foreignKey: {
@@ -78,6 +86,7 @@ module.exports = {
     Options,
     Ranking,
     Data,
-    Comment
+    Comment,
+    SurveyResult
     // Data
 }

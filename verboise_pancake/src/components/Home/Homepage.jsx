@@ -115,7 +115,6 @@ const EventList = () => {
     setShowModal(true);
   };
   const openEvent = (event) => {
-    history.push(`/Event/${event.columnProps.rowData.code}`);
     let eventData =event.columnProps.rowData
     eventData.tempQuestionArr =[]
     eventData.questionCount =0
@@ -129,6 +128,8 @@ const EventList = () => {
         event: eventData,
       },
     });
+    history.push(`/Event/${event.columnProps.rowData.code}`);
+
   };
 
   return (

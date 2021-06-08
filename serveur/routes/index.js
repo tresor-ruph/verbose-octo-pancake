@@ -4,6 +4,9 @@ const polls = require('./PollRoutes')
 const question = require('./questions')
 const option = require('./optionsRoutes')
 const reactions = require('./reactions')
+const surveyResult = require('./surveyResults')
+const ranking = require('./rankingRoutes')
+const slides = require('./slidesRoute')
 
 module.exports = (app) => {
 
@@ -13,6 +16,10 @@ module.exports = (app) => {
     question(app)
     option(app)
     reactions(app)
+    surveyResult(app)
+    ranking(app)
+    slides(app)
+    
 }
 
 

@@ -11,10 +11,6 @@ module.exports = dbConnection.define("Ranking", {
         type: Sequelize.STRING,
         allowNull: false,
     },
-    rank : {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-    },
     points : {
         type: Sequelize.INTEGER,
         allowNull: false, 

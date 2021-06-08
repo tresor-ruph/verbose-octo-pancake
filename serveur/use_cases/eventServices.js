@@ -85,6 +85,56 @@ module.exports = () => {
         return { poll, questions, options}
     }
 
+    const getEventResults = async (req) => {
+        let questions = [];
+        let SurveyResults = []
+        let poll = []
+        console.log('****************************')
+        console.log(req.params)
+        const response = await EventRepo.getEventResults(req.params.id)
+        const polls = response[0].dataValues.Polls
+        const questionsList = polls[0].dataValues.Questions
+        poll.push({
+            id: polls[0].dataValues.pollId,
+            layout: polls[0].dataValues.defaultResultLayout,
+            timer: polls[0].dataValues.timer,
+            waitingTime: polls[0].dataValues.waitingTime,
+            resultInPercent: polls[0].dataValues.resultInPercent,
+            questionIndex: polls[0].dataValues.questionIndex
+        })
+        questionsList.forEach(elt => {
+            questions.push(
+                {
+                    id: elt.dataValues.questionId,
+                    order: elt.dataValues.order,
+                    question: elt.dataValues.question,
+                    image: elt.dataValues.image,
+                    answer: elt.dataValues.answer,
+
+                }
+            )
+
+            elt.dataValues.SurveyResults.forEach(elt => {
+                SurveyResults.push(
+                    {
+                        questionId: elt.dataValues.QuestionQuestionId,
+                        vote: elt.dataValues.vote,
+                        optionText: elt.dataValues.optionText,
+                        id: elt.dataValues.id,
+                    }
+                )
+            })
+        })
+
+
+
+      
+
+        return { poll, questions, SurveyResults}
+    }
+
+
+
     const startEvent = async (request) => {
 
         let token = tokenManager.decode(request)
@@ -106,6 +156,6 @@ module.exports = () => {
         return response
     }
 
-    return ({ create, fetchOne, fetchEventPoll, startEvent, deleteEvent })
+    return ({ create, fetchOne, fetchEventPoll, startEvent, deleteEvent,getEventResults })
 
 }
