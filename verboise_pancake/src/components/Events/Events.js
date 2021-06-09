@@ -63,7 +63,7 @@ const Events = () => {
         }
         else if (eventStatus === "inactive") {
             if (eventType === "polls" || eventType === "ranking") {
-                return <NewPoll handleStartEvent={handleStartEvent}/>
+                return <NewPoll handleStartEvent={handleStartEvent} />
             } else if (eventType === "gallup") {
                 return <Reaction code={eventState.code} />
             } else {

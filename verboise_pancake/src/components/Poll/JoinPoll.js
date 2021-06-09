@@ -49,18 +49,19 @@ const JoinPoll = ({code,setEventStatus,uniqueId}) => {
                     else if (doc.data().message === 'START_EVENT') {
                     }
                     else if (doc.data().message === 'REVEAL_RESULTS') {
-                        questionIndex = doc.data().index
+                        // questionIndex = doc.data().index
                         setDisplayGraph(true)
                     }
                     else if (doc.data().message === 'NEXT_QUESTION') {
+                        setDisplayGraph(false)
                         questionIndex = doc.data().index
                         chartDataList = []
                         setDataSet([])
-                        setDisplayGraph(false)
                         setReload(prev => prev + 1)
 
                     }
                     else if (doc.data().message === 'POLL_DATA') {
+
                         chartDataList.push(doc.data().value)
                         let frequency = chartDataList.reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map());
                         frequency = [...frequency.entries()]
@@ -80,7 +81,7 @@ const JoinPoll = ({code,setEventStatus,uniqueId}) => {
                             tempPieChart.push(elt[1])
                             total += elt[1]
                         })
-                        questionIndex = doc.data().index
+                        // questionIndex = doc.data().index
 
                         tempArr.forEach(elt => {
                             resultPercent.push({ x: elt.x, y: ((parseInt(elt.y) / total) * 100).toFixed(1) })
@@ -114,7 +115,8 @@ const JoinPoll = ({code,setEventStatus,uniqueId}) => {
     }
 
     const validAnswer = () => {
-        let arr =   option.filter(elt => elt.questionId == question[questionIndex].id).filter(elt =>elt.order === question[questionIndex].answer)[0]
+      
+        let arr =   option.filter(elt => elt.questionId == question[questionIndex]?.id).filter(elt =>elt.order === question[questionIndex]?.answer)[0]
         return arr
        }
 
@@ -123,7 +125,7 @@ const JoinPoll = ({code,setEventStatus,uniqueId}) => {
         if(selectedAns === validAnswer().optionText){
             score =uniqueId
         }
-        pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'POLL_DATA', value: selectedAns, index: questionIndex,partCount:uniqueId, score: score })
+        pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'POLL_DATA', value: selectedAns, index: questionIndex,npartCount:uniqueId, score: score })
 
     }
 

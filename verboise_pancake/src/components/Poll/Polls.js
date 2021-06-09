@@ -60,14 +60,18 @@ const Poll = ({ code }) => {
                 querySnapshot.docChanges().filter(({ type }) => type === "added").map(({ doc }) => {
 
                     if (doc.data().message === 'FETCH_QUESTIONS') {
+                        console.log('fetch data')
                         getQuestions(false)
                     }
                     else if (doc.data().message === 'START_EVENT') {
+                        console.log('startEvent')
                     }
                     else if (doc.data().message === 'REVEAL_RESULTS') {
+                        console.log('reveal question')
 
                     }
                     else if (doc.data().message === 'NEXT_QUESTION') {
+                        console.log('next question')
 
                     }
                     else if (doc.data().message === 'POLL_DATA') {
@@ -134,6 +138,9 @@ const Poll = ({ code }) => {
             setOption(res.data.options)
             if (x) {
                 setPoll(res.data.poll)
+                if( res.data.poll[0].questionIndex != null){
+                    questionIndex = res.data.poll[0].questionIndex
+                }
                 registerFireStore(res.data.poll[0].id, sorted[questionIndex])
                 setLoaded(true)
                 setFetchData(false)
@@ -142,6 +149,7 @@ const Poll = ({ code }) => {
                 if (res.data.poll[0].layout === 'pie-chart' || res.data.poll[0].layout === 'donut') {
                     setDataSet([1, 1, 1, 1, 1, 1])
                 }
+              
             } else {
 
                 pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: '' })
@@ -157,9 +165,7 @@ const Poll = ({ code }) => {
     const handleNextQuestion = () => {
 
         let optionsResults = dataSet
-
         optionsResults.forEach(elt => {
-            // elt.QuestionQuestionId = question[questionIndex].id
             questionStats.push({ optionText: elt.x, vote: elt.y, QuestionQuestionId: question[questionIndex].id })
         })
 
@@ -168,18 +174,19 @@ const Poll = ({ code }) => {
             id: poll[0].id,
             questionIndex: questionIndex + 1,
         }
-
         axios.put('/questionCount', data).then(res => {
 
             pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'NEXT_QUESTION', index: ++questionIndex }).then(() => {
+                chartDataList = []
+                // setVoteLock(true)
+                setDataSet([])
+                setNumbVotes(0)
+                setReload(prev => !prev)
             }).catch(err => {
                 console.log(err)
             })
 
-            chartDataList = []
-            setVoteLock(true)
-            setDataSet([])
-            setReload(prev => !prev)
+
         }).catch(err => {
             console.log(err.response)
         })
@@ -187,8 +194,9 @@ const Poll = ({ code }) => {
     }
 
     const handleEndQuestion = () => {
-        pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'REVEAL_RESULTS', })
-        setVoteLock(false)
+
+        pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'REVEAL_RESULTS', index: questionIndex })
+        // setVoteLock(false)
 
     }
 
@@ -279,25 +287,16 @@ const Poll = ({ code }) => {
                         setActiveIndex(0)
                         eventState.questionList = []
                         eventState.optionList = []
-                        eventState.questionCount=0
-                        eventState.tempQuestionArr=[]
-                        eventState.status ='In progress'
+                        eventState.questionCount = 0
+                        eventState.tempQuestionArr = []
                         dispatch({
                             type: "NEW_EVENT",
                             payload: {
                                 event: eventState,
-                
+
                             },
                         });
-                        // eventState.questionList = []
-                        // eventState.optionList = []
-                        // dispatch({
-                        //     type: "NEW_EVENT",
-                        //     payload: {
-                        //         event: eventState,
-
-                        //     },
-                        // });
+                      
                     }
 
                 }).catch(err => {
@@ -314,7 +313,13 @@ const Poll = ({ code }) => {
         })
 
     }
+
     const handleCloseEvent = () => {
+        let optionsResults = dataSet
+
+        optionsResults.forEach(elt => {
+            questionStats.push({ optionText: elt.x, vote: elt.y, QuestionQuestionId: question[questionIndex].id })
+        })
 
         let frequency = ranks.reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map());
         frequency = [...frequency.entries()]
@@ -325,18 +330,35 @@ const Poll = ({ code }) => {
             })
         })
 
-        // const totalPartCount = [...new Set(votesNumb)]
-        console.log('lol',usersRanking)
-            axios.post('/ranking', usersRanking).then(res => {
-
+        if (usersRanking.length === 0) {
+            console.log('user ranking cannot be null')
+            return
+        }
+        axios.post('/ranking', usersRanking).then(res => {
+            if (questionStats.length === 0) {
+                console.log('questions cannot be empty', questionStats)
+                return
+            }
             axios.post('/surveyResults', questionStats).then(res => {
                 const data = {
                     id: eventState.eventId,
                     status: 'Ended'
                 }
-        
+
                 axios.put('/updateStatus', data).then(res => {
                     pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'END_EVENT' })
+                    eventState.questionList = []
+                    eventState.optionList = []
+                    eventState.questionCount = 0
+                    eventState.tempQuestionArr = []
+                    dispatch({
+                        type: "NEW_EVENT",
+                        payload: {
+                            event: eventState,
+
+                        },
+                    });
+                    questionIndex = 0
                     history.push('/result')
                 }).catch(err => {
                     console.log(err)
@@ -358,13 +380,15 @@ const Poll = ({ code }) => {
                 <div className='row poll-container'>
                     <div className='col-7 graphs'>
                         <PollGraphs handleNextQuestion={handleNextQuestion} questionIndex={questionIndex} defChart={defChart} question={question} handleStopEvent={handleEndQuestion} voteLock={voteLock} dataSet={dataSet} numbVotes={numbVotes} handleCloseEvent={handleCloseEvent} chartLabels={chartLabels} pieChartData={pieChartData} />
+                        
                     </div>
+
                     <div className='col-4  qr-codes'>
                         <TabView activeIndex={activeIndex} onTabChange={(e) => handleIndex(e)}>
                             <TabPanel headerClassName='quest-tab' header="Question">
                                 <div className='question-div'>
-                                    <span className='question-txt'>{question[questionIndex].question || ''}</span>
-                                    {question[questionIndex].image != "" && <div className='img-div'><img src={question[questionIndex].image} width='300px' /></div>}
+                                    <span className='question-txt'>{question[questionIndex]?.question || ''}</span>
+                                    {question[questionIndex]?.image != "" && <div className='img-div'><img src={question[questionIndex].image} width='300px' /></div>}
                                 </div>
                             </TabPanel>
                             <TabPanel headerClassName='join-tab' header="Invite Participants">
