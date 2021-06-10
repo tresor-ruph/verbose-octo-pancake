@@ -4,7 +4,7 @@ import { Line } from 'react-chartjs-2'
 import { Button } from 'react-bootstrap';
 
 
-const ReactionGraph = ({ dataSet }) => {
+const ReactionGraph = ({ dataSet,StopEvent }) => {
 
 
 
@@ -53,7 +53,7 @@ const ReactionGraph = ({ dataSet }) => {
         <div>
             <div >
                 <Line data={chartData} options={options} />
-                <Button onClick={() => stoptest()}>Stop</Button>
+                <Button onClick={() => StopEvent()}>Stop</Button>
             </div>
         </div>
     )

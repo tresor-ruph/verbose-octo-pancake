@@ -3,6 +3,7 @@ import { Button } from 'react-bootstrap'
 import ReactionGraph from './ReactionGraph'
 import { TabView, TabPanel } from 'primereact/tabview';
 import { useDispatch, useSelector } from 'react-redux'
+import { useHistory } from 'react-router'
 import axios from 'axios'
 import 'helper/axiosConfig'
 import { QRCode } from 'react-qr-svg'
@@ -19,21 +20,32 @@ let ctrl = 0
 let interval = null
 const db = firebase.firestore();
 
-const LoadGallup = ({ code }) => {
+const LoadGallup = ({ code, ongoing }) => {
     const reactionRef = db.collection('reaction')
-    const eventState = useSelector(state => state.EventReducer.event)
 
     const [activeIndex, setActiveIndex] = useState(0)
-    const [eventStart, setEventStart] = useState(false)
 
 
     const [chats, setChats] = useState([])
     const [dataSet, setDataSet] = useState([])
     const [refresh, setRefresh] = useState(false)
-    const [voteFreq, setVoteFreq] = useState(3)
+    const [show, setShow] = useState(true);
+    const [duration, setDuration] = useState(60)
+    const [voteFreq, setVoteFreq] = useState(duration / 10)
+    const [delay, setDelay] = useState(3000)
+    const history = useHistory()
+    const eventState = useSelector(state => state.EventReducer.event)
+
+
+    const dispatch = useDispatch()
+    const handleDuration = (x) => {
+        setDuration(x)
+        setVoteFreq(Math.round(x / 10))
+    }
 
     useEffect(() => {
-
+        console.log('eventState', eventState.eventId, eventState.delay)
+        console.log('code', code)
         const unsubscribe = reactionRef.doc(eventState.eventId).collection(code).onSnapshot((querySnapshot) => {
             querySnapshot.docChanges().filter(({ type }) => type === "added").map(({ doc }) => {
 
@@ -50,7 +62,7 @@ const LoadGallup = ({ code }) => {
 
                             setRefresh(prev => !prev)
 
-                        }, 10000)
+                        }, eventState?.delay || 3000)
                     }
                     ctrl++
 
@@ -89,24 +101,39 @@ const LoadGallup = ({ code }) => {
     const handleIndex = (e) => {
         setActiveIndex(e.index)
     }
+
+    const handleClose = () => {
+        setShow(false)
+        history.push('/Home')
+    }
+
     const handleStartEvent = () => {
-      
+
+
         const data = {
             id: eventState.eventId,
             status: 'In progress'
         }
         axios.put('/updateStatus', data).then(res => {
             let data2 = {
-                audienceNumber: 0,
+                audienceNumber: duration,
                 voteFreq: voteFreq,
                 eventId: eventState.eventId
             }
             axios.post('/newReaction', data2).then(res => {
-                console.log(res)
-                setEventStart(true)
+                eventState.status = "In progress"
+                eventState.delay = delay
+                dispatch({
+                    type: "NEW_EVENT",
+                    payload: {
+                        event: eventState,
+                    },
+                });
+                setShow(false)
             }).catch(err => {
                 console.log(err.response)
-            
+                console.log(err)
+
             })
 
         }).catch(err => {
@@ -115,17 +142,40 @@ const LoadGallup = ({ code }) => {
         })
     }
 
+    const StopEvent = () => {
+        const data = {
+            id: eventState.eventId,
+            status: 'Ended'
+        }
+        try {
+            reactionRef.doc(eventState.eventId).collection(code).add({ message: 'END_EVENT', dataSet })
+
+            reactionRef.doc(eventState.eventId).collection(`${code}result`).add({ message: 'RESULTANALYSIS', dataSet })
+
+        } catch (error) {
+            console.log(err)
+        }
+
+
+        axios.put('/updateStatus', data).then(res => {
+            history.push('/resultGallup')
+        })
+
+
+    }
+
+
 
     return (
         <div>
-            {eventStart ? (<div>
+            {   !ongoing && <StartReaction show={show} setDelay={setDelay} setShow={handleClose} duration={duration} setDuration={handleDuration} voteFreq={voteFreq} setVoteFreq={setVoteFreq} handleStartEvent={handleStartEvent} />}            <div>
                 <div className='row'>
                     <div className='col-7'>
-                        <ReactionGraph dataSet={dataSet} />
+                        <ReactionGraph dataSet={dataSet} StopEvent={StopEvent} />
                     </div>
                     <div className='col-3'>
                         <TabView activeIndex={activeIndex} onTabChange={(e) => handleIndex(e)}>
-                            <TabPanel headerClassName='join-tab' header={eventStart ? 'Comments' : 'Start eVent'}>
+                            <TabPanel headerClassName='join-tab' >
                                 <div><Comment message={chats} handleBlock={handleBlock} handleUnblock={handleUnblock} /></div>
                             </TabPanel>
                             <TabPanel headerClassName='add-quest-tab' header="Invite Participants">
@@ -149,7 +199,7 @@ const LoadGallup = ({ code }) => {
                         </TabView>
                     </div>
                 </div>
-            </div>) : (<StartReaction voteFreq={voteFreq} setVoteFreq={setVoteFreq} handleStartEvent={handleStartEvent} />)}
+            </div>
         </div>
     )
 

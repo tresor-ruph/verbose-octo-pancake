@@ -7,6 +7,7 @@ import Reaction from 'components/Gallup/Reaction'
 import NewPoll from 'components/Poll/NewPoll'
 import Polls from 'components/Poll/Polls'
 import PollAnalysis from 'components/Poll/PollAnalysis'
+import ResultGallup from "components/Gallup/ResultGallup"
 
 
 
@@ -28,6 +29,7 @@ const Events = () => {
         } else {
             setEventType(eventState.eventType)
             setLoaded(true)
+            
             setEventStatus(eventState.status)
 
         }
@@ -47,14 +49,15 @@ const Events = () => {
             } else if (eventType === "gallup") {
 
             } else {
-                //------------------implement errors here
+                <ResultGallup />
                 console.log('error')
             }
         } else if (eventStatus === "In progress") {
+            console.log('bababbabababab')
             if (eventType === "polls" || eventType === "ranking") {
                 return <Polls code={eventState.code} />
             } else if (eventType === "gallup") {
-
+                return <Reaction ongoing={true} code={eventState.code} />
             } else {
                 //------------------implement errors here
                 console.log('error')
@@ -62,6 +65,7 @@ const Events = () => {
             }
         }
         else if (eventStatus === "inactive") {
+            console.log('llololololo')
             if (eventType === "polls" || eventType === "ranking") {
                 return <NewPoll handleStartEvent={handleStartEvent} />
             } else if (eventType === "gallup") {

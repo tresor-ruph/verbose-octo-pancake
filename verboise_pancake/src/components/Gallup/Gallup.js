@@ -4,17 +4,46 @@ import 'helper/firebaseConfig'
 import moment, { Moment } from 'moment'
 import firebase from 'firebase';
 import 'firebase/firestore';
+import { useSelector, useDispatch } from 'react-redux'
+import axios from 'axios'
+import 'helper/axiosConfig'
 
 const db = firebase.firestore();
 let r = Math.random().toString(36).substring(7);
 
-const Gallup = () => {
+const Gallup = ({code,eventId,userIp,setEventStatus}) => {
     const reactionRef = db.collection('reaction')
     const [hideAll, setHideAll] = useState(false)
+    const [maxVotes, setMaxVotes] = useState(5)
+
+    const eventState = useSelector(state => state.EventReducer.event)
+    const dispatch =useDispatch()
+
 
     useEffect(() => {
 
-        const unsubscribe = reactionRef.doc('tresor85550').collection('ruphin85550').onSnapshot((querySnapshot) => {
+        axios.get(`reaction/${eventId}`).then(res =>{
+            setMaxVotes(res.data[0].waitingTime)
+            if(eventState.maxVotes === null ||eventState.maxVotes === undefined){
+                eventState.maxVotes =maxVotes
+                dispatch({
+                    type: "NEW_EVENT",
+                    payload: {
+                        event: eventState,
+        
+                    },
+                });
+        
+            }else {
+                setMaxVotes(eventState.maxVotes)
+            }
+           
+        }).catch(err => {
+            console.log(err.response)
+        })
+
+       
+        const unsubscribe = reactionRef.doc(eventId).collection(code).onSnapshot((querySnapshot) => {
             querySnapshot.docChanges().filter(({ type }) => type === "added").map(({ doc }) => {
 
                 if (doc.data().message === 'BLOCK') {
@@ -28,6 +57,8 @@ const Gallup = () => {
                         console.log(true)
                         setHideAll(false)
                     }
+                }else if(doc.data().message === 'END_EVENT'){
+                    setEventStatus('Ended')
                 }
                 
             })
@@ -38,6 +69,13 @@ const Gallup = () => {
         return () => {
             // clearInterval(interval)
             unsubscribe()
+            dispatch({
+                type: "NEW_EVENT",
+                payload: {
+                    event: [],
+
+                },
+            });
         }
 
     }, [])
@@ -50,10 +88,31 @@ const Gallup = () => {
     }
 
     const handleSend = () => {
-        reactionRef.doc('tresor85550').collection('ruphin85550').add({ message: 'MESSAGE', textMessage: text , id:{r}})
+        reactionRef.doc(eventId).collection(code).add({ message: 'MESSAGE', textMessage: text , id:{r}})
     }
     const handleChoice=(choice)=> {
-        reactionRef.doc('tresor85550').collection('ruphin85550').add({ message: 'VOTE', vote: {value: choice, date: moment().format() } })
+        let maxVote =maxVotes
+        eventState.maxVotes = --maxVote
+        dispatch({
+            type: "NEW_EVENT",
+            payload: {
+                event: eventState,
+
+            },
+        });
+
+        let data ={
+            ip: eventState.pseudo,
+            eventId :eventId,
+            questionIndex: 1000 + maxVote
+        }
+        console.log(data)
+        // console.log(userIp)
+        axios.put('updateIndex',data ).then(res => {
+            reactionRef.doc(eventId).collection(code).add({ message: 'VOTE', vote: {value: choice, date: moment().format() } }).then(res => {
+                setMaxVotes(prev =>prev -1 )
+            })
+        }).catch(err => {console.log(err.response)})
 
     }
 
@@ -61,7 +120,8 @@ const Gallup = () => {
         <div>
         {!hideAll ? <div>
             <div style={{ marginBottom: '20%', marginTop: '10%' }}>
-                <div className='row'>
+                <div><h1>{maxVotes}</h1></div>
+               {maxVotes > 0 ? <div className='row'>
                     <div className='col-md-2'>
                         <Button onClick= {() => handleChoice(1)}>1</Button>
                     </div>
@@ -77,7 +137,7 @@ const Gallup = () => {
                     <div className='col-md-2'>
                         <Button onClick= {() => handleChoice(5)}>5</Button>
                     </div>
-                </div>
+                </div> : <div>you caanot vot</div>}
 
             </div>
 

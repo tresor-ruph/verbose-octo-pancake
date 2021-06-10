@@ -13,6 +13,17 @@ module.exports = () => {
         })
         return newPoll
     }
+    const getReaction = async function (param) {
 
-    return ({ addReaction })
+ 
+          reactions = await Reactions.findAll({
+            where: {
+            EventEventId: param
+            }
+          })
+
+        return reactions
+      }
+
+    return ({ addReaction,getReaction })
 }

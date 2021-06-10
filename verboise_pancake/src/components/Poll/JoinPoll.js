@@ -59,7 +59,6 @@ const JoinPoll = ({code,setEventStatus,eventId,userIp }) => {
                         setDisplayGraph(true)
                     }
                     else if (doc.data().message === 'NEXT_QUESTION') {
-                        console.log('houououououououhhhhhaaaaa')
                         let data ={
                             ip: eventState.pseudo,
                             eventId :eventId,
@@ -185,7 +184,7 @@ const JoinPoll = ({code,setEventStatus,eventId,userIp }) => {
                 axios.get(`/audience/${userIp}/${eventId}`).then(res2 => {
                     if(res2.data[0].questionIndex ===2){
                         setDisabledField(true)
-                    }else {
+                    }else if(res2.data[0].questionIndex ===1 || res2.data[0].questionIndex ===0 ) {
                         setDisabledField(false)
                     }
 

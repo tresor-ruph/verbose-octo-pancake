@@ -71,6 +71,13 @@ const JoinEvent = () => {
 
 
     useEffect(async () => {
+        dispatch({
+            type: "NEW_EVENT",
+            payload: {
+                event: [],
+
+            },
+        });
         let test = await getClientIp()
         setUserIp(test)
         axios
@@ -115,6 +122,9 @@ const JoinEvent = () => {
 
                         } else {
                             eventState.pseudo = res2.data[0].pseudo
+                            if(res2.data[0].questionIndex >= 1000){
+                                eventState.maxVotes = res2.data[0].questionIndex -1000
+                            }
                             dispatch({
                                 type: "NEW_EVENT",
                                 payload: {
@@ -138,6 +148,9 @@ const JoinEvent = () => {
                 console.log(err)
                 console.log(err.response)
             })
+
+           
+
 
     }, [])
     const renderEvent = () => {

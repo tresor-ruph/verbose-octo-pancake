@@ -6,6 +6,7 @@ import AdminNavbar from "components/Navbars/AdminNavbar";
 import Events from "components/Events/Events"
 import PollAnalysis from 'components/Poll/PollAnalysis'
 import Notfound from "components/Error/Notfound"
+import ResultGallup from 'components/Gallup/ResultGallup'
 
 
 
@@ -15,16 +16,18 @@ function Admin() {
   const location = useLocation();
   const path = location.pathname.split('/')[1]
 
-
   const renderComponent = () => {
     if (path === "Home") {
       return (<HomePage />)
     } else if (path === 'Event') {
       return (<Events />)
-    }else if(path === 'result'){
+    } else if (path === 'result') {
       return (<PollAnalysis />)
+    } else if (path === 'resultGallup') {
+      return (<ResultGallup />)
     }
-     else {
+
+    else {
       return (<Notfound />)
     }
   }

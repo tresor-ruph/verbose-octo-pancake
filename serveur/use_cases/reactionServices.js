@@ -30,7 +30,16 @@ module.exports = () => {
             return { code: 1, message: 'the event does not exist' }
         }
     }
+
+    const getReaction = async (param) => {
+
+    
+        const response = await ReactionRepo.getReaction(param)
+        return response
+    
+      }
+    
   
-    return ({ createReaction })
+    return ({ createReaction,getReaction })
 
 }
