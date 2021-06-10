@@ -84,7 +84,7 @@ const PollGraphs = ({ handleNextQuestion, questionIndex, question, handleStopEve
 
     const renderChart = () => {
         if (defChart === 'bar-chart') {
-            return <div style={{ width: '85%', marginTop: '2vh', marginLeft: '3vw' }}> {console.log('biiiiiitchhhhhc',questionIndex )}<Bar key={questionIndex} data={chartData} options={chartOptions} redraw={false}/></div>
+            return <div style={{ width: '85%', marginTop: '2vh', marginLeft: '3vw' }}><Bar key={questionIndex} data={chartData} options={chartOptions} redraw={false}/></div>
         } else if (defChart === 'pie-chart') {
             return <div style={{ width: '45%', marginTop: '5vh', marginLeft: '10vw' }}> <Pie key={questionIndex} data={chartData2} options={chartOptions} redraw={false} /></div>
 
@@ -102,9 +102,6 @@ const PollGraphs = ({ handleNextQuestion, questionIndex, question, handleStopEve
 
     return (
         <div className='graph-div'>
-
-
-
             <div>
                 {renderChart()}
                 <div className='row param-div'>

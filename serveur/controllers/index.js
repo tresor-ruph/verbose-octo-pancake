@@ -8,7 +8,7 @@ const reactionControllerFactory = require('./reactionController')
 const surveyResultControllerFactory = require('./surveyResultController')
 const rankingControllerFactory = require('./rankingController')
 const slidesControllerFactory = require('./slidesController')
-
+const audienceControllerFactory = require('./audienceController')
 
 const surveyResultController =surveyResultControllerFactory()
 const eventController = eventControllerFactory()
@@ -19,8 +19,9 @@ const optionController = optionControllerFactory()
 const reactionController = reactionControllerFactory()
 const rankingController = rankingControllerFactory()
 const slidesController =slidesControllerFactory()
+const audienceController = audienceControllerFactory()
 
-module.exports= {userController, eventController, pollController, questionController, optionController,reactionController, surveyResultController, rankingController,slidesController}
+module.exports= {userController, eventController, pollController, questionController, optionController,reactionController, surveyResultController, rankingController,slidesController,audienceController}
 
 
 

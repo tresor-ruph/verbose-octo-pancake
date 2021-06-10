@@ -7,7 +7,7 @@ const reactionsRepository = require('./ReactionRepository')
 const SurveyResultRepository = require('./SurveyResultRepository')
 const RankingRepository = require('./RankingRepository')
 const SlidesRepository = require('./SlidesRepository')
-
+const AudienceRepository = require('./AudienceRepository')
 
 const UsersRepo = usersRepository()
 const EventRepo = eventsRepository()
@@ -18,6 +18,7 @@ const ReactionRepo = reactionsRepository()
 const SurveyResultRepo = SurveyResultRepository()
 const RankingRepo = RankingRepository()
 const slidesRepo= SlidesRepository()
+const AudienceRepo =AudienceRepository()
 
-module.exports = { UsersRepo, EventRepo,PollRepo,QuestionRepo,OptionRepo,ReactionRepo, SurveyResultRepo, RankingRepo,slidesRepo }
+module.exports = { UsersRepo, EventRepo,PollRepo,QuestionRepo,OptionRepo,ReactionRepo, SurveyResultRepo, RankingRepo,slidesRepo,AudienceRepo}
 

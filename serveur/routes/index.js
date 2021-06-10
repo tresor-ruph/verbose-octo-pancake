@@ -7,6 +7,7 @@ const reactions = require('./reactions')
 const surveyResult = require('./surveyResults')
 const ranking = require('./rankingRoutes')
 const slides = require('./slidesRoute')
+const audience = require('./audience')
 
 module.exports = (app) => {
 
@@ -18,7 +19,7 @@ module.exports = (app) => {
     reactions(app)
     surveyResult(app)
     ranking(app)
-    slides(app)
+    audience(app)
     
 }
 

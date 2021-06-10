@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+
 import axios from 'axios'
 import 'helper/axiosConfig'
 import { Button } from 'react-bootstrap'
@@ -11,7 +13,7 @@ let chartDataList = []
 let questionIndex = 0
 const db = firebase.firestore();
 
-const JoinPoll = ({code,setEventStatus,uniqueId}) => {
+const JoinPoll = ({code,setEventStatus,eventId,userIp }) => {
     const [poll, setPoll] = useState(null)
     const [question, setQuestion] = useState(null)
     const [option, setOption] = useState(null)
@@ -26,11 +28,15 @@ const JoinPoll = ({code,setEventStatus,uniqueId}) => {
     const [chartLabels, setchartLabels] = useState([1])
     const [pieChartData, setPieChartData] = useState([1])
 
+    const dispatch =useDispatch()
+    const eventState = useSelector(state => state.EventReducer.event)
+
     let percent = null
     let pollRef = db.collection('polls')
 
 
     useEffect(() => {
+        console.log('pseudo', eventState.pseudo)
         fetchData ? getQuestions(true) : registerFireStore(poll[0].id, question[questionIndex])
     }, [reload])
 
@@ -53,11 +59,26 @@ const JoinPoll = ({code,setEventStatus,uniqueId}) => {
                         setDisplayGraph(true)
                     }
                     else if (doc.data().message === 'NEXT_QUESTION') {
-                        setDisplayGraph(false)
-                        questionIndex = doc.data().index
-                        chartDataList = []
-                        setDataSet([])
-                        setReload(prev => prev + 1)
+                        console.log('houououououououhhhhhaaaaa')
+                        let data ={
+                            ip: eventState.pseudo,
+                            eventId :eventId,
+                            questionIndex: 1
+                        }
+                
+                        axios.put('updateIndex',data ).then(res => {                           
+                            setDisplayGraph(false)
+                            questionIndex = doc.data().index
+                            chartDataList = []
+                            setDataSet([])
+                            setDisabledField(false)
+                            setReload(prev => prev + 1)
+                        }).catch(err => {
+                            console.log(err.response)
+                        })
+
+
+                        
 
                     }
                     else if (doc.data().message === 'POLL_DATA') {
@@ -123,9 +144,30 @@ const JoinPoll = ({code,setEventStatus,uniqueId}) => {
     const sentVote = () => {
         let score =null
         if(selectedAns === validAnswer().optionText){
-            score =uniqueId
+            score =eventState.pseudo
         }
-        pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'POLL_DATA', value: selectedAns, index: questionIndex,npartCount:uniqueId, score: score })
+        if(selectedAns ===''){
+            console.log('select an answer')
+            return
+        }
+       
+        let data ={
+            ip: eventState.pseudo,
+            eventId :eventId,
+            questionIndex: 2
+        }
+
+        axios.put('updateIndex',data ).then(res => {
+           
+            pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'POLL_DATA', value: selectedAns, index: questionIndex,npartCount:eventState.pseudo, score: score }).then(() => {
+                setDisabledField(true)
+    
+            })
+        }).catch(err => {
+            console.log(err.response)
+        })
+
+      
 
     }
 
@@ -140,6 +182,18 @@ const JoinPoll = ({code,setEventStatus,uniqueId}) => {
             questionIndex = res.data.poll[0].questionIndex
             }
             if (x) {
+                axios.get(`/audience/${userIp}/${eventId}`).then(res2 => {
+                    if(res2.data[0].questionIndex ===2){
+                        setDisabledField(true)
+                    }else {
+                        setDisabledField(false)
+                    }
+
+                }).catch(err => {
+                    console.log(err.response)
+                })
+
+
                 registerFireStore(res.data.poll[0].id, sorted[questionIndex])
                 setFetchData(false)
                 setLoaded(true)

@@ -72,8 +72,8 @@ const Poll = ({ code }) => {
                     }
                     else if (doc.data().message === 'NEXT_QUESTION') {
                         console.log('next question')
-
                     }
+
                     else if (doc.data().message === 'POLL_DATA') {
                         if (doc.data().score !== null && doc.data().score !== null) {
                             ranks.push(doc.data().score)
@@ -175,10 +175,10 @@ const Poll = ({ code }) => {
             questionIndex: questionIndex + 1,
         }
         axios.put('/questionCount', data).then(res => {
+                setVoteLock(true)
 
             pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'NEXT_QUESTION', index: ++questionIndex }).then(() => {
                 chartDataList = []
-                // setVoteLock(true)
                 setDataSet([])
                 setNumbVotes(0)
                 setReload(prev => !prev)
@@ -196,7 +196,7 @@ const Poll = ({ code }) => {
     const handleEndQuestion = () => {
 
         pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'REVEAL_RESULTS', index: questionIndex })
-        // setVoteLock(false)
+        setVoteLock(false)
 
     }
 
