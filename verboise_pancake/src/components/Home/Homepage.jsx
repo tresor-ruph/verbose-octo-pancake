@@ -1,19 +1,21 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { DataTable } from "primereact/datatable";
 import { Button } from "primereact/button";
-import { Spinner } from "react-bootstrap";
-
-import moment from "moment";
+import { ProgressSpinner } from "primereact/progressspinner";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { confirmPopup } from 'primereact/confirmpopup';
+import { Chip } from "primereact/chip";
 import { Column } from "primereact/column";
-import EventDelete from "./DeleteModal";
-import "customcss/Event.scss";
+import moment from "moment";
 import axios from "axios";
 import "helper/axiosConfig";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import EventDelete from "./DeleteModal";
 import NewEvent from "../Events/NewEvent";
 import WelcomeMessage from "./WelcomeMessage";
-import { useSelector, useDispatch } from "react-redux";
+import "customcss/Event.scss";
 
 const EventList = () => {
   const [showDelete, setShowDelete] = useState(false);
@@ -32,7 +34,6 @@ const EventList = () => {
     axios
       .get(`/getEvent/${userInfo.userId}`)
       .then((res) => {
-        console.log(res.data);
         let arr = [];
         if (res.data.length === 0) {
           setWelcome(true);
@@ -72,12 +73,10 @@ const EventList = () => {
   const handleReload = (reload) => {
     if (reload) {
       setReload((prev) => !prev);
-      console.log("big bang");
     }
   };
 
   const confirmDelete = () => {
-    console.log("delete", selectedEvent);
     axios
       .delete(`/Event/${selectedEvent.eventId}`)
       .then((res) => {
@@ -115,13 +114,12 @@ const EventList = () => {
     setShowModal(true);
   };
   const openEvent = (event) => {
-    let eventData =event.columnProps.rowData
-    eventData.tempQuestionArr =[]
-    eventData.questionCount =0
-    eventData.optionList =[]
-    eventData.questionList =[]
-    
-    
+    let eventData = event.columnProps.rowData;
+    eventData.tempQuestionArr = [];
+    eventData.questionCount = 0;
+    eventData.optionList = [];
+    eventData.questionList = [];
+
     dispatch({
       type: "NEW_EVENT",
       payload: {
@@ -129,11 +127,48 @@ const EventList = () => {
       },
     });
     history.push(`/Event/${event.columnProps.rowData.code}`);
+  };
 
+  const statusBodyTemplate = (rowData) => {
+    if (rowData.status === "In progress") {
+      return (
+        <Chip
+          label={rowData.status.trim().toLowerCase()}
+          className={`status-progress p-mr-2 p-mb-2 chip`}
+        />
+      );
+    }
+    return (
+      <Chip
+        label={rowData.status.trim().toLowerCase()}
+        className={`status-${rowData.status.toLowerCase()} p-mr-2 p-mb-2 chip`}
+      />
+    );
+  };
+  const typeBodyTemplate = (rowData) => {
+    if (rowData.eventType === "gallup") {
+      return (
+        <div>
+          <FontAwesomeIcon color="#888" icon="chart-line" size="1x" />
+        </div>
+      );
+    } else if (rowData.eventType === "polls") {
+      return (
+        <div>
+          <FontAwesomeIcon color="#888" icon="chart-bar" size="1x" />
+        </div>
+      );
+    } else if (rowData.eventType === "ranking") {
+      return (
+        <div>
+          <FontAwesomeIcon icon="trophy" color="#888" size="1x" />
+        </div>
+      );
+    }
   };
 
   return (
-    <div>
+    <div className='evt-list-container'>
       {loaded ? (
         <div>
           {welcome ? (
@@ -157,14 +192,32 @@ const EventList = () => {
               </div>
               <hr />
               <div className="card event-list">
-                <DataTable value={eventData} headerClassName="test34">
+                <DataTable
+                  value={eventData}
+                  className="p-datatable-striped datatable-responsive-demo p-datatable-md"
+                  paginator
+                  paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                  currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+                  rows={6}
+                  rowsPerPageOptions={[6, 16, 30]}
+                 
+                >
                   <Column
                     field="title"
                     header="EventTitle"
                     editor={() => console.log("")}
                     onBeforeEditorShow={(event) => openEvent(event)}
                     bodyClassName="event-td"
+                    sortable
                   ></Column>
+                  <Column
+                    field="status"
+                    header="Status"
+                    body={statusBodyTemplate}
+                    sortable
+                  />
+                  <Column field="Type" header="Type" body={typeBodyTemplate} />
+
                   <Column
                     headerStyle={{ width: "10em" }}
                     header="Created At"
@@ -190,15 +243,11 @@ const EventList = () => {
           )}
         </div>
       ) : (
-        <div className="spinner" style={{ marginTop: "40vh" }}>
-          <Spinner
-            animation="border"
-            role="status"
-            variant="primary"
-            size="x-lg"
-          >
-            <span className="sr-only">Loading...</span>
-          </Spinner>
+        <div
+          className="spinner p-d-flex p-jc-center"
+          style={{ marginTop: "40vh" }}
+        >
+          <ProgressSpinner />
         </div>
       )}
     </div>

@@ -5,6 +5,7 @@ import { store, persistor } from "store";
 import 'primereact/resources/themes/saga-blue/theme.css'
 import 'primereact/resources/primereact.min.css'
 import 'primeicons/primeicons.css'
+import 'primeflex/primeflex.css';
 // primereact/resources/primereact.min.css
 // primeicons/primeicons.css
  

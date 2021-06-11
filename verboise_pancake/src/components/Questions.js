@@ -5,7 +5,6 @@ import { RadioButton } from "primereact/radiobutton";
 import { Button } from "primereact/button";
 import UploadImage from '../components/modal/UploadImage'
 import { Avatar } from 'primereact/avatar';
-import { AvatarGroup } from 'primereact/avatargroup';
 import './question.scss'
 
 const Questions = (props) => {
@@ -41,16 +40,16 @@ const Questions = (props) => {
         Array.from(inputField).forEach(elt => {
             arr.push(
                 <div key={elt} >
-                    <div className="p-col-12 p-md-12">
+                  
                         <div className="p-inputgroup option-div">
-                            <span className="p-inputgroup-addon">
+                            <span className="p-inputgroup-addon" style={{ height: '37px' }}>
                                 <RadioButton name="rb1" value={elt} checked={radioValue1 === elt} onChange={(e) => handleRadioValues(e.value, props.questionCount)} />
                             </span>
-                            <InputText placeholder={'option' + elt} onChange={(event) => props.handleOptionChange(props.questionCount, elt, event)} />
+                            <InputText placeholder={'option' + elt} onChange={(event) => props.handleOptionChange(props.questionCount, elt, event)} className="p-inputtext-sm" />
                             {![1, 2].includes(elt) && <Button icon="pi pi-times" className="p-button-danger add-option" onClick={() => rmvField(elt, props.questionCount)} />}
 
                         </div>
-                    </div>
+                    
                 </div>
             )
         })
@@ -96,7 +95,6 @@ const Questions = (props) => {
         }).catch(error => {
             console.log(error)
         })
-
     }
 
     return (
@@ -106,14 +104,14 @@ const Questions = (props) => {
                 <i className="pi pi-times" onClick={() => deleteImage()}></i>
             </Avatar></div>}
             <div className="p-inputgroup questions-input">
-                <Button icon="pi pi-image" className="p-button-secondary" onClick={() => setReveal()} />
-                <InputText id={'Question ' + props.questionKey} placeholder={'Question ' + props.questionKey} onChange={(event) => props.handleQuestions(props.questionKey, event)} />
-                <Button icon="pi pi-pencil" className="p-button-success" onClick={() => revealOptions(props.questionKey)} style={{ display: 'none' }} className='edit-quests' id={'edit-quest' + props.questionKey} />
-                <Button icon="pi pi-times" className="p-button-danger" onClick={() => props.rmvQuestion(props.questionCount, props.questionKey)} />
+                <Button icon="pi pi-image" className="p-button-secondary" style={{ height: '37px' }} onClick={() => setReveal()} />
+                <InputText id={'Question ' + props.questionKey} placeholder={'Question ' + props.questionKey} onChange={(event) => props.handleQuestions(props.questionKey, event)} className="p-inputtext-sm p-d-block " />
+                <Button icon="pi pi-pencil" className="p-button-success" style={{ display: 'none', height: '37px' }} onClick={() => revealOptions(props.questionKey)} className='edit-quests' id={'edit-quest' + props.questionKey} />
+                <Button icon="pi pi-times" className="p-button-danger" style={{ height: '37px' }} onClick={() => props.rmvQuestion(props.questionCount, props.questionKey)} />
             </div>
-            <small id="username2-help" className="p-error p-d-block" id={`inv-quest${props.questionKey}`} style={{ display: 'none' }}>Please add your question.</small>
-            <small id="username2-help" className="p-error p-d-block" id={`inv-option${props.questionKey}`} style={{ display: 'none' }}>Please add atleast 2 options.</small>
-            <small id="username2-help" className="p-error p-d-block" id={`inv-answ${props.questionKey}`} style={{ display: 'none' }}>Please select an answer.</small>
+            <small id="username2-help" className="p-error" id={`inv-quest${props.questionKey}`} style={{ display: 'none' }}>Please add your question.</small>
+            <small id="username2-help" className="p-error" id={`inv-option${props.questionKey}`} style={{ display: 'none' }}>Please add atleast 2 options.</small>
+            <small id="username2-help" className="p-error" id={`inv-answ${props.questionKey}`} style={{ display: 'none' }}>Please select an answer.</small>
 
             <br />
             <div className={'hide-options options-list'} id={'option' + props.questionKey}>

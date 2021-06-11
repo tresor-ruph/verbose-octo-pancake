@@ -1,16 +1,11 @@
 .new-event-body {
-  margin-top: 5vh;
+  margin-top: 10vh;
   margin-left: 7vw;
   margin-bottom: 5vh;
-  // background-color: red;
-}
-
-.event-input {
-  width: 80%;
 }
 
 .evt-type {
-    margin-top: 7vh;
+    margin-top: 4vh;
     margin-bottom: 1vh;
 }
 .label-evt-type {
@@ -21,19 +16,12 @@
 }
 
 .cards {
-  width: 15vw;
+  width: 10vw;
   margin-left: 1vw;
-  // background-color: red;
   text-align: center;
   position: relative;
-  
 }
-.p-card {
-    border-color: blue;
-}
-.modal-event-title {
-  // text-align: center;
-}
+
 .new-event-title {
   font-size: 2em;
   color: #888;
@@ -41,6 +29,15 @@
 a {
   text-decoration: none;
 }
-.event-type-error {
-    margin-top: 2vh;
+
+.label-eventTitle {
+  width: 32vw;
 }
+.p-dialog-title {
+  margin-left: 7vw;
+  font-weight: 100;
+  color: #888;
+  font-size: 2vw;
+
+}
+

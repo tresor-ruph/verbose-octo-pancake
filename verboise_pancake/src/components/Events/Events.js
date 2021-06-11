@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { useLocation, useHistory } from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
 import { Spinner } from "react-bootstrap";
-import LoadPolls from 'components/Poll/LoadPolls'
 import Reaction from 'components/Gallup/Reaction'
 import NewPoll from 'components/Poll/NewPoll'
 import Polls from 'components/Poll/Polls'
@@ -65,7 +64,6 @@ const Events = () => {
             }
         }
         else if (eventStatus === "inactive") {
-            console.log('llololololo')
             if (eventType === "polls" || eventType === "ranking") {
                 return <NewPoll handleStartEvent={handleStartEvent} />
             } else if (eventType === "gallup") {

@@ -1,0 +1,62 @@
+.new-poll-container {
+  background-color: white;
+  overflow-y: auto;
+  height: 100vh;
+  width: 100%;
+
+  .new-poll-subcontainer {
+    margin-top: 5vh;
+    margin-left: 5vw;
+    height: 700px;
+    
+  }
+  .new-poll-config {
+    margin-left: 1vw;
+    background-color: white;
+  }
+  .config-content {
+    margin-top: 2vh;
+  }
+  .new-poll-question {
+    margin-top: 2vh;
+    max-height: 700px;
+    margin-bottom: 2vh;
+    overflow-y: auto;
+  }
+}
+
+
+.new-poll-bottons {
+    margin-top: 2vh;
+}
+.go-back {
+    background-color: green;
+}
+@media (max-width: 1350.98px) {
+    .new-poll-subcontainer {
+      margin-top: 5vh;
+      margin-left: 5vw;
+      max-height: 370px;
+      height: 350px;
+    }
+    .new-poll-question {
+      margin-top: 2vh;
+      height: 350px;
+      max-height: 370px;
+  
+      overflow-y: auto;
+    }
+    .format-text {
+      color: red;
+    }
+    .layout-display {
+        width: 7vw;
+        // height: 10vh;
+        text-align: center;
+        margin-top: 2vh;
+        position: relative;
+        margin-right: 1vw;
+        margin-left: 1vw;
+      }
+   
+  }

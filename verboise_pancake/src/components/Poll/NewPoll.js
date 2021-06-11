@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Card } from 'primereact/card';
-import { Button } from 'react-bootstrap'
+import { Button } from 'primereact/button';
+import {useHistory} from 'react-router'
 import CreateQuestion from 'components/CreateQuestions'
 import { InputSwitch } from 'primereact/inputswitch';
-import { InputNumber } from 'primereact/inputnumber';
 import { useSelector, useDispatch } from 'react-redux'
-
 import axios from 'axios'
 import "helper/axiosConfig"
 
-const NewPoll = ({handleStartEvent}) => {
+import 'customcss/newPoll.scss'
+
+const NewPoll = ({ handleStartEvent }) => {
 
     const [resultFormat, setResultFormat] = useState(false)
     const [timerMode, setTimerMode] = useState(false)
@@ -20,7 +21,7 @@ const NewPoll = ({handleStartEvent}) => {
     const [layout, setLayout] = useState(null)
     const [layoutErr, setLayoutErr] = useState(false)
     const eventState = useSelector(state => state.EventReducer.event)
-    
+    const history = useHistory()
 
 
 
@@ -140,14 +141,14 @@ const NewPoll = ({handleStartEvent}) => {
                             axios.put('/updateStatus', data).then(res => {
                                 eventState.questionList = []
                                 eventState.optionList = []
-                                eventState.questionCount=0
-                                eventState.tempQuestionArr=[]
-                                eventState.status ='In progress'
+                                eventState.questionCount = 0
+                                eventState.tempQuestionArr = []
+                                eventState.status = 'In progress'
                                 dispatch({
                                     type: "NEW_EVENT",
                                     payload: {
                                         event: eventState,
-                        
+
                                     },
                                 });
                                 handleStartEvent(true)
@@ -179,18 +180,20 @@ const NewPoll = ({handleStartEvent}) => {
 
 
     }
+    const goBack = () => {
+        history.push('/Home')
+    }
 
     return (
-        <div className='create-survey'>
-            <div className='row survey-container'>
-                <div className='col-7 survey-questions'>
-
-
-                    <CreateQuestion setSendQuestion={setSendQuestion} />
-
+        <div className='new-poll-container'>
+            <div className='new-poll-subcontainer row '>
+                <div className='p-shadow-4 col-7 '>
+                    <div className='new-poll-question'>
+                        <CreateQuestion setSendQuestion={setSendQuestion} />
+                    </div>
                 </div>
-                <div className='col-3 survey-config'>
-                    <div className='config-header'>
+                <div className='p-shadow-4 col-3 new-poll-config '>
+                    <div className='config-content'>
                         <FontAwesomeIcon icon='cog' color='gray' />
                         <span className='config-title'>Configuration</span>
                         <hr />
@@ -232,24 +235,16 @@ const NewPoll = ({handleStartEvent}) => {
                             <InputSwitch checked={resultFormat} onChange={(e) => setResultFormat(e.value)} className='format-input' />
                         </div>
 
-                        <div className='survey-timer'>
-                            <span className='survey-timer-name'>Timer mode :  </span><br />
-                            <InputSwitch checked={timerMode} onChange={(e) => setTimerMode(e.value)} className='survey-mode-input' />
-                            {timerMode && <div className="p-field timer-div">
-                                <label htmlFor="minmax-buttons" className='time-label'>Time</label>
-                                <InputNumber id="minmax-buttons" value={time} onValueChange={(e) => setTime(e.value)} mode="decimal" showButtons min={0} max={100} size={1} className='timer-input' />
-                            </div>}
-                        </div>
-
-
                     </div>
-                    <div className='post-questiion'>
-                        <Button className="primary" onClick={() => startEvent()}>Start Event</Button>
-                    </div>
+
                 </div>
 
-            </div>
+            </div><br /><br />
+            <div className='p-d-flex p-jc-center new-poll-bottons'>
+                <Button className="primary p-mr-6 p-d-inline p-button-sm go-back" onClick={() => goBack()}>Go back</Button>
 
+                <Button className="primary p-d-inline p-button-sm"  onClick={() => startEvent()}>Start Event</Button>
+            </div>
         </div>
     )
 

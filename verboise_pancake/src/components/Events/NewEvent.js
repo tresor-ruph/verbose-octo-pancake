@@ -1,12 +1,16 @@
 
-import { useState } from 'react'
-import { Modal, Button } from 'react-bootstrap'
+import { useState, useRef } from 'react'
+import { Button } from 'primereact/button';
+import { Dialog } from 'primereact/dialog';
+import { Toast } from 'primereact/toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { InputText } from 'primereact/inputtext';
 import { Card } from 'primereact/card';
-import 'customcss/newEvent.scss'
+
 import axios from 'axios'
 import "helper/axiosConfig"
+
+import 'customcss/newEvent.scss'
 
 const NewEvents = ({ hide }) => {
 
@@ -14,6 +18,14 @@ const NewEvents = ({ hide }) => {
     const [eventType, setEventType] = useState('')
     const [evtNameErr, setEvtNameErr] = useState(false)
     const [eventTypeErr, setEventTypeErr] = useState(false)
+    const toast = useRef(null);
+
+    const footer = (
+        <div style={{marginRight:'7vw'}}>
+            <Button label="cancel" icon="pi pi-times" className='p-button-danger p-button-sm cancel-evt' onClick={() => hide(false)} />
+            <Button label="create" icon="pi pi-check" className='p-button-sm save-evt' onClick={() => handleSubmit()} />
+        </div>
+    );
 
     const handleEventName = (event) => {
         setEventName(event.target.value)
@@ -51,7 +63,7 @@ const NewEvents = ({ hide }) => {
             setEvtNameErr(true)
             fieldError = true
         }
-         if (eventType === '') {
+        if (eventType === '') {
             setEventTypeErr(true)
             fieldError = true
         }
@@ -62,43 +74,42 @@ const NewEvents = ({ hide }) => {
             selected: eventType
         }
         axios.post('/createEvent', data).then(res => {
-            if (res.status === 200) {
-                console.log(res.data)
+                toast.current.show({severity:'success', summary: 'Success', detail:'Event created', life: 3000});
                 hide('reload')
-            }
+            
         }).catch(err => {
-            console.log(err.response)
+            console.log(err)
+
+            if(err?.response?.status === 404){
+                toast.current.show({severity:'error', summary: 'Error', detail:'Event already exists', life: 5000});
+            }else {
+                toast.current.show({severity:'error', summary: 'Error', detail:'An error occured', life: 5000});
+            }
         })
     }
 
     return (
         <div >
-            <Modal size="lg" aria-labelledby="contained-modal-title-vcenter" centered show={true} onHide={() => hide(false)} backdrop="static" scrollable={true} dialogClassName="modal-90w" contentClassName='mod-content'>
-                <Modal.Header>
-                    <div className='modal-event-title'>
-                        {/* <span className='new-event-title'>New Event</span> */}
-                    </div>
-                    <hr />
-                </Modal.Header>
-                <Modal.Body>
-
-                    <div className='new-event-body'>
+            
+            <Dialog header="Create Event" showHeader={false} footer={footer} visible={true} style={{ width: '50vw' }} modal  closable={false}  onHide={() => hide(false)}>
+            <Toast ref={toast} />
+                <div>
+                    <div className='new-event-body '>
                         <div >
                             <span className="p-float-label">
-                                <InputText id="in" value={eventName} className='event-input' onChange={(e) => handleEventName(e)} onBlur={() => handleEventNameBlur()} onFocus={() => handleEventNameFocus()} />
-                                <label htmlFor="in">Name</label>
-
+                                <InputText id="in" value={eventName} className='p-inputtext-md p-d-block p-mb-2 label-eventTitle' onChange={(e) => handleEventName(e)} onBlur={() => handleEventNameBlur()} onFocus={() => handleEventNameFocus()} />
+                                <label htmlFor="in" style={{ color: 'gray', fontSize: '1vw' }}>Name</label>
                             </span>
-                            {evtNameErr && <small id="username2-help" className="p-error p-d-block">Invalid name.</small>}
+                            {evtNameErr && <small id="in" className="p-error p-d-block">Invalid name.</small>}
                         </div>
                         <div className='evt-type'>
-                            <span className='label-evt-type ' style={{ color: 'gray', fontSize: '0.80em' }}>Select an event mode</span>
+                            <span className='label-evt-type ' style={{ color: 'gray', fontSize: '1vw' }}>Event mode</span>
                         </div>
                         <div className='event-types row'>
                             <Card className='cards card-gallup' >
                                 <a className='stretched-link' id='gallup' onClick={() => handleSelect("gallup")}>
                                     <div>
-                                        <FontAwesomeIcon icon='chart-line' size="2x" />
+                                        <FontAwesomeIcon color='#888' icon='chart-line' size="2x" />
                                     </div>
                                 Gallup
                                 </a>
@@ -106,7 +117,7 @@ const NewEvents = ({ hide }) => {
                             <Card className='cards card-polls'>
                                 <a className='stretched-link' onClick={() => handleSelect("polls")}>
                                     <div>
-                                        <FontAwesomeIcon icon='chart-bar' size="2x" />
+                                        <FontAwesomeIcon color='#888' icon='chart-bar' size="2x" />
                                     </div>
                                 Polls
                                 </a>
@@ -114,7 +125,7 @@ const NewEvents = ({ hide }) => {
                             <Card className='cards card-ranking' id='ranking'>
                                 <a className='stretched-link' id='gallup' onClick={() => handleSelect("ranking")}>
                                     <div>
-                                        <FontAwesomeIcon icon='trophy' size="2x" />
+                                        <FontAwesomeIcon icon='trophy' color='#888' size="2x" />
                                     </div>
                                 Ranking
                                 </a>
@@ -124,28 +135,8 @@ const NewEvents = ({ hide }) => {
                             {eventTypeErr && <small id="username2-help" className="p-error p-d-block">Please Select an event mode.</small>}
                         </div>
                     </div>
-
-
-
-
-
-
-
-
-                </Modal.Body>
-                <Modal.Footer>
-
-                    <Button variant="danger" onClick={() => hide(false)}>
-                        Cancel
-          </Button>
-                    <Button variant="primary" onClick={() => handleSubmit()}>
-                        Save
-          </Button>
-
-
-
-                </Modal.Footer>
-            </Modal>
+                </div>
+            </Dialog>
         </div>
     )
 }

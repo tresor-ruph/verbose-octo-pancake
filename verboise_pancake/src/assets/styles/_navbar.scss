@@ -17,9 +17,10 @@
     padding-left: 15px;
     padding-right: 15px;
     width: 100%;
-    // width: calc(100% - #{$sidebar-width-lg});
     height: $navbar-height;
-    background: #3070C5;
+    background: #00C0F8;
+    // background: #3C4AE4;
+
     @media (max-width: 991px) {
       width: 100%;
       padding-left: 11px;

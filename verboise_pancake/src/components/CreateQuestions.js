@@ -1,9 +1,9 @@
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Questions from 'components/Questions'
 import { useSelector, useDispatch } from 'react-redux'
-import { Button } from 'react-bootstrap'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Button } from 'primereact/button';
+import { Toast } from 'primereact/toast';
 
 import 'customcss/survey.scss'
 
@@ -14,31 +14,24 @@ import 'customcss/survey.scss'
 
 let [tempQuestionArr, questionCount, optionList, questionList] = [[], 0, [], []]
 
-const CreateQuestions = ({ addNew, setSendQuestion }) => {
+const CreateQuestions = ({ setSendQuestion }) => {
     const [questionArr, setQuestionArr] = useState([]) //contain de component Question
     const [questCompCount, setquestCompCount] = useState(0) //Keep count of the number of Question components
     const eventState = useSelector(state => state.EventReducer.event)
+    const toast = useRef(null);
 
     const dispatch = useDispatch()
 
     useEffect(() => {
-        console.log(eventState)
         if (questionArr.length === 0) {
             tempQuestionArr = eventState.tempQuestionArr
-                questionCount = eventState.questionCount
-                optionList = eventState.optionList
-                questionList = eventState.questionList
+            questionCount = eventState.questionCount
+            optionList = eventState.optionList
+            questionList = eventState.questionList
         }
         if (questCompCount > 0) {
             tempQuestionArr = questionArr
             hideQuestion(questionCount)
-
-            // return () => {
-            //     questionCount = 0;
-            //     tempQuestionArr = []
-            //     optionList = []
-            //     questionList = []
-            // }
         }
     }, [questCompCount])
 
@@ -158,25 +151,20 @@ const CreateQuestions = ({ addNew, setSendQuestion }) => {
 
     const addQuestions = () => {
         setSendQuestion(true)
-        if (questionCount >= 10) {
-            alert('you cannot create more than 10 questions at once')
+        if (questionCount > 1) {
+            toast.current.show({severity:'error', summary: 'Error', detail:'cannot create more than 7 questions at once', life: 5000});
             return
         }
 
-        if (questionCount > 0 && questionList[questionCount].question === "") {
-            console.log('please add your question')
-            console.log('questionCount', questionCount)
-            console.log(eventState)
+        if (questionCount > 6 && questionList[questionCount].question === "") {
             let questionErr = document.getElementById(`inv-quest${questionCount}`)
             if (questionErr !== null) questionErr.style.display = 'inline'
             return
         } else {
             let questionErr = document.getElementById(`inv-quest${questionCount}`)
-
             if (questionErr !== null) questionErr.style.display = 'none'
         }
         if (questionCount > 0 && optionList[questionCount].answers.filter(elt => elt.id != undefined).length < 2) {
-            console.log('please add atleast 2 options')
             let optionErr = document.getElementById(`inv-option${questionCount}`)
             if (optionErr !== null) optionErr.style.display = 'inline'
             return
@@ -187,13 +175,12 @@ const CreateQuestions = ({ addNew, setSendQuestion }) => {
 
         }
         if (questionCount > 0 && questionList[questionCount].answer === "") {
-            console.log('please select an answer')
             let answerErr = document.getElementById(`inv-answ${questionCount}`)
             if (answerErr !== null) answerErr.style.display = 'inline'
             return
         } else {
-            let answerErr = document.getElementById(`inv-answ${questionCount}`)
 
+            let answerErr = document.getElementById(`inv-answ${questionCount}`)
             if (answerErr !== null) answerErr.style.display = 'none'
 
         }
@@ -204,7 +191,7 @@ const CreateQuestions = ({ addNew, setSendQuestion }) => {
         questionList[questionCount] = { id: '', question: '', answer: '', picture: '' }
         optionList[questionCount] = { questionId: '', answers: [] }
 
-       
+
         setQuestionArr(prevState =>
             [...prevState, <div key={questionCount}>
                 <Questions questionKey={questionCount} handleQuestions={handleQuestions} deleteQuestionImage={deleteQuestionImage}
@@ -218,9 +205,11 @@ const CreateQuestions = ({ addNew, setSendQuestion }) => {
 
     return (<div>
 
-        <div>
-            <Button variant="success" onClick={() => addQuestions()}>{!questionCount > 0 ? 'Add Questions' : 'New Question'}</Button><br /><br />
-            <small id="username2-help" className="p-error p-d-block" id='null-question' style={{ display: 'none' }}>Please add your question.</small>
+        <div className='questions-div'>
+        <Toast ref={toast} style={{marginTop:'5vh'}}/>
+
+            <Button className="p-button-raised p-button-success" onClick={() => addQuestions()}>{!questionCount > 0 ? 'Add Questions' : 'New Question'}</Button><br /><br />
+            <small id="username2-help" className="p-error" id='null-question' style={{ display: 'none' }}>Please add your question.</small>
 
             {questionCount > 0 && questionArr}
         </div>

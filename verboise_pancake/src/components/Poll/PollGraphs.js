@@ -63,6 +63,18 @@ const PollGraphs = ({ handleNextQuestion, questionIndex, question, handleStopEve
     }
     const chartOptions = {
         indexAxis: 'x',
+        scales: {
+            xAxes: [{
+               gridLines: {
+                  display: false
+               }
+            }],
+            yAxes: [{
+                gridLines: {
+                    drawOnChartArea: false
+                  }
+            }]
+       },
 
         elements: {
             bar: {
