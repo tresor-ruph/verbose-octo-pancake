@@ -39,8 +39,7 @@ const Questions = (props) => {
         let arr = []
         Array.from(inputField).forEach(elt => {
             arr.push(
-                <div key={elt} >
-                  
+                <div key={elt} >                  
                         <div className="p-inputgroup option-div">
                             <span className="p-inputgroup-addon" style={{ height: '37px' }}>
                                 <RadioButton name="rb1" value={elt} checked={radioValue1 === elt} onChange={(e) => handleRadioValues(e.value, props.questionCount)} />

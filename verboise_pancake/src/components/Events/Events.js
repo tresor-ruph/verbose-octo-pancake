@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useLocation, useHistory } from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
-import { Spinner } from "react-bootstrap";
+
 import Reaction from 'components/Gallup/Reaction'
 import NewPoll from 'components/Poll/NewPoll'
 import Polls from 'components/Poll/Polls'
 import PollAnalysis from 'components/Poll/PollAnalysis'
 import ResultGallup from "components/Gallup/ResultGallup"
+import { ProgressSpinner } from "primereact/progressspinner";
 
 
 
@@ -28,7 +29,7 @@ const Events = () => {
         } else {
             setEventType(eventState.eventType)
             setLoaded(true)
-            
+
             setEventStatus(eventState.status)
 
         }
@@ -46,13 +47,12 @@ const Events = () => {
             if (eventType === "polls" || eventType === "ranking") {
                 return <PollAnalysis />
             } else if (eventType === "gallup") {
-
+                console.log('tyupe')
+                return <ResultGallup code={eventState.code} />
             } else {
-                <ResultGallup />
                 console.log('error')
             }
         } else if (eventStatus === "In progress") {
-            console.log('bababbabababab')
             if (eventType === "polls" || eventType === "ranking") {
                 return <Polls code={eventState.code} />
             } else if (eventType === "gallup") {
@@ -85,16 +85,14 @@ const Events = () => {
                 (<div>
                     {returnEvent()}
                 </div>) :
-                (<div className="spinner" style={{ marginTop: "40vh" }}>
-                    <Spinner
-                        animation="border"
-                        role="status"
-                        variant="primary"
-                        size="x-lg"
+                (
+                    <div
+                        className="spinner p-d-flex p-jc-center"
+                        style={{ marginTop: "40vh" }}
                     >
-                        <span className="sr-only">Loading...</span>
-                    </Spinner>
-                </div>)
+                        <ProgressSpinner />
+                    </div>
+                )
         }
     </div>)
 }

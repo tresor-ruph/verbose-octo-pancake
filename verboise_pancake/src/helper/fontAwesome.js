@@ -20,6 +20,7 @@ import {
     faLockOpen,
     faLock,
     faUserFriends,
+    faStop,
     
     
 }
@@ -47,7 +48,8 @@ library.add(
     faArrowAltCircleRight,
     faLockOpen,
     faLock,
-    faUserFriends
+    faUserFriends,
+    faStop
     
 
     

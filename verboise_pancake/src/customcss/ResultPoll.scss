@@ -1,0 +1,38 @@
+
+.result-body {
+    background-color: white;
+    overflow-y: auto;
+    height: 100vh;
+    overflow-x: none;
+}
+.poll-result {
+    height: 80vh;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+.ranking {
+    margin-left: 1vw;
+}
+.result-container {  
+    margin-top: 5vh;
+}
+.res-txt {
+    text-align: center;
+    font-size: 1.5rem;
+    color: gray;
+}
+.quest-text {
+    font-weight: 500;
+    margin-bottom: 2vh;
+}
+.vote-txt {
+    font-weight: 500;
+    color: rgba(255,0,0,0.5);
+}
+.rank-div {
+    margin-top: 2vh;
+    margin-left: 5vw;
+}
+.pts-div {
+    font-weight: 500;
+}

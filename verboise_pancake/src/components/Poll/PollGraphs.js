@@ -11,13 +11,9 @@ import 'helper/axiosConfig'
 import 'helper/firebaseConfig'
 
 
-
-
-
 const PollGraphs = ({ handleNextQuestion, questionIndex, question, handleStopEvent, voteLock, numbVotes, dataSet, handleCloseEvent,defChart, chartLabels, pieChartData }) => {
     const eventState = useSelector(state => state.EventReducer.event)
     const history = useHistory()
-
     let chartData = {
         datasets: [{
             data: dataSet,
@@ -96,7 +92,7 @@ const PollGraphs = ({ handleNextQuestion, questionIndex, question, handleStopEve
 
     const renderChart = () => {
         if (defChart === 'bar-chart') {
-            return <div style={{ width: '85%', marginTop: '2vh', marginLeft: '3vw' }}><Bar key={questionIndex} data={chartData} options={chartOptions} redraw={false}/></div>
+            return <div  className='bar-chart'><Bar key={questionIndex} data={chartData} options={chartOptions} redraw={false}/></div>
         } else if (defChart === 'pie-chart') {
             return <div style={{ width: '45%', marginTop: '5vh', marginLeft: '10vw' }}> <Pie key={questionIndex} data={chartData2} options={chartOptions} redraw={false} /></div>
 
@@ -104,32 +100,17 @@ const PollGraphs = ({ handleNextQuestion, questionIndex, question, handleStopEve
             return <div style={{ width: '45%', marginTop: '5vh', marginLeft: '10vw' }}><Doughnut key={questionIndex} data={chartData2} options={chartOptions} redraw ={false}/></div>
 
         }
-
     }
 
     const stopEvent = () => {
         handleStopEvent()
-
-    }
+}
 
     return (
-        <div className='graph-div'>
+        <div className='poll-graph-div'>
             <div>
                 {renderChart()}
-                <div className='row param-div'>
-                    <div className='col-3'>
-                        {voteLock ? <FontAwesomeIcon icon="lock-open" color='#5F98FA' size='3x' onClick={() => stopEvent()} className='add-option' /> : <FontAwesomeIcon icon="lock" color='#5F98FA' size='3x' />}
-                    </div>
-                    <div className='col-3'>
-                        {questionIndex < question.length - 1 ? <FontAwesomeIcon icon="arrow-alt-circle-right" color='#5F98FA' size='3x' onClick={() => handleNextQuestion()} className='add-option' /> : <Button onClick={() => handleCloseEvent()}> Stop Event</Button>}
-
-                    </div>
-                    <div className='col-3'>
-                        <div><span className='particip-div'>{numbVotes} /</span><FontAwesomeIcon icon="user-friends" color='gray' size='2x' className='particip-icon' /></div>
-                    </div>
-
-
-                </div>
+               
             </div>
         </div>
     )

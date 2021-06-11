@@ -151,7 +151,7 @@ const CreateQuestions = ({ setSendQuestion }) => {
 
     const addQuestions = () => {
         setSendQuestion(true)
-        if (questionCount > 1) {
+        if (questionCount > 6   ) {
             toast.current.show({severity:'error', summary: 'Error', detail:'cannot create more than 7 questions at once', life: 5000});
             return
         }

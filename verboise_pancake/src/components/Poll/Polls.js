@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { TabView, TabPanel } from 'primereact/tabview';
 import { QRCode } from 'react-qr-svg'
 import { useSelector, useDispatch } from 'react-redux'
+import { ProgressSpinner } from "primereact/progressspinner";
+
 import CreateQuestion from 'components/CreateQuestions'
 import { Button } from 'react-bootstrap'
 import axios from 'axios'
@@ -138,7 +140,7 @@ const Poll = ({ code }) => {
             setOption(res.data.options)
             if (x) {
                 setPoll(res.data.poll)
-                if( res.data.poll[0].questionIndex != null){
+                if (res.data.poll[0].questionIndex != null) {
                     questionIndex = res.data.poll[0].questionIndex
                 }
                 registerFireStore(res.data.poll[0].id, sorted[questionIndex])
@@ -149,7 +151,7 @@ const Poll = ({ code }) => {
                 if (res.data.poll[0].layout === 'pie-chart' || res.data.poll[0].layout === 'donut') {
                     setDataSet([1, 1, 1, 1, 1, 1])
                 }
-              
+
             } else {
 
                 pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: '' })
@@ -175,7 +177,7 @@ const Poll = ({ code }) => {
             questionIndex: questionIndex + 1,
         }
         axios.put('/questionCount', data).then(res => {
-                setVoteLock(true)
+            setVoteLock(true)
 
             pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'NEXT_QUESTION', index: ++questionIndex }).then(() => {
                 chartDataList = []
@@ -296,7 +298,7 @@ const Poll = ({ code }) => {
 
                             },
                         });
-                      
+
                     }
 
                 }).catch(err => {
@@ -376,52 +378,71 @@ const Poll = ({ code }) => {
 
     return (
         <div className='poll-main'>
-            {loaded ? <div className=''>
-                <div className='row poll-container'>
-                    <div className='col-7 graphs'>
-                        <PollGraphs handleNextQuestion={handleNextQuestion} questionIndex={questionIndex} defChart={defChart} question={question} handleStopEvent={handleEndQuestion} voteLock={voteLock} dataSet={dataSet} numbVotes={numbVotes} handleCloseEvent={handleCloseEvent} chartLabels={chartLabels} pieChartData={pieChartData} />
-                        
-                    </div>
+            {loaded ?
+                <div className=''>
+                    <div className='row poll-container'>
+                        <div className='p-shadow-2 col-7 graphs'>
+                            <div className='graph-sub-mess'>
+                                <PollGraphs handleNextQuestion={handleNextQuestion} questionIndex={questionIndex} defChart={defChart} question={question} handleStopEvent={handleEndQuestion} voteLock={voteLock} dataSet={dataSet} numbVotes={numbVotes} handleCloseEvent={handleCloseEvent} chartLabels={chartLabels} pieChartData={pieChartData} />
+                            </div>
+                        </div>
 
-                    <div className='col-4  qr-codes'>
-                        <TabView activeIndex={activeIndex} onTabChange={(e) => handleIndex(e)}>
-                            <TabPanel headerClassName='quest-tab' header="Question">
-                                <div className='question-div'>
-                                    <span className='question-txt'>{question[questionIndex]?.question || ''}</span>
-                                    {question[questionIndex]?.image != "" && <div className='img-div'><img src={question[questionIndex].image} width='300px' /></div>}
-                                </div>
-                            </TabPanel>
-                            <TabPanel headerClassName='join-tab' header="Invite Participants">
-                                <div className='scan-div'>
+                        <div className='p-shadow-2 col-4  qr-codes'>
+                            <TabView activeIndex={activeIndex} onTabChange={(e) => handleIndex(e)}>
+                                <TabPanel headerClassName='tab-view-title' header="Question">
+                                    <div className='question-div'>
+                                        <span className='question-txt'>{question[questionIndex]?.question || ''}</span>
+                                        {question[questionIndex]?.image != "" && <div className='img-div'><img src={question[questionIndex].image} width='300px' /></div>}
+                                    </div>
+                                </TabPanel>
+                                <TabPanel headerClassName='tab-view-title' header="Invite Participants">
+                                    <div className='scan-div'>
 
-                                    <QRCode bgColor="#FFFFFF"
-                                        fgColor="#000000"
-                                        level="Q"
-                                        style={{ width: 270 }}
-                                        className='qr-code'
-                                        value={`http://localhost:3000/${code}`} />
-                                    <div className='or-div' >
-                                        <span className='or-text'> -- OR -- </span><br />
-                                        <div className='url-div'>
-                                            <span className='url-text'>{`verbosePancake/${code}`}</span>
+                                        <QRCode bgColor="#FFFFFF"
+                                            fgColor="#000000"
+                                            level="Q"
+                                            className='qr-code'
+                                            value={`http://localhost:3000/${code}`} />
+                                        <div className='or-div' >
+                                            <span className='or-text'> -- OR -- </span><br />
+                                            <div className='url-div'>
+                                                <span className='url-text'>{`verbosePancake/${code}`}</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                            </TabPanel>
-                            <TabPanel headerClassName='add-quest-tab' header="Add Question">
-                                <div>
-                                    <CreateQuestion addNew={true} setSendQuestion={setSendQuestion} />
-                                    {sendQuestion && <Button onClick={addNewQuestion}>send</Button>}
+                                </TabPanel>
+                                <TabPanel headerClassName='tab-view-title' header="Add Question">
+                                    <div>
+                                        <CreateQuestion addNew={true} setSendQuestion={setSendQuestion} />
+                                        {sendQuestion && <Button onClick={addNewQuestion}>send</Button>}
 
-                                </div>
-                            </TabPanel>
+                                    </div>
+                                </TabPanel>
 
-                        </TabView>
+                            </TabView>
 
+                        </div>
                     </div>
-                </div>
-            </div> : <div>Loadind</div>}
+                    <div className='p-shadow-2 p-d-flex p-jc-between param-div'>
+                        <div className='p-d-flex left-icons'>
+                            <div className="p-mr-2 p-order-1">
+                                {voteLock ? <FontAwesomeIcon icon="lock-open" color='#5F98FA' size='2x' onClick={() => handleEndQuestion()} /> : <FontAwesomeIcon icon="lock" color='#5F98FA' size='2x' />}
+                            </div>
+                            <div className="p-mr-2 p-order-2 lock-icon">
+                                {questionIndex < question.length - 1 ? <FontAwesomeIcon icon="arrow-alt-circle-right" color='#5F98FA' size='2x' onClick={() => handleNextQuestion()} /> : <FontAwesomeIcon icon="stop" color='#5F98FA' onClick={() => handleCloseEvent()} size='2x' />}
+                            </div>
+                        </div>
+                        <div className="right-icons">
+                            <div><span className='particip-div'>{numbVotes} /</span><FontAwesomeIcon icon="user-friends" color='gray' size='2x' className='particip-icon' /></div>
+                        </div>
+                    </div>
+                </div> : <div
+                    className="spinner p-d-flex p-jc-center"
+                    style={{ marginTop: "40vh" }}
+                >
+                    <ProgressSpinner />
+                </div>}
         </div>
     )
 

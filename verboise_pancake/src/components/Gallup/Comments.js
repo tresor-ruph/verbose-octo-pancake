@@ -1,16 +1,27 @@
-const Comment = ({ message,handleBlock,handleUnblock }) => {
+import 'customcss/Comment.scss'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
+const Comment = ({ message, handleBlock, handleUnblock }) => {
 
 
     return (<div>
         {
             message.length > 0 ?
                 (<div>
-                    <ul>
+                    <div>
                         {message.map((elt, index) => (
-                            <li key={index}>{elt.freeText}<button onClick={() => handleBlock(elt.id)}>block</button><button onClick={() => handleUnblock(elt.id)}>unblock</button></li>
+                            <div className='p-d-flex p-jc-between comment-div row' key={index}>
+                                <div className='col-9'>
+                                    {elt.freeText}
+                                </div>
+                                <div className='col-2'>
+                                    <FontAwesomeIcon icon="lock-open" color='#5F98FA'  size='smaller' onClick={() => handleBlock(elt.id)} />
+                                    <FontAwesomeIcon icon="lock" color='#5F98FA'  size='smaller' onClick={() => handleUnblock(elt.id)} />
+                                </div>
+                            </div>
 
                         ))}
-                    </ul>
+                    </div>
 
                 </div>
                 ) : (

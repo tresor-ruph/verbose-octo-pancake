@@ -1,23 +1,10 @@
 import React, { useEffect, useState } from 'react'
 
 import { Line } from 'react-chartjs-2'
-import { Button } from 'react-bootstrap';
 
 
-const ReactionGraph = ({ dataSet,StopEvent }) => {
+const ReactionGraph = ({ dataSet }) => {
 
-
-
-
-
-    // const stoptest = () => {
-    //     if (interval != 0) {
-    //         clearInterval(interval)
-
-    //     } else {
-    //         console.log(' an error occured')
-    //     }
-    // }
     let chartData = {
         datasets: [{
             data: dataSet 
@@ -51,9 +38,9 @@ const ReactionGraph = ({ dataSet,StopEvent }) => {
 
     return (
         <div>
-            <div >
+            <div className='poll-graph-div line-graph ' >
                 <Line data={chartData} options={options} />
-                <Button onClick={() => StopEvent()}>Stop</Button>
+               
             </div>
         </div>
     )

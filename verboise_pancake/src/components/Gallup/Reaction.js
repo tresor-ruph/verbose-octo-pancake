@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Button } from 'react-bootstrap'
+import { useState, useEffect,useRef } from 'react';
+import { Button } from  'primereact/button';
 import ReactionGraph from './ReactionGraph'
 import { TabView, TabPanel } from 'primereact/tabview';
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,6 +12,9 @@ import firebase from 'firebase';
 import 'firebase/firestore';
 import Comment from './Comments'
 import StartReaction from './StartReaction'
+import { Toast } from 'primereact/toast';
+import { Spinner } from "react-bootstrap";
+
 let voteCount = 0
 let messageList = []
 let votes = []
@@ -33,6 +36,8 @@ const LoadGallup = ({ code, ongoing }) => {
     const [duration, setDuration] = useState(60)
     const [voteFreq, setVoteFreq] = useState(duration / 10)
     const [delay, setDelay] = useState(3000)
+    const toast = useRef(null);
+
     const history = useHistory()
     const eventState = useSelector(state => state.EventReducer.event)
 
@@ -91,11 +96,14 @@ const LoadGallup = ({ code, ongoing }) => {
     const average = arr => arr.reduce((p, c) => p + c, 0) / arr.length;
     const handleBlock = (x) => {
         reactionRef.doc(eventState.eventId).collection(code).add({ message: 'BLOCK', id: x.r })
+        toast.current.show({severity:'success', summary: 'Success', detail:'User Banned', life: 3000});
 
     }
 
     const handleUnblock = (x) => {
         reactionRef.doc(eventState.eventId).collection(code).add({ message: 'UN_BLOCK', id: x.r })
+        toast.current.show({severity:'success', summary: 'Success', detail:'user unBlocked', life: 3000});
+
     }
 
     const handleIndex = (e) => {
@@ -163,28 +171,35 @@ const LoadGallup = ({ code, ongoing }) => {
 
 
     }
-
-
+    const showModal = () => {
+        if (!ongoing && show) {
+            return <StartReaction show={show} setDelay={setDelay} delay={delay} setShow={handleClose} duration={duration} setDuration={handleDuration} voteFreq={voteFreq} setVoteFreq={setVoteFreq} handleStartEvent={handleStartEvent} />
+        }
+    }
 
     return (
         <div>
-            {   !ongoing && <StartReaction show={show} setDelay={setDelay} setShow={handleClose} duration={duration} setDuration={handleDuration} voteFreq={voteFreq} setVoteFreq={setVoteFreq} handleStartEvent={handleStartEvent} />}            <div>
-                <div className='row'>
-                    <div className='col-7'>
+                {showModal()}
+                <Toast ref={toast} style={{marginTop: '5vh'}}   />
+
+            <div className='poll-main'>
+                <div className='row poll-container'>
+                    <div className='p-shadow-2 col-7 graphs'>
+                    <div className='graph-sub-mess line-div'>
                         <ReactionGraph dataSet={dataSet} StopEvent={StopEvent} />
+                        </div>
                     </div>
-                    <div className='col-3'>
+                    <div className='p-shadow-2 col-3  qr-codes'>
                         <TabView activeIndex={activeIndex} onTabChange={(e) => handleIndex(e)}>
-                            <TabPanel headerClassName='join-tab' >
-                                <div><Comment message={chats} handleBlock={handleBlock} handleUnblock={handleUnblock} /></div>
+                            <TabPanel headerClassName='tab-view-title' header="Comments" >
+                                <div className=''><Comment message={chats} handleBlock={handleBlock} handleUnblock={handleUnblock} /></div>
                             </TabPanel>
-                            <TabPanel headerClassName='add-quest-tab' header="Invite Participants">
+                            <TabPanel headerClassName='tab-view-title' header="Invite Participants">
                                 <div className='scan-div'>
 
                                     <QRCode bgColor="#FFFFFF"
                                         fgColor="#000000"
                                         level="Q"
-                                        style={{ width: 270 }}
                                         className='qr-code'
                                         value={`http://localhost:3000/${code}`} />
                                     <div className='or-div' >
@@ -199,6 +214,7 @@ const LoadGallup = ({ code, ongoing }) => {
                         </TabView>
                     </div>
                 </div>
+                <div className='p-d-flex p-jc-center param-div stop-react' > <Button style={{width: '20vh', textAlign: 'center', fontWeight: '500', fontSize: '1.2vw'}} onClick={() => StopEvent()}>End Event</Button></div>
             </div>
         </div>
     )
