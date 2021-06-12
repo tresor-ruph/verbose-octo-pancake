@@ -47,7 +47,6 @@ const Events = () => {
             if (eventType === "polls" || eventType === "ranking") {
                 return <PollAnalysis />
             } else if (eventType === "gallup") {
-                console.log('tyupe')
                 return <ResultGallup code={eventState.code} />
             } else {
                 console.log('error')

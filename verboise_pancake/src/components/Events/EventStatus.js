@@ -1,20 +1,21 @@
+import 'customcss/eventStatus.scss'
 const EventStatus = ({status}) => {
  
     return (
-        <div>
+        <div className="event-status ">
 
             { status === 'inactive' ?
-                <div className="container bootstrap snippet">
+                <div >
                     <div className="main-div">
-                        <div className="center-div">
-                            <p className="text-res">The Event has not begun</p>
+                        <div className=" p-d-flex p-jc-center evt-status-text">
+                            <span className="">The event has not started</span>
                         </div>
                     </div>
                 </div> :
-                <div className="container bootstrap snippet">
+                <div className=" ">
                     <div className="main-div">
-                        <div className="center-div">
-                            <p className="text-res">The event has ended</p>
+                        <div className="p-d-flex p-jc-center evt-status-text">
+                            <span className="">The event is over</span>
                         </div>
                     </div>
                 </div>}

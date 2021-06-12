@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { useHistory } from 'react-router'
+import { Button } from 'primereact/button'
+import { ProgressSpinner } from "primereact/progressspinner";
+
 import _ from 'underscore'
 import axios from 'axios'
 import 'helper/axiosConfig'
@@ -12,17 +16,15 @@ const PollAnalysis = () => {
     const [loaded, setLoaded] = useState(false)
     const [questKey, setQuestKey] = useState([])
 
+    const history = useHistory()
     const eventState = useSelector(state => state.EventReducer.event)
 
     useEffect(() => {
         console.log('eventState', eventState)
-        // getRanks()
-        // getResults()
+        getResults()
     }, [])
 
-    const getRanks = () => {
 
-    }
 
     const getResults = () => {
         axios.get(`eventResults/${eventState.eventId}`).then(res => {
@@ -57,42 +59,56 @@ const PollAnalysis = () => {
         })
     }
 
+    const handleReturn = () => {
+        history.push('/Home')
+    }
+
     return (
         <div className='result-body'>
-            {!loaded ? <h1>Polls analysis</h1> : (
-                <div className='row result-container p-d-flex p-jc-center'>
-                    <div className="p-shadow-4 col-5 poll-result">
-                        <div className='res-txt'><span>Poll Results</span></div>
-                        <hr />
-                        {questKey.map((elt, idx) => (
-                            <div key={idx}>
-                                <div className='p-d-flex p-jc-center quest-text'> <span>{elt}</span></div>
+            {!loaded ?
+             <div
+                className="spinner p-d-flex p-jc-center"
+                style={{ marginTop: "40vh" }}
+            >
+                <ProgressSpinner />
+            </div> : (
+                <div>
+                    <div className='row result-container p-d-flex p-jc-center'>
+                        <div className="p-shadow-4 col-5 poll-result">
+                            <div className='res-txt'><span>Poll Results</span></div>
+                            <hr />
+                            {questKey.map((elt, idx) => (
+                                <div key={idx}>
+                                    <div className='p-d-flex p-jc-center quest-text'> <span>{elt}</span></div>
 
-                                {results[elt].map((elt2, idx) => (
-                                    <div key={idx} className='row'>
-                                        <div className='col-8'>{elt2.optionText}</div> <div className='col-2 vote-txt'> {elt2.vote}</div>
-                                    </div>
-                                ))}
-                                <hr />
-                            </div>
+                                    {results[elt].map((elt2, idx) => (
+                                        <div key={idx} className='row'>
+                                            <div className='col-8'>{elt2.optionText}</div> <div className='col-2 vote-txt'> {elt2.vote}</div>
+                                        </div>
+                                    ))}
+                                    <hr />
+                                </div>
 
-                        ))}
+                            ))}
 
+                        </div>
+                        <div className='p-shadow-4 col-5 ranking'>
+                            <div className='res-txt'><span> Ranking</span></div>
+                            <hr />
+                            {ranks.map((elt, idx) => (
+                                <div className='p-d-flex p-jc-center row  rank-div' key={idx}>
+                                    <div className='col-1'>{idx + 1}</div>
+                                    <div className='col-5'>{elt.pseudo}</div>
+                                    <div className='col-2 pts-div'>{elt.points + 'pts'}</div>
+                                    <hr />
+
+                                </div>
+                            ))}
+                        </div>
+
+                    </div><div className='p-d-flex p-jc-center' style={{ marginTop: '2vh' }}>
+                        <Button onClick={() => handleReturn()} style={{ fontWeight: '500' }}> Home</Button>
                     </div>
-                    <div className='p-shadow-4 col-5 ranking'>
-                        <div className='res-txt'><span> Ranking</span></div>
-                        <hr />
-                        {ranks.map((elt, idx) => (
-                            <div className='p-d-flex p-jc-center row  rank-div' key={idx}>
-                                <div className='col-1'>{idx +1 }</div>
-                                <div className='col-5'>{elt.pseudo}</div>
-                                <div className='col-2 pts-div'>{elt.points + 'pts'}</div>
-                                <hr />
-
-                            </div>
-                        ))} 
-                    </div>
-
                 </div>
             )}
         </div>

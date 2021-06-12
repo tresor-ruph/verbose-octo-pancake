@@ -188,13 +188,13 @@ const EventList = () => {
               )}{" "}
               {showModal && <NewEvent hide={modalOnHide} show={modalOnShow} />}
               <div className="btn-add">
-                <Button onClick={() => showAddEventModal()}>New Event</Button>
+                <Button className='p-shadow-4' onClick={() => showAddEventModal()}>New Event</Button>
               </div>
               <hr />
               <div className="card event-list">
                 <DataTable
                   value={eventData}
-                  className="p-datatable-striped datatable-responsive-demo p-datatable-md"
+                  className="p-datatable-striped datatable-responsive-demo p-datatable-md p-shadow-4"
                   paginator
                   paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                   currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"

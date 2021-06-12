@@ -260,6 +260,7 @@ const Poll = ({ code }) => {
                 }
             }
         }
+    
 
 
 
@@ -271,6 +272,7 @@ const Poll = ({ code }) => {
                 answer: elt.answer,
                 pollId: poll[0].id
             }
+            console.log('data1', data1)
             axios.post('/addQuestions', data1).then(res => {
                 let optionData = []
 

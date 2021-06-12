@@ -9,6 +9,7 @@ import JoinPoll from 'components/Poll/JoinPoll'
 import NotFound from 'components/Error/Notfound'
 import EventStatus from 'components/Events/EventStatus'
 import AddUsername from 'components/Poll/AddUsername'
+import { ProgressSpinner } from "primereact/progressspinner";
 
 import axios from 'axios'
 import 'helper/axiosConfig'
@@ -122,8 +123,8 @@ const JoinEvent = () => {
 
                         } else {
                             eventState.pseudo = res2.data[0].pseudo
-                            if(res2.data[0].questionIndex >= 1000){
-                                eventState.maxVotes = res2.data[0].questionIndex -1000
+                            if (res2.data[0].questionIndex >= 1000) {
+                                eventState.maxVotes = res2.data[0].questionIndex - 1000
                             }
                             dispatch({
                                 type: "NEW_EVENT",
@@ -149,7 +150,7 @@ const JoinEvent = () => {
                 console.log(err.response)
             })
 
-           
+
 
 
     }, [])
@@ -157,9 +158,9 @@ const JoinEvent = () => {
         if (eventStatus === 'In progress') {
 
             if (eventType === 'gallup') {
-                return (<Gallup setEventStatus={setEventStatus} code={path} eventId={eventId} userIp={userIp}  />)
+                return (<Gallup setEventStatus={setEventStatus} code={path} eventId={eventId} userIp={userIp} />)
             } else if (eventType === 'polls') {
-                return (<JoinPoll setEventStatus={setEventStatus} code={path} uniqueId={pseudo} eventId={eventId} userIp={userIp}  />)
+                return (<JoinPoll setEventStatus={setEventStatus} code={path} uniqueId={pseudo} eventId={eventId} userIp={userIp} />)
             } else if (eventType === 'ranking') {
                 return (<div>
                     {
@@ -178,7 +179,12 @@ const JoinEvent = () => {
 
     return (
         <div>
-            {loaded ? renderEvent() : <div><NotFound /></div>}
+            {loaded ? renderEvent() : <div
+                className="spinner p-d-flex p-jc-center"
+                style={{ marginTop: "40vh" }}
+            >
+                <ProgressSpinner />
+            </div>}
         </div>
     )
 

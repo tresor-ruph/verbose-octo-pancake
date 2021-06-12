@@ -13,7 +13,8 @@ import 'firebase/firestore';
 import Comment from './Comments'
 import StartReaction from './StartReaction'
 import { Toast } from 'primereact/toast';
-import { Spinner } from "react-bootstrap";
+import 'customcss/Reaction.scss'
+
 
 let voteCount = 0
 let messageList = []

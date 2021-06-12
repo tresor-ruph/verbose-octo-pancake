@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { RadioButton } from 'primereact/radiobutton';
 
 import axios from 'axios'
 import 'helper/axiosConfig'
@@ -13,7 +14,7 @@ let chartDataList = []
 let questionIndex = 0
 const db = firebase.firestore();
 
-const JoinPoll = ({code,setEventStatus,eventId,userIp }) => {
+const JoinPoll = ({ code, setEventStatus, eventId, userIp }) => {
     const [poll, setPoll] = useState(null)
     const [question, setQuestion] = useState(null)
     const [option, setOption] = useState(null)
@@ -27,9 +28,9 @@ const JoinPoll = ({code,setEventStatus,eventId,userIp }) => {
     const [dataSet, setDataSet] = useState([])
     const [chartLabels, setchartLabels] = useState([1])
     const [pieChartData, setPieChartData] = useState([1])
-
-    const dispatch =useDispatch()
+    const dispatch = useDispatch()
     const eventState = useSelector(state => state.EventReducer.event)
+
 
     let percent = null
     let pollRef = db.collection('polls')
@@ -49,7 +50,7 @@ const JoinPoll = ({code,setEventStatus,eventId,userIp }) => {
                     if (doc.data().message === 'FETCH_QUESTIONS') {
                         getQuestions(false)
                     }
-                    else if(doc.data().message === 'END_EVENT'){
+                    else if (doc.data().message === 'END_EVENT') {
                         setEventStatus('Ended')
                     }
                     else if (doc.data().message === 'START_EVENT') {
@@ -59,13 +60,13 @@ const JoinPoll = ({code,setEventStatus,eventId,userIp }) => {
                         setDisplayGraph(true)
                     }
                     else if (doc.data().message === 'NEXT_QUESTION') {
-                        let data ={
+                        let data = {
                             ip: eventState.pseudo,
-                            eventId :eventId,
+                            eventId: eventId,
                             questionIndex: 1
                         }
-                
-                        axios.put('updateIndex',data ).then(res => {                           
+
+                        axios.put('updateIndex', data).then(res => {
                             setDisplayGraph(false)
                             questionIndex = doc.data().index
                             chartDataList = []
@@ -77,7 +78,7 @@ const JoinPoll = ({code,setEventStatus,eventId,userIp }) => {
                         })
 
 
-                        
+
 
                     }
                     else if (doc.data().message === 'POLL_DATA') {
@@ -107,14 +108,14 @@ const JoinPoll = ({code,setEventStatus,eventId,userIp }) => {
                             resultPercent.push({ x: elt.x, y: ((parseInt(elt.y) / total) * 100).toFixed(1) })
                             pieResultPercent.push(((parseInt(elt.y) / total) * 100).toFixed(1))
                         })
-                        setchartLabels(tempLabels)  
-                        if(percent){
+                        setchartLabels(tempLabels)
+                        if (percent) {
                             setDataSet(resultPercent)
-                            setPieChartData(pieResultPercent) 
-            
-                        }else {
+                            setPieChartData(pieResultPercent)
+
+                        } else {
                             setDataSet(tempArr)
-                            setPieChartData(tempPieChart)                        
+                            setPieChartData(tempPieChart)
                         }
 
                         setDataSet(tempArr)
@@ -135,38 +136,38 @@ const JoinPoll = ({code,setEventStatus,eventId,userIp }) => {
     }
 
     const validAnswer = () => {
-      
-        let arr =   option.filter(elt => elt.questionId == question[questionIndex]?.id).filter(elt =>elt.order === question[questionIndex]?.answer)[0]
+
+        let arr = option.filter(elt => elt.questionId == question[questionIndex]?.id).filter(elt => elt.order === question[questionIndex]?.answer)[0]
         return arr
-       }
+    }
 
     const sentVote = () => {
-        let score =null
-        if(selectedAns === validAnswer().optionText){
-            score =eventState.pseudo
+        let score = null
+        if (selectedAns === validAnswer().optionText) {
+            score = eventState.pseudo
         }
-        if(selectedAns ===''){
+        if (selectedAns === '') {
             console.log('select an answer')
             return
         }
-       
-        let data ={
+
+        let data = {
             ip: eventState.pseudo,
-            eventId :eventId,
+            eventId: eventId,
             questionIndex: 2
         }
 
-        axios.put('updateIndex',data ).then(res => {
-           
-            pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'POLL_DATA', value: selectedAns, index: questionIndex,npartCount:eventState.pseudo, score: score }).then(() => {
+        axios.put('updateIndex', data).then(res => {
+
+            pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'POLL_DATA', value: selectedAns, index: questionIndex, npartCount: eventState.pseudo, score: score }).then(() => {
                 setDisabledField(true)
-    
+
             })
         }).catch(err => {
             console.log(err.response)
         })
 
-      
+
 
     }
 
@@ -177,14 +178,14 @@ const JoinPoll = ({code,setEventStatus,eventId,userIp }) => {
 
             setQuestion(sorted)
             setOption(res.data.options)
-            if(res.data.poll[0].questionIndex != null){
-            questionIndex = res.data.poll[0].questionIndex
+            if (res.data.poll[0].questionIndex != null) {
+                questionIndex = res.data.poll[0].questionIndex
             }
             if (x) {
                 axios.get(`/audience/${userIp}/${eventId}`).then(res2 => {
-                    if(res2.data[0].questionIndex ===2){
+                    if (res2.data[0].questionIndex === 2) {
                         setDisabledField(true)
-                    }else if(res2.data[0].questionIndex ===1 || res2.data[0].questionIndex ===0 ) {
+                    } else if (res2.data[0].questionIndex === 1 || res2.data[0].questionIndex === 0) {
                         setDisabledField(false)
                     }
 
@@ -197,12 +198,12 @@ const JoinPoll = ({code,setEventStatus,eventId,userIp }) => {
                 setFetchData(false)
                 setLoaded(true)
                 setDefChart(res.data.poll[0].layout)
-                percent =res.data.poll[0].resultInPercent
+                percent = res.data.poll[0].resultInPercent
                 if (res.data.poll[0].layout === 'pie-chart' || res.data.poll[0].layout === 'donut') {
                     setDataSet([1, 1, 1, 1, 1, 1])
                 }
-            }else {
-                pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: ''})
+            } else {
+                pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: '' })
 
             }
 
@@ -292,45 +293,55 @@ const JoinPoll = ({code,setEventStatus,eventId,userIp }) => {
         }
 
     }
-  
+
 
     return (
-        <div className='join-poll' >
+        <div className='join-poll  p-d-flex p-jc-center ' >
             {loaded ?
-                <div>
+                <div className='join-poll-body p-shadow-14'>
 
-                    {displayGraph ? <div>
-                        <div className='corr-answ-div'> Correct Answer: <span className='ans-val'>{validAnswer().optionText }</span></div>
-                        <div className='graph-div'>
-                            {renderChart()}
-                        </div>
-                    </div> :
-                        <div className='container join-poll-body'>
-                            <div className='text-question-div'>
-                               
-                                <span className='text-question-span'>{question[questionIndex].question || ''}</span>
+                    {displayGraph
+                        ?
+                        <div>
+                            <div className='corr-answ-div2'> Correct Answer: <span className='ans-val'>{validAnswer().optionText}</span></div>
+                            <div className=' graph-div2'>
+                                {renderChart()}
                             </div>
-                            {question[questionIndex].image != "" && <div className='image-div'>
-                                <img src={question[questionIndex].image} alt='question picture' className='quest-img' />
-                            </div>}
-                            <div>
-                                <div className='quest-option-div'>
-                                    {
-                                        option.filter(elt => elt.questionId == question[questionIndex].id).map((elt, index) => (
-                                            <div className="form-check" key={index}>
-                                                <label className="form-check-label op-label opt-lab">
-                                                    <input type="radio" className="form-check-input opt-val" id="poll" value={elt.optionText} checked={selectedAns == elt.optionText} onChange={(event) => handleOptionChange(event)} disabled={disabledField} /> {elt.optionText}
-                                                    <i className="input-helper"></i>
-                                                </label>
-                                            </div>
+                        </div> :
+                        <div className='qtn-div'>
+                            <div className='qtn-sub-div'>
+                                <div className='text-question-div'>
 
-                                        ))
-                                    }
-
+                                    <span className='text-question-span'>{question[questionIndex].question || ''}</span>
                                 </div>
 
-                                <div className='snd-answer'> <Button onClick={() => sentVote()} className='snd-answ-btn' disabled={disabledField} >Answer</Button></div>
+                                <hr />
+                                {<div className='witing-quest'> waiting for next question</div>}
+                                <div className='p-d-flex p-jc-center'>
+
+                                    <div>
+                                        <div className='p-d-flex p-jc-center'>
+                                            {question[questionIndex].image != "" && <img src={question[questionIndex].image} alt='question picture' className='quest-img' />
+                                            }                                        </div>
+                                        <div className='quest-option-div '>
+                                            {
+                                                option.filter(elt => elt.questionId == question[questionIndex].id).map((elt, index) => (
+                                                    <div className="form-check opt-sub-div" key={index}>
+                                                        <div className="p-field-radiobutton">
+                                                            <RadioButton value={elt.optionText} name="city" onChange={(event) => handleOptionChange(event)} disabled={disabledField} checked={selectedAns == elt.optionText} />
+                                                            <label className='opt-label' htmlFor="city1">{elt.optionText} </label>
+                                                        </div>
+                                                    </div>
+
+                                                ))
+                                            }
+
+                                        </div>
+
+                                    </div>
+                                </div>
                             </div>
+                            <div className='p-d-flex p-jc-center' style={{ marginTop: '5vh' }}> <Button onClick={() => sentVote()} className='snd-answ-btn' disabled={disabledField} >Answer</Button></div>
 
                         </div>}
                 </div>
