@@ -51,7 +51,7 @@ module.exports = () => {
 
   const addUser = async function (userObject) {
     const user = await User.create(userObject)
-    return user.dataValues.userId
+    return user
   }
 
 

@@ -1,10 +1,11 @@
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { TabView, TabPanel } from 'primereact/tabview';
 import { QRCode } from 'react-qr-svg'
 import { useSelector, useDispatch } from 'react-redux'
 import { ProgressSpinner } from "primereact/progressspinner";
+import { Toast } from 'primereact/toast';
 
 import CreateQuestion from 'components/CreateQuestions'
 import { Button } from 'react-bootstrap'
@@ -21,6 +22,7 @@ let chartDataList = []
 let ranks = []
 let votesNumb = []
 let questionStats = []
+let optionsResults = []
 
 const db = firebase.firestore();
 let questionIndex = 0
@@ -41,6 +43,8 @@ const Poll = ({ code }) => {
     const [pieChartData, setPieChartData] = useState([1])
     const [numbVotes, setNumbVotes] = useState(0)
     const [sendQuestion, setSendQuestion] = useState()
+    const toast = useRef(null);
+
     let percent = null
 
     const dispatch = useDispatch()
@@ -77,9 +81,9 @@ const Poll = ({ code }) => {
                     }
 
                     else if (doc.data().message === 'POLL_DATA') {
-                        if (doc.data().score !== null && doc.data().score !== null) {
-                            ranks.push(doc.data().score)
-                        }
+
+                        ranks.push(doc.data().score)
+
 
                         chartDataList.push(doc.data().value)
                         votesNumb.push(doc.data().partCount)
@@ -108,12 +112,16 @@ const Poll = ({ code }) => {
                         setchartLabels(tempLabels)
                         if (percent) {
                             setDataSet(resultPercent)
+                            optionsResults = tempArr
                             setPieChartData(pieResultPercent)
 
                         } else {
+                            optionsResults = tempArr
+
                             setDataSet(tempArr)
                             setPieChartData(tempPieChart)
                         }
+
                         setNumbVotes(prev => prev + 1)
 
                     }
@@ -260,7 +268,7 @@ const Poll = ({ code }) => {
                 }
             }
         }
-    
+
 
 
 
@@ -318,61 +326,85 @@ const Poll = ({ code }) => {
 
     }
 
-    const handleCloseEvent = () => {
-        let optionsResults = dataSet
+    const findIndex = (arr, str) => {
+        if (arr.length === 0) {
+            return -1
+        }
+        let exist = false
+        for (let i in arr) {
+            if (arr[i].pseudo === str) {
+                exist = i
+            }
+        }
+        if (exist) {
+            return exist
+        } else {
+            return -1
+        }
+    }
 
+    const handleCloseEvent = () => {
+        console.log('optionres', optionsResults)
         optionsResults.forEach(elt => {
             questionStats.push({ optionText: elt.x, vote: elt.y, QuestionQuestionId: question[questionIndex].id })
         })
+        console.log('questionStats', questionStats)
+        let frequency = [];
 
-        let frequency = ranks.reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map());
-        frequency = [...frequency.entries()]
-        let usersRanking = []
-        frequency.forEach(elt => {
-            usersRanking.push({
-                pseudo: elt[0], points: elt[1], PollPollId: poll[0].id
+        try {
+            ranks.forEach(elt => {
+
+                if (findIndex(frequency, elt.pseudo) === -1) {
+                    frequency.push({ pseudo: elt.pseudo, points: elt.score, PollPollId: poll[0].id })
+                } else {
+
+                    frequency[findIndex(frequency, elt.pseudo)].points += elt.score
+                }
             })
-        })
+        } catch (error) {
+            console.log(error)
+        }
 
-        if (usersRanking.length === 0) {
-            console.log('user ranking cannot be null')
+
+        if (questionStats.length === 0) {
+            toast.current.show({ severity: 'error', summary: 'Error', detail: 'Cannot end event without participation', life: 5000 });
             return
         }
-        axios.post('/ranking', usersRanking).then(res => {
-            if (questionStats.length === 0) {
-                console.log('questions cannot be empty', questionStats)
-                return
+        axios.post('/surveyResults', questionStats).then(res => {
+            const data = {
+                id: eventState.eventId,
+                status: 'Ended'
             }
-            axios.post('/surveyResults', questionStats).then(res => {
-                const data = {
-                    id: eventState.eventId,
-                    status: 'Ended'
-                }
-
-                axios.put('/updateStatus', data).then(res => {
-                    pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'END_EVENT' })
-                    eventState.questionList = []
-                    eventState.optionList = []
-                    eventState.questionCount = 0
-                    eventState.tempQuestionArr = []
-                    dispatch({
-                        type: "NEW_EVENT",
-                        payload: {
-                            event: eventState,
-
-                        },
-                    });
-                    questionIndex = 0
-                    history.push('/result')
+            if (frequency.length !== 0) {
+                axios.post('/ranking', frequency).then(res => {
+                    console.log(res)
                 }).catch(err => {
-                    console.log(err)
+                    console.log(err.response)
                 })
-            }).catch(err => {
-                console.log(err.response)
+            }
 
+
+            axios.put('/updateStatus', data).then(res => {
+                pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'END_EVENT' })
+                eventState.questionList = []
+                eventState.optionList = []
+                eventState.questionCount = 0
+                eventState.tempQuestionArr = []
+                dispatch({
+                    type: "NEW_EVENT",
+                    payload: {
+                        event: eventState,
+
+                    },
+                });
+                questionIndex = 0
+                history.push('/result')
+            }).catch(err => {
+                console.log(err)
             })
         }).catch(err => {
             console.log(err.response)
+
         })
 
     }
@@ -380,6 +412,7 @@ const Poll = ({ code }) => {
 
     return (
         <div className='poll-main'>
+            <Toast ref={toast} style={{ marginTop: '5vh' }} />
             {loaded ?
                 <div className=''>
                     <div className='row poll-container'>

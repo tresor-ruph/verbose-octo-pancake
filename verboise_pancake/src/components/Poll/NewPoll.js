@@ -32,7 +32,7 @@ const NewPoll = ({ handleStartEvent }) => {
             elt.style.backgroundColor = 'white'
         })
         let selectedCard = document.getElementsByClassName(`card-${x}`)
-        Array.from(selectedCard)[0].style.backgroundColor = 'rgba(255,0,0,0.2)'
+        Array.from(selectedCard)[0].style.backgroundColor = 'rgba(0,255,0,0.2)'
         setLayout(x)
         setLayoutErr(false)
 
@@ -98,6 +98,7 @@ const NewPoll = ({ handleStartEvent }) => {
                 }
             }
         }
+        console.log('questions')
 
         const data = {
             layout: layout,
@@ -107,19 +108,19 @@ const NewPoll = ({ handleStartEvent }) => {
             eventId: eventState.eventId
 
         }
+        console.log(questions)
+
         axios.post('/createPoll', data).then(res => {
             questions.forEach((elt, idx, array) => {
+                let pic = ''
                 let data1 = {
                     order: elt.id,
                     question: elt.question,
-                    image: elt.picture.length < 3 ? '' : questions[0].picture,
+                    image: elt.picture,
                     answer: elt.answer,
                     pollId: res.data.pollId
                 }
-
                 axios.post('/addQuestions', data1).then(res => {
-
-                    // setTimeout('', 200)
                     let optionData = []
                     elt.option.forEach(elt2 => {
                         optionData.push({
@@ -128,11 +129,12 @@ const NewPoll = ({ handleStartEvent }) => {
                             QuestionQuestionId: res.data.response.questionId
                         })
                     })
+                    if(optionData.length > 6){
+                        console.log('an error occured')
+                        return
+                    }
 
-                    axios.post('/addOption', optionData).then(res => {
-                        console.log('bit')
-                        console.log(idx)
-                        console.log(array.length - 1)
+                    axios.post('/addOption', optionData).then(res2 => {
                         if (idx === array.length - 1) {
                             const data = {
                                 id: eventState.eventId,
@@ -158,6 +160,7 @@ const NewPoll = ({ handleStartEvent }) => {
                         }
                     }).catch(err => {
                         console.log(err.response)
+                        console.log(err)
 
                     })
 
@@ -241,9 +244,8 @@ const NewPoll = ({ handleStartEvent }) => {
 
             </div><br /><br />
             <div className='p-d-flex p-jc-center new-poll-bottons'>
-                <Button className="primary p-mr-6 p-d-inline p-button-sm go-back" onClick={() => goBack()}>Go back</Button>
-
-                <Button className="primary p-d-inline p-button-sm"  onClick={() => startEvent()}>Start Event</Button>
+            <Button label="Back" className="p-button-raised p-button-secondary p-button-sm" icon="pi pi-arrow-left"  onClick={() => goBack()} iconPos="left" style ={{marginRight: '2vw'}}/>
+              <Button  className="primary p-button-raised p-button-sm"  onClick={() => startEvent()}>Start Event</Button>
             </div>
         </div>
     )

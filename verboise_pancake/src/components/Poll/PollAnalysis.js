@@ -44,9 +44,11 @@ const PollAnalysis = () => {
             let test = _.groupBy(results, elt => elt.questionText);
             setQuestKey(Object.keys(test))
             setResults(test)
+            console.log('test', test)
             axios.get(`/ranks/${res.data.poll[0].id}`).then(res => {
                 console.log('ranking', res.data)
-                let sortedData = res.data.sort((a, b) => a.points - b.points)
+                let sortedData = res.data.sort((a, b) => a.points - b.points).reverse()
+                console.log('sorted', sortedData)
                 setRanks(sortedData)
                 setLoaded(true)
 
@@ -95,6 +97,7 @@ const PollAnalysis = () => {
                         <div className='p-shadow-4 col-5 ranking'>
                             <div className='res-txt'><span> Ranking</span></div>
                             <hr />
+                          {eventState.eventType === 'polls' ?<div style={{marginTop: '20vh', fontSize:'1.5rem', fontWeight: '200' }} className='p-d-flex p-jc-center no-rank' > No Ranking for this event</div> :  <div>
                             {ranks.map((elt, idx) => (
                                 <div className='p-d-flex p-jc-center row  rank-div' key={idx}>
                                     <div className='col-1'>{idx + 1}</div>
@@ -104,6 +107,7 @@ const PollAnalysis = () => {
 
                                 </div>
                             ))}
+                            </div>}
                         </div>
 
                     </div><div className='p-d-flex p-jc-center' style={{ marginTop: '2vh' }}>

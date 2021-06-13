@@ -84,7 +84,7 @@ module.exports = () => {
       return
     }
 
-    res.status(200).send(JSON.stringify({ token: response }))
+    res.status(200).send(JSON.stringify( response ))
 
   }
 
@@ -184,7 +184,7 @@ module.exports = () => {
       return
 
     }
-    res.status(200).send(JSON.stringify({message: 'valid'}))
+    res.status(200).send(JSON.stringify({message: 'valid', id: response}))
 
   }
 

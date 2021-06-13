@@ -31,6 +31,7 @@ const handleSettings = () => {
 }
 const handleRedirectHome = () => {
   history.push('/Home')
+  
 }
 
   const handleLogOut = () => {

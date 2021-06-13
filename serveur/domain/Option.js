@@ -2,9 +2,17 @@ const Joi = require('joi')
 
 
 module.exports = (order, optionText, questionId) => {
+  const optionTextValid = (value, helpers) => {
+    if (value.length > 0) {
+      return value
+    } else {
+      throw new Error('invalid event type')
+    }
+  }
+  
   const schema = Joi.object({
     order: Joi.number(),
-    optionText: Joi.string().required(),
+    optionText: Joi.custom(optionTextValid,'custom validation'),
     questionId: Joi.string().min(10).required(),
 
 

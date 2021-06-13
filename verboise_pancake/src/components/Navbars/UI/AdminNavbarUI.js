@@ -38,9 +38,7 @@ const AdminNavbarUI = (props) => {
             </Dropdown>
           </li>
         </ul>
-        <button className="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" onClick={toggleOffcanvas}>
-          <span className="mdi mdi-menu"></span>
-        </button>
+     
       </div>
     </nav>
     </div>

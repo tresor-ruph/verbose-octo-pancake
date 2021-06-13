@@ -22,8 +22,8 @@ const NewEvents = ({ hide }) => {
 
     const footer = (
         <div style={{marginRight:'7vw'}}>
-            <Button label="cancel" icon="pi pi-times" className='p-button-danger p-button-sm cancel-evt' onClick={() => hide(false)} />
-            <Button label="create" icon="pi pi-check" className='p-button-sm save-evt' onClick={() => handleSubmit()} />
+            <Button label="cancel"  className='p-button-danger p-button-sm cancel-evt' onClick={() => hide(false)} />
+            <Button label="create" className='p-button-sm save-evt' onClick={() => handleSubmit()} />
         </div>
     );
 
@@ -38,7 +38,7 @@ const NewEvents = ({ hide }) => {
             elt.style.backgroundColor = 'white'
         })
         let selectedCard = document.getElementsByClassName(`card-${x}`)
-        Array.from(selectedCard)[0].style.backgroundColor = 'rgba(255,0,0,0.2)'
+        Array.from(selectedCard)[0].style.backgroundColor = 'rgba(0,255,0,0.2)'
         setEventType(x)
         setEventTypeErr(false)
 
@@ -91,7 +91,7 @@ const NewEvents = ({ hide }) => {
     return (
         <div >
             
-            <Dialog header="Create Event" showHeader={false} footer={footer} visible={true} style={{ width: '50vw' }} modal  closable={false}  onHide={() => hide(false)}>
+            <Dialog header="Create Event" showHeader={false} footer={footer} visible={true} style={{ width: '45vw' }} modal  closable={false}  onHide={() => hide(false)}>
             <Toast ref={toast} />
                 <div>
                     <div className='new-event-body '>

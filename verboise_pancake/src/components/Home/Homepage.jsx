@@ -40,17 +40,18 @@ const EventList = () => {
         } else {
           setWelcome(false);
         }
-
-        res.data.forEach((elt) => [
+        res.data.forEach(elt=> {
+         let dataFormat = elt.createdAt.split('T')[0]
           arr.push({
             eventId: elt.eventId,
             title: elt.title,
             eventType: elt.eventType,
             code: elt.code,
             status: elt.status,
-            createdAt: moment(res.data[0].createdAt, "YYYYMMDD").fromNow(),
-          }),
-        ]);
+            createdAt:dataFormat
+          })
+
+      });
         setEventData(arr);
         setLoaded(true);
       })
@@ -188,13 +189,13 @@ const EventList = () => {
               )}{" "}
               {showModal && <NewEvent hide={modalOnHide} show={modalOnShow} />}
               <div className="btn-add">
-                <Button className='p-shadow-4' onClick={() => showAddEventModal()}>New Event</Button>
+                <Button className='p-shadow-4' style ={{backgroundColor: '#00C0F8', fontWeight:"500"}} onClick={() => showAddEventModal()}>New Event</Button>
               </div>
               <hr />
               <div className="card event-list">
                 <DataTable
                   value={eventData}
-                  className="p-datatable-striped datatable-responsive-demo p-datatable-md p-shadow-4"
+                  className="p-datatable-striped datatable-responsive-demo p-datatable-sm p-shadow-4"
                   paginator
                   paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                   currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"

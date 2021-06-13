@@ -22,6 +22,10 @@
   color: #888;
   margin-bottom: 2vh;
 }
+.pie-chart-custom {
+  width: 40vw;
+  margin-left: 20vw;
+}
 .quest-option-div {
   margin-left: 2vw;
   margin-top: 2vh;
@@ -41,6 +45,9 @@
 .op-label-2 {
   color: blue;
   margin-left: 5vw;
+}
+.inpt-join {
+  width: 20vw
 }
 .opt-val {
   margin-left: 5vw;
@@ -79,7 +86,28 @@
     .quest-img {
         width: 200px;
       }
-      .join-poll-body {
+      .opt-sub-div {
+        margin-bottom: 1vh;
+        background-color: rgba(0, 0, 0, 0.03);
+        height: 5vh;
+        width: 30vw;
+        border-radius: 20px;
+        padding-left: 2vw;
+        padding-top: 1vh;
+        padding-bottom: 2vh;
+        font-size: 0.9rem;
+        font-weight: 200;
+      }
+      
+  }
+  
+
+@media (min-width: 1500.98px) {
+  
+}
+
+@media (max-width: 700.98px) {
+    .join-poll-body {
         height: 82vh;
         width: 90vw;
         margin-top: 10vh;
@@ -100,13 +128,8 @@
         font-size: 0.9rem;
         font-weight: 200;
       }
-      
-  }
-  
+      .inpt-join {
+        width: 70vw
+      }
 
-@media (min-width: 1500.98px) {
-
-}
-
-@media (max-width: 700.98px) {
 }

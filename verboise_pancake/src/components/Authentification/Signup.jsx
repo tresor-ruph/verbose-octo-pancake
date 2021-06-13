@@ -1,21 +1,19 @@
 import React, { useState, useRef } from "react";
 import { useDispatch } from "react-redux";
-import axios from "axios";
-
-import loginImage from "assets/images/background/login.jpg";
 import SignupUI from "components/authentification/UI/SignupUI";
 import TermsAndCondition from "components/modal/TermsCondition";
-
 import { Button } from "react-bootstrap";
+import loginImage from "assets/images/auth/login.svg";
+import { returnHeader } from "helper/customMixin";
+import "customcss/signup.css";
+import axios from "axios";
+import "../../helper/axiosConfig";
 import {
   EmailVerification,
   PasswordVerification,
   UsernameVerification,
 } from "helper/detailsVerification";
-import { returnHeader } from "helper/customMixin";
-import { setStyle, clearStyle } from "helper/dynamicCss";
-import "customcss/signup.css";
-import "../../helper/axiosConfig";
+
 
 function Signup(props) {
   const [email, setEmail] = useState("");
@@ -30,22 +28,7 @@ function Signup(props) {
   const [modalDisplay, setModalDisplay] = useState("");
   const [check, setCheck] = useState("off");
   const [checkBoxErr, setCheckBoxErr] = useState(false);
-  const [notif, setNotif] = useState(false);
-  const [notifMess, setnotifMess] = useState("");
-  const [variant, setVariant] = useState("");
-  const [err, setErr] = useState(null);
-  const emailRef = useRef(null);
-  const emailLabel = useRef(null);
-  const emailInp = useRef(null);
-  const userRef = useRef(null);
-  const userLabel = useRef(null);
-  const userInp = useRef(null);
-  const passwd = useRef(null);
-  const passwd2 = useRef(null);
-  const pwd = useRef(null);
-  const labelPasswd = useRef(null);
-  const pwd2 = useRef(null);
-  const labelPasswd2 = useRef(null);
+  const toast = useRef(null);
   const dispatch = useDispatch();
 
   const handleEmail = (event) => {
@@ -87,71 +70,45 @@ function Signup(props) {
     );
   };
   const handleEmailFocus = () => {
-    emailRef.current.classList.add("field--not-empty");
-    clearStyle(emailInp, emailRef, emailLabel);
     setEmailErr(false);
   };
 
   const handleEmailBlur = () => {
-    if (email.length === 0)
-      emailRef.current.classList.remove("field--not-empty");
     if (!EmailVerification(email)) {
-      setStyle(emailInp, emailRef, emailLabel);
       setEmailErr(true);
     } else {
-      clearStyle(userInp, userRef, userLabel);
       setEmailErr(false);
     }
   };
 
   const handleUserFocus = () => {
-    userRef.current.classList.add("field--not-empty");
-    clearStyle(userInp, userRef, userLabel);
     setUserErr(false);
   };
 
   const handleUserBlur = () => {
-    if (username.length === 0)
-      userRef.current.classList.remove("field--not-empty");
-
     if (!UsernameVerification(username)) {
-      setStyle(userInp, userRef, userLabel);
       setUserErr(true);
     }
   };
 
   const handlePasswordFocus = () => {
-    passwd.current.classList.add("field--not-empty");
-    clearStyle(pwd, passwd, labelPasswd);
     setDisabled(false);
   };
 
   const handlePasswordBlur = () => {
-    if (password.length === 0) {
-      passwd.current.classList.remove("field--not-empty");
-    }
-
     if (!PasswordVerification(password)) {
-      setStyle(pwd, passwd, labelPasswd);
       setDisabled(true);
     } else {
-      clearStyle(pwd, passwd, labelPasswd);
       setDisabled(false);
     }
   };
 
   const handlePassword2Focus = () => {
-    passwd2.current.classList.add("field--not-empty");
-    clearStyle(pwd2, passwd2, labelPasswd2);
     setDisabled2(false);
   };
 
   const handlePassword2Blur = () => {
-    if (password2.length === 0)
-      passwd2.current.classList.remove("field--not-empty");
-
     if (password !== password2) {
-      setStyle(pwd2, passwd2, labelPasswd2);
       setDisabled2(true);
     }
   };
@@ -163,22 +120,18 @@ function Signup(props) {
       err = true;
     }
     if (!PasswordVerification(password)) {
-      setStyle(pwd, passwd, labelPasswd);
       setDisabled(true);
       err = true;
     }
     if (password.length > 1 && password != password2) {
-      setStyle(pwd2, passwd2, labelPasswd2);
       setDisabled2(true);
       err = true;
     }
     if (!EmailVerification(email)) {
-      setStyle(emailInp, emailRef, emailLabel);
       setEmailErr(true);
       err = true;
     }
     if (!UsernameVerification(username)) {
-      setStyle(userInp, userRef, userLabel);
       setUserErr(true);
       err = true;
     }
@@ -191,7 +144,6 @@ function Signup(props) {
     axios
       .post("/Signin", data)
       .then((res) => {
-        setErr(null);
         dispatch({
           type: "LOG_IN",
           payload: {
@@ -208,9 +160,22 @@ function Signup(props) {
         props.history.push(`/confEmail/${res.data.id}`, "");
       })
       .catch((err) => {
-        setnotifMess(err?.response?.data?.message || "An error occured");
-        setVariant("danger");
-        setNotif(true);
+        console.log(err?.response)
+        if (err?.response?.status === 404) {
+          toast.current.show({
+            severity: "error",
+            summary: "Error",
+            detail: "User already exist",
+            life: 5000,
+          });
+        } else {
+          toast.current.show({
+            severity: "error",
+            summary: "Error",
+            detail: "an error occured",
+            life: 5000,
+          });
+        }
       });
   };
 
@@ -226,40 +191,26 @@ function Signup(props) {
   return (
     <SignupUI
       returnHeader={returnHeader()}
+      toast ={toast}
       returnTermsAndCondition={returnTermsAndCondition()}
       showModal={showModal}
       setShowModal={setShowModal}
       modalDisplay={modalDisplay}
-      notif={notif}
-      setNotif={setNotif}
-      notifMess={notifMess}
       loginImage={loginImage}
-      emailRef={emailRef}
-      emailLabel={emailLabel}
       email={email}
-      emailInp={emailInp}
       handleEmailFocus={handleEmailFocus}
       handleEmailBlur={handleEmailBlur}
       handleEmail={handleEmail}
       emailErr={emailErr}
-      userRef={userRef}
-      userLabel={userLabel}
       username={username}
-      userInp={userInp}
       handleUserFocus={handleUserFocus}
       handleUserBlur={handleUserBlur}
       handleUsername={handleUsername}
-      passwd={passwd}
-      labelPasswd={labelPasswd}
-      pwd={pwd}
       password={password}
       handlePasswordFocus={handlePasswordFocus}
       handlePasswordBlur={handlePasswordBlur}
       handlePassword={handlePassword}
-      passwd2={passwd2}
-      labelPasswd2={labelPasswd2}
       password2={password2}
-      pwd2={pwd2}
       handlePassword2Focus={handlePassword2Focus}
       handlePassword2Blur={handlePassword2Blur}
       handlePassword2={handlePassword2}
@@ -269,7 +220,6 @@ function Signup(props) {
       handleTerms={handleTerms}
       handlePrivacy={handlePrivacy}
       handleSubmit={handleSubmit}
-      variant={variant}
       userErr={userErr}
       disabled={disabled}
       checkBoxErr={checkBoxErr}

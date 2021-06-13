@@ -3,8 +3,9 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import firebase from "firebase";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
-import loginImage from "assets/images/background/login.jpg";
+import loginImage from "assets/images/auth/login.svg"
 import {returnHeader} from "helper/customMixin"
+
  import "customcss/login.css";
 
 import LoginUI from "components/authentification/UI/LoginUI";
@@ -36,6 +37,7 @@ function Login(props) {
   const [notif, setNotif] = useState(false);
   const [notifMess, setnotifMess] = useState("");
   const [variant, setVariant] = useState("");
+  const toast = useRef(null);
 
   const user = useRef(null);
   const passwd = useRef(null);
@@ -76,7 +78,11 @@ function Login(props) {
       axios
         .get("/Login/" + JSON.stringify(data))
         .then((res) => {
-          const { id, token } = res.data.token;
+          console.log(res.data)
+          const id = res.data.user[0].userId
+          const token = res.data.token
+          const picture = res.data.user[0].imageUrl
+          const accountStatus = res.data.user[0].accountStatus
 
           dispatch({
             type: "LOG_IN",
@@ -86,10 +92,12 @@ function Login(props) {
               user: {
                 username: data.username ? data.username : username,
                 isLogged: res.status == 200 ? true : false,
-                picture: res.data.imageUrl,
+                picture: picture,
+                status: accountStatus
               },
             },
           });
+
           if (res.status === 203) {
             props.history.push(`/confEmail/${id}`,'login');
           } else if (res.status === 200) {
@@ -97,9 +105,14 @@ function Login(props) {
           }
         })
         .catch((err) => {
-          setnotifMess(err?.response?.data?.message || 'An error occured');
-          setVariant("danger");
-          setNotif(true);
+          console.log(err)
+         
+          if(err?.response?.status === 400){
+          toast.current.show({severity:'error', summary: 'Error', detail:'Invalid credentials', life: 5000});
+          }else {
+            toast.current.show({severity:'error', summary: 'Error', detail:'an error occured', life: 5000});
+          }
+        
         });
     }
   };
@@ -123,6 +136,7 @@ function Login(props) {
       handlePasswordBlur={handlePasswordBlur}
       handlePassword={handlePassword}
       handleSubmit={handleSubmit}
+      toast={toast}
      
     >
       <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()} />

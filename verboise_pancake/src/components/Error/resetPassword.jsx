@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useHistory } from "react-router";
 import axios from "axios";
 import "helper/axiosConfig";
-import { EmailVerification } from "helper/detailsVerification";
+import { EmailVerification ,  PasswordVerification,} from "helper/detailsVerification";
 import ResetPasswordUI from "components/Error/UI/ResetPasswordUI";
 import { useEffect } from "react";
 import { returnHeader } from "helper/customMixin";
-
 import "customcss/resetPassword.css";
 
 export default function Reset(props) {
@@ -17,6 +16,11 @@ export default function Reset(props) {
   const [notifMess, setnotifMess] = useState("");
   const [variant, setVariant] = useState("");
   const [reset, setReset] = useState(true);
+  const [passwordErr, setPasswordErr] = useState(false)
+  const [passwordErr1, setPasswordErr1] = useState(false)
+  const [id, setId] = useState(null)
+  const toast = useRef(null);
+
   let history = useHistory();
   let link = props.location.pathname;
 
@@ -27,11 +31,15 @@ export default function Reset(props) {
       setReset(false);
     } else {
       let arr = link.split("/");
+      console.log(arr)
       axios
         .get(`/verifLink/${arr[2]}`)
         .then((res) => {
           if (res.data.message == "valid") {
-            history.push("/resetpassword/validation");
+            console.log(res.data)
+            setId(res.data.id)
+               setReset(false);
+
           } else if (res.data.message == "invalid") {
             history.push("/error");
           }
@@ -51,6 +59,10 @@ export default function Reset(props) {
   const handlePassword2 = (event) => {
     setPassword2(event.target.value);
   };
+  const handleFocus = ()=> {
+    setPasswordErr(false)
+    setPasswordErr1(false)
+  }
 
   const handleReset = () => {
     if (!EmailVerification(email)) {
@@ -60,45 +72,40 @@ export default function Reset(props) {
         .get(`/resetpassword/${email}`)
         .then((res) => {
           if (res.status == 200) {
-            setnotifMess(` An Email has been sent to ${email}. Follow the instructions to reset
-            your password`);
-            setNotif(true);
-            setVariant("success");
+            toast.current.show({severity:'success', summary: 'success', detail:` An Email has been sent to ${email}. Follow the instructions to reset
+            your password`, life: 10000});
           }
         })
         .catch((err) => {
-          setnotifMess(err?.response?.data?.message || "An error occured");
-          setVariant("danger");
-          setNotif(true);
+          toast.current.show({severity:'error', summary: 'Error', detail:'IAn error occured`', life: 5000});    
         });
     }
   };
   const updatePassword = () => {
+    if (!PasswordVerification(password1)) {
+      setPasswordErr1(true)
+      return   
+    }
     if (password1 !== password2) {
-      setnotifMess(`Password are different`);
-      setVariant("danger");
-      setNotif(true);
+      setPasswordErr(true)
+      console.log("erro")
       return;
     } else {
       const data = {
         password: password1,
+        id:id
       };
 
       axios
         .put("/password", data)
         .then((res) => {
-          setnotifMess(` password updated`);
-          setVariant("success");
-          setNotif(true);
-
+          toast.current.show({severity:'success', summary: 'success', detail:'password updated', life: 5000});
           setTimeout(function () {
             history.push("/login");
           }, 1000);
         })
         .catch((err) => {
-          setnotifMess(`An error occured`);
-          setVariant("danger");
-          setNotif(true);
+          toast.current.show({severity:'error', summary: 'Error', detail:'An error occured`', life: 5000});
         });
     }
   };
@@ -108,6 +115,9 @@ export default function Reset(props) {
       MainHeader={returnHeader}
       notif={notif}
       variant={variant}
+      handleFocus={handleFocus}
+      passwordErr={passwordErr}
+      toast={toast}
       setNotif={setNotif}
       notifMess={notifMess}
       email={email}
@@ -119,6 +129,7 @@ export default function Reset(props) {
       handlePassword2={handlePassword2}
       updatePassword={updatePassword}
       reset={reset}
+      passwordErr1={passwordErr1}
     />
   );
 }

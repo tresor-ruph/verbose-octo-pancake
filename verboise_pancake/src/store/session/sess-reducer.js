@@ -9,6 +9,7 @@ const INITIAL_STATE = {
         email: "",
         isLogged: false,
         picture: "",
+        status:"",
     }
 }
 
@@ -35,7 +36,8 @@ const SessionReducer = (state = INITIAL_STATE, action) => {
                     username: "",
                     email: "",
                     isLogged: false,
-                    picture: ""
+                    picture: "",
+                    status:""
                 }
             }
 

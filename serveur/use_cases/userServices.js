@@ -64,8 +64,8 @@ module.exports = () => {
         values.accountStatus = 'social'
         values.userRole = 'client'
         const response = await UsersRepo.addUser(values)
-        const token = await tokenManager.encode(response)
-        return { token: token, id: response }
+        const token = await tokenManager.encode(response[0].dataValues.id)
+      
 
       }
     } else {
@@ -84,12 +84,13 @@ module.exports = () => {
       }
     }
     const token = await tokenManager.encode(response[0].dataValues.userId)
-    return { id: response[0].dataValues.userId, token }
+    return { user: response, token }
 
   }
 
 
   const update = async (request) => {
+  
 
     let token = tokenManager.decode(request)
 
@@ -115,14 +116,9 @@ module.exports = () => {
   }
 
   const updatePassword = async (request) => {
-
-    let id = tokenManager.decode(request)
-
-    if (id.error) {
-      return "error"
-    }
-
-    const getOneUser = await UsersRepo.getOneUser(id.data)
+  
+  
+    const getOneUser = await UsersRepo.getOneUser(request.body.id)
 
     if (getOneUser.length === 0) {
       return 0
@@ -135,7 +131,7 @@ module.exports = () => {
     }
 
     request.body.password = passWordManager.hashPassword(request.body.password)
-    const response = await UsersRepo.updatePassword(request.body.password, id.data)
+    const response = await UsersRepo.updatePassword(request.body.password,request.body.id)
     return response
 
 
@@ -169,7 +165,7 @@ module.exports = () => {
     if (response.length === 0) {
       return -1
     }
-    const token = await tokenManager.encode(response[0].dataValues.userId, Math.floor(Date.now() / 1000) + (30 * 60))
+    const token = await tokenManager.encode(response[0].dataValues.userId, Math.floor(Date.now() / 1000) + (2 * 60))
     let link = `http://localhost:3000/resetpassword/${token}`
     // let link = `https://verbose-pancake-4fb37.web.app/resetpassword/${token}`
     mail.send(request.params.email, link, "", true)
@@ -197,7 +193,7 @@ module.exports = () => {
     if (response.error) {
       return -1
     }
-    return req.params.id
+    return response.data
   }
 
   return ({ fetchAll, fetchOne, create, login, update, deleteUser, redirectPassword, confirm, updatePassword, sendLink, reset })

@@ -109,6 +109,8 @@ const CreateQuestions = ({ setSendQuestion }) => {
 
     }
     const handleQuestionImage = (x, y) => {
+        console.log('xxxxxx',x)
+        console.log('hehehhe',y)
         questionList[x].picture = y
         eventState.questionList = questionList
         dispatch({
@@ -208,7 +210,7 @@ const CreateQuestions = ({ setSendQuestion }) => {
         <div className='questions-div'>
         <Toast ref={toast} style={{marginTop:'5vh'}}/>
 
-            <Button className="p-button-raised p-button-success" onClick={() => addQuestions()}>{!questionCount > 0 ? 'Add Questions' : 'New Question'}</Button><br /><br />
+            <Button className="p-button-raised p-button-success" style={{ backgroundColor: "#00C0F8", fontWeight: '500' }} onClick={() => addQuestions()}>{!questionCount > 0 ? 'Add Questions' : 'New Question'}</Button><br /><br />
             <small id="username2-help" className="p-error" id='null-question' style={{ display: 'none' }}>Please add your question.</small>
 
             {questionCount > 0 && questionArr}

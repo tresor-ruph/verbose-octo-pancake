@@ -77,9 +77,10 @@ const Questions = (props) => {
         setShowQuestModal(false)
         if (x != undefined) {
             props.handleQuestionImage(props.questionCount, x)
+            setPicture(x)
+            setPictureRef(y)
         }
-        setPicture(x)
-        setPictureRef(y)
+       
     }
     const setReveal = () => {
         setShowQuestModal(true)

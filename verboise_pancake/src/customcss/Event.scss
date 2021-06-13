@@ -1,5 +1,5 @@
 .evt-list-container{
-    overflow-y: scroll;
+    overflow-y: auto;
     height: 100vh;
     background-color: white;
 }
@@ -37,14 +37,13 @@
 }
 
 .status-inactive {
-   
-    // background-color: rgba(0,0,255,0.4)
+    background-color:rgba(0,0,0,0.2);
 }
 .status-progress {
-    // background-color: rgba(0,255,0,0.4)
+    background-color: rgba(0,255,0,0.2)
 }
 .status-ended {
-    // background-color: rgba(255,0,0,0.4)
+    background-color: rgba(255,0,0,0.4)
 }
 .chip {
     width: 100px;

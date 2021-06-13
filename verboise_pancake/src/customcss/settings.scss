@@ -14,9 +14,16 @@
     margin-bottom: 1%;
 }
 .main-title {
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: gray;
+  font-weight: 400;
 }
+.usr-lbl {
+  font-size: 0.8rem;
+  color: gray;
+  margin-left: 5vw;
+}
+
 .content-title
 {
   font-size: 0.9rem;
@@ -35,7 +42,10 @@
     border-right: none;
     border-top: none;
 }
-
+.usr-name {
+  width: 15vw;
+  margin-left: 5vw;
+}
 .upd-usename {
   margin-top: 5vh
 }

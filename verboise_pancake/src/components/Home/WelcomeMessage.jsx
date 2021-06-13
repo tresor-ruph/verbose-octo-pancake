@@ -33,6 +33,7 @@ const WelcomeMessage = ({ userName, handleReload }) => {
                 size="lg"
                 className="create-Event-btn"
                 onClick={() => modalOnShow()}
+                
               >
                 <span style={{ fontWeight: "bold", fontSize: "1.1rem" }}>
                   Create your first Event

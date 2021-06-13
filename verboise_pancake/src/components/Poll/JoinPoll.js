@@ -28,6 +28,7 @@ const JoinPoll = ({ code, setEventStatus, eventId, userIp }) => {
     const [dataSet, setDataSet] = useState([])
     const [chartLabels, setchartLabels] = useState([1])
     const [pieChartData, setPieChartData] = useState([1])
+    const [optErr, setOptErr] = useState(false)
     const dispatch = useDispatch()
     const eventState = useSelector(state => state.EventReducer.event)
 
@@ -142,9 +143,15 @@ const JoinPoll = ({ code, setEventStatus, eventId, userIp }) => {
     }
 
     const sentVote = () => {
+        if (selectedAns === null || selectedAns === '') {
+            setOptErr(true)
+            return
+        }
         let score = null
         if (selectedAns === validAnswer().optionText) {
-            score = eventState.pseudo
+            score = { pseudo: eventState.pseudo, score: 1 }
+        } else {
+            score = { pseudo: eventState.pseudo, score: 0 }
         }
         if (selectedAns === '') {
             console.log('select an answer')
@@ -213,6 +220,7 @@ const JoinPoll = ({ code, setEventStatus, eventId, userIp }) => {
 
     }
     const handleOptionChange = (evt) => {
+        setOptErr(false)
         setSelectedAns(evt.target.value)
     }
 
@@ -282,10 +290,11 @@ const JoinPoll = ({ code, setEventStatus, eventId, userIp }) => {
     };
 
     const renderChart = () => {
+
         if (defChart === 'bar-chart') {
             return <div className='bar-chart-custom'> <Bar key={questionIndex} data={chartData} options={chartOptions} redraw={false} /></div>
         } else if (defChart === 'pie-chart') {
-            return <div className='pie-chart-custom'> <Pie key={questionIndex} data={chartData2} options={chartOptions} redraw={false} /></div>
+            return <div className='pie-chart-custom '> <Pie key={questionIndex} data={chartData2} options={chartOptions} redraw={false} /></div>
 
         } else if (defChart === 'donut') {
             return <div className='pie-chart-custom'><Doughnut key={questionIndex} data={chartData2} options={chartOptions} redraw={false} /></div>
@@ -311,14 +320,11 @@ const JoinPoll = ({ code, setEventStatus, eventId, userIp }) => {
                         <div className='qtn-div'>
                             <div className='qtn-sub-div'>
                                 <div className='text-question-div'>
-
                                     <span className='text-question-span'>{question[questionIndex].question || ''}</span>
                                 </div>
-
                                 <hr />
-                                {<div className='witing-quest'> waiting for next question</div>}
+                                {disabledField && <div className='witing-quest'> waiting for next question</div>}
                                 <div className='p-d-flex p-jc-center'>
-
                                     <div>
                                         <div className='p-d-flex p-jc-center'>
                                             {question[questionIndex].image != "" && <img src={question[questionIndex].image} alt='question picture' className='quest-img' />
@@ -339,7 +345,15 @@ const JoinPoll = ({ code, setEventStatus, eventId, userIp }) => {
                                         </div>
 
                                     </div>
+                                   
                                 </div>
+                                {optErr && <div className=' p-d-flex p-jc-center'><small
+                                        id="username2-help error-div "
+                            
+                                        className="p-error"
+                                    >
+                                        please select an option
+                                    </small></div>}
                             </div>
                             <div className='p-d-flex p-jc-center' style={{ marginTop: '5vh' }}> <Button onClick={() => sentVote()} className='snd-answ-btn' disabled={disabledField} >Answer</Button></div>
 

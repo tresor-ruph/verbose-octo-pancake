@@ -11,9 +11,9 @@ const MainHeader = (props) => {
       return (
         <Header>
           <a
-            // href="#"
-            style={{ color: "#42D0ED", fontSize: '1.1rem', textDecoration: "none" }}
+            style={{ color: "#42D0ED", fontSize: '1rem', fontWeight:'500',marginRight:'5vw', textDecoration: "none" }}
             onClick={() => history.push("/signup")}
+         
           >
             Create an account
           </a>
@@ -24,7 +24,7 @@ const MainHeader = (props) => {
         <Header>
           <a
             // href="#"
-            style={{ color: "#42D0ED", textDecoration: "none" }}
+            style={{ color: "#42D0ED",fontSize: '1rem', fontWeight:'500',marginRight:'5vw', textDecoration: "none" }}
             onClick={() => history.push("/login")}
           >
             Login
@@ -32,7 +32,9 @@ const MainHeader = (props) => {
         </Header>
       );
     } else {
-      return <Header></Header>;
+      return ( <Header>
+        
+      </Header>)
     }
   };
 

@@ -1,10 +1,11 @@
 
 
-import {  useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Modal, Button } from 'react-bootstrap'
 import { useDropzone } from 'react-dropzone'
 import { storage } from 'helper/firebaseConfig'
-import {useSelector} from 'react-redux'
+import { useSelector } from 'react-redux'
+import { Dialog } from 'primereact/dialog';
 
 const baseStyle = {
     flex: 1,
@@ -68,7 +69,7 @@ const img = {
 const UploadImage = ({ hide, eventId }) => {
     const [files, setFiles] = useState([]);
     const eventState = useSelector(state => state.EventReducer.event)
-    
+
     const {
         getRootProps,
         getInputProps,
@@ -81,10 +82,10 @@ const UploadImage = ({ hide, eventId }) => {
             setFiles(acceptedFiles.map(file => Object.assign(file, {
                 preview: URL.createObjectURL(file)
             })));
-            
+
         }
     });
- 
+
     const thumbs = files.map(file => (
         <div style={thumb} key={file.name}>
             <div style={thumbInner}>
@@ -97,7 +98,7 @@ const UploadImage = ({ hide, eventId }) => {
     ));
 
     useEffect(() => () => {
-    
+
         // Make sure to revoke the data uris to avoid memory leaks
         files.forEach(file => URL.revokeObjectURL(file.preview));
     }, [files])
@@ -114,59 +115,54 @@ const UploadImage = ({ hide, eventId }) => {
     ]);
 
     const submitImage = () => {
-        if(files ===[]){
+        if (files === []) {
+            console.log('files empty')
             return
         }
 
         const uploadTask = storage.ref(`${eventState.eventId}/${files[0].name}`).put(files[0]);
-        uploadTask.on('state_changed', (snapshot)=> {
+        uploadTask.on('state_changed', (snapshot) => {
 
         }, (error) => {
-
-        }, () =>{
+console.log(error)
+        }, () => {
             storage.ref(eventState.eventId).child(files[0].name).getDownloadURL().then(url => {
                 const imageRef = storage.ref(eventState.eventId).child(files[0].name)
+                console.log('image uploaded')
                 hide(url, imageRef)
-
+               
             })
         })
     }
 
+    const footer = (
+        <div>
+            <Button variant="danger" onClick={() => hide()}>
+                Cancel
+            </Button>
+            <Button variant="primary" onClick={() => submitImage()}>
+                Save
+            </Button>
+        </div>
+
+    )
+
     return (
         <div >
-            <Modal size="lg" aria-labelledby="contained-modal-title-vcenter" centered show={true} onHide={() => hide(false)} backdrop="static" scrollable={true} dialogClassName="modal-90w" contentClassName='mod-content'>
-                <Modal.Header>
-                    <div className='modal-event-title'>
-                        {/* <span className='new-event-title'>New Event</span> */}
+            <Dialog header="Create Event" showHeader={false} footer={footer} visible={true} style={{ width: '45vw' }} modal closable={false} onHide={() => hide(false)}>
+
+                <section className="container" style={{ marginTop: '10vh' }}>
+                    <div {...getRootProps({ style })}>
+                        <input {...getInputProps()} />
+                        <p>Drag 'n' drop some files here, or click to select files</p>
                     </div>
-                    <hr />
-                </Modal.Header>
-                <Modal.Body>
+                    <aside style={thumbsContainer}>
+                        {thumbs}
+                    </aside>
+                </section>
 
-                    <section className="container">
-                        <div {...getRootProps({ style })}>
-                            <input {...getInputProps()} />
-                            <p>Drag 'n' drop some files here, or click to select files</p>
-                        </div>
-                        <aside style={thumbsContainer}>
-                            {thumbs}
-                        </aside>
-                    </section>
+            </Dialog>
 
-                </Modal.Body>
-                <Modal.Footer>
-
-                    <Button variant="danger" onClick={() => hide()}>
-                        Cancel
-          </Button>
-                    <Button variant="primary" onClick={() => submitImage()}>
-                        Save
-          </Button>
-
-
-
-                </Modal.Footer>
-            </Modal>
         </div>
     )
 }

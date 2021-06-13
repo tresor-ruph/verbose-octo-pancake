@@ -25,6 +25,7 @@ const JoinEvent = () => {
     const [pseudo, setPseudo] = useState('')
     const [startCompet, setStartCompet] = useState(false)
     const [userIp, setUserIp] = useState('')
+    const [userNameErr, setUserNameErr] = useState(false)
     const dispatch = useDispatch()
     const eventState = useSelector(state => state.EventReducer.event)
 
@@ -34,7 +35,7 @@ const JoinEvent = () => {
 
     const handleValidatePseudo = () => {
         if (pseudo.length < 3) {
-            console.log('Invalid pseudo')
+            setUserNameErr(true)
             return
         }
         eventState.pseudo = pseudo
@@ -67,7 +68,9 @@ const JoinEvent = () => {
     }).then(res => {
         return res
     })
-
+    const handleFocus = () => {
+        setUserNameErr(false)
+    }
 
 
 
@@ -79,12 +82,15 @@ const JoinEvent = () => {
 
             },
         });
+        console.log(eventState)
         let test = await getClientIp()
         setUserIp(test)
         axios
             .get(`/getEvent/${path}`).then(res => {
+                console.log(res)
 
                 if (res.data.length > 0) {
+
                     setEventId(res.data[0].eventId)
                     setEventType(res.data[0].eventType)
                     setEventStatus(res.data[0].status)
@@ -140,21 +146,17 @@ const JoinEvent = () => {
                     }).catch(err => {
                         console.log(err.response)
                     })
-
-
-
+                } else {
+                    setLoaded(true)
                 }
-
             }).catch(err => {
                 console.log(err)
                 console.log(err.response)
             })
 
-
-
-
     }, [])
     const renderEvent = () => {
+
         if (eventStatus === 'In progress') {
 
             if (eventType === 'gallup') {
@@ -164,7 +166,7 @@ const JoinEvent = () => {
             } else if (eventType === 'ranking') {
                 return (<div>
                     {
-                        startCompet ? <JoinPoll setEventStatus={setEventStatus} code={path} uniqueId={pseudo} eventId={eventId} userIp={userIp} /> : <AddUsername pseudo={pseudo} handlePseudo={handlePseudo} handleValidatePseudo={handleValidatePseudo} />
+                        startCompet ? <JoinPoll setEventStatus={setEventStatus} code={path} uniqueId={pseudo} eventId={eventId} userIp={userIp} /> : <AddUsername pseudo={pseudo} userNameErr={userNameErr} handleFocus={handleFocus} handlePseudo={handlePseudo} handleValidatePseudo={handleValidatePseudo} />
 
                     }
 
@@ -172,9 +174,15 @@ const JoinEvent = () => {
             } else {
                 return (<NotFound />)
             }
-        } else {
+        } else if (eventStatus === '') {
+            return (<NotFound />)
+        }
+        else {
             return (<EventStatus status={eventStatus} />)
         }
+    }
+    const renderNothing = () => {
+
     }
 
     return (

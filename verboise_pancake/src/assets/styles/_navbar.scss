@@ -31,9 +31,7 @@
       color: $navbar-menu-color;
       margin-right: 0;
       &:not(.navbar-toggler-right) {
-        @media (max-width: 991px) {
-          display: none;
-        }
+     
       }
     }
     .search-form {

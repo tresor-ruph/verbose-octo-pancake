@@ -22,12 +22,13 @@
     color: gray;
 }
 .quest-text {
-    font-weight: 500;
+    font-weight: 200;
     margin-bottom: 2vh;
+    font-size: 1.1rem;
+    background-color: rgba(0,0,0,0.05);
 }
 .vote-txt {
     font-weight: 500;
-    color: rgba(255,0,0,0.5);
 }
 .rank-div {
     margin-top: 2vh;
@@ -35,4 +36,7 @@
 }
 .pts-div {
     font-weight: 500;
+}
+.no-rank {
+    margin-top: 20vh;
 }
