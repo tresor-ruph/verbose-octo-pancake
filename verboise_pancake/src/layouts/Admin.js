@@ -20,21 +20,21 @@ function Admin() {
   const { sessionId, userId, user } = useSelector(
     (state) => state.SessionReducer
   );
-  useEffect(() => {
-    console.log(userId)
-    axios.get(`/authStatus/${userId}`).then(res => {
+  // useEffect(() => {
+  //   console.log(userId)
+  //   axios.get(`/authStatus/${userId}`).then(res => {
 
-      console.log(res.data.message)
-      if(res.data.message === 'LOG_OUT'){
-        dispatch({
-          type: "LOG_OUT",
-        });
+  //     console.log(res.data.message)
+  //     if(res.data.message === 'LOG_OUT'){
+  //       dispatch({
+  //         type: "LOG_OUT",
+  //       });
     
-      }
-    }).catch(err => {
-      console.log(err.response)
-    })
-  }, [])
+  //     }
+  //   }).catch(err => {
+  //     console.log(err.response)
+  //   })
+  // }, [])
   const location = useLocation();
   const path = location.pathname.split('/')[1]
 

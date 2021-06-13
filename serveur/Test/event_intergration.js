@@ -13,6 +13,8 @@ describe('events api test', () => {
           function(error, response, body){
     
             var _body = {};
+            console.log('booooooooody')
+            console.log(body)
             try{
               _body = JSON.parse(body);
             }

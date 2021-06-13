@@ -64,6 +64,8 @@ module.exports = () => {
         values.accountStatus = 'social'
         values.userRole = 'client'
         const response = await UsersRepo.addUser(values)
+        console.log('response')
+        console.log(response)
         const token = await tokenManager.encode(response[0].dataValues.id)
       
 

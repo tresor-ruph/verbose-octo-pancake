@@ -3,7 +3,7 @@ const EventModel = require('../domain/Events')
 
 const validtitle = ['EventTest', 'polls']
 const failedtitle = ['ts', 'polls']
-const validEventType = ['EventTest', 'reactions']
+const validEventType = ['EventTest', 'gallup']
 const failedEventType = ['EventTest', 'wordCloud']
 
 
