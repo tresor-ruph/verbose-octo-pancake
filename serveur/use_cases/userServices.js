@@ -97,13 +97,11 @@ module.exports = () => {
     if (token.error) {
       return "access_D"
     }
-    console.log(request.body)
 
     if ((request.body.username.length < 3 && request.body.username.length > 30) || (request.body.username.length < 10)) {
       return { code: -1, message: 'incorrect parameters' }
 
     }
-    console.log(token)
     const getOneUser = await UsersRepo.getOneUser(token.data)
 
     if (getOneUser.length === 0) {
@@ -195,6 +193,17 @@ module.exports = () => {
     }
     return response.data
   }
+  const authStatus = async (req) => {
+    if (tokenManager.decode(req).error) {
+      return {code: -1}
+    }
+    response = await UsersRepo.getOneUser(req.params.id)
+    if(response.length === 0){
+      return -1
+    }
+    return {response: response}
 
-  return ({ fetchAll, fetchOne, create, login, update, deleteUser, redirectPassword, confirm, updatePassword, sendLink, reset })
+  }
+
+  return ({ fetchAll, fetchOne, create, login, update, deleteUser, redirectPassword, confirm, updatePassword, sendLink, reset, authStatus })
 }

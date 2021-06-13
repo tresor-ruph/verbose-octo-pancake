@@ -91,7 +91,6 @@ const Questions = (props) => {
         props.deleteQuestionImage(props.questionCount)
 
         pictureRef.delete().then(() => {
-            console.log('fileDeleted')
         }).catch(error => {
             console.log(error)
         })

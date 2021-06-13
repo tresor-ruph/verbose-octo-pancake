@@ -89,8 +89,6 @@ module.exports = () => {
         let questions = [];
         let SurveyResults = []
         let poll = []
-        console.log('****************************')
-        console.log(req.params)
         const response = await EventRepo.getEventResults(req.params.id)
         const polls = response[0].dataValues.Polls
         const questionsList = polls[0].dataValues.Questions
@@ -151,7 +149,6 @@ module.exports = () => {
             return "access_D"
         }
 
-        console.log('test', req.params)
         const response = await EventRepo.removeEvent(req.params.id)
         return response
     }

@@ -144,6 +144,7 @@ function Signup(props) {
     axios
       .post("/Signin", data)
       .then((res) => {
+        console.log('res', res.data)
         dispatch({
           type: "LOG_IN",
           payload: {
@@ -156,8 +157,8 @@ function Signup(props) {
             },
           },
         });
-
-        props.history.push(`/confEmail/${res.data.id}`, "");
+        console.log(res.data.id.userId)
+        props.history.push(`/confEmail/${res.data.id.userId}`, "");
       })
       .catch((err) => {
         console.log(err?.response)

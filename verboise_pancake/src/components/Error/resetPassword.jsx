@@ -36,7 +36,6 @@ export default function Reset(props) {
         .get(`/verifLink/${arr[2]}`)
         .then((res) => {
           if (res.data.message == "valid") {
-            console.log(res.data)
             setId(res.data.id)
                setReset(false);
 

@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import axios from "axios";
 import "helper/axiosConfig";
 import { useLocation, useHistory } from "react-router";
 import ConfirmEmailUI from "components/Error/UI/ConfirmEmailUI";
 import { useSelector } from "react-redux";
-import {returnHeader} from "helper/customMixin"
+import { returnHeader } from "helper/customMixin";
 
 export default function ConfirmMail(props) {
   const { sessionId, userId, user } = useSelector(
@@ -16,7 +16,7 @@ export default function ConfirmMail(props) {
   const [notif, setNotif] = useState(false);
   const [notifMess, setnotifMess] = useState("");
   const [variant, setVariant] = useState("");
-
+  const toast = useRef(null);
   const arr = location.pathname.split("/");
 
   const fromLoging = location.state === "login" ? true : false;
@@ -28,7 +28,7 @@ export default function ConfirmMail(props) {
     email: user.email,
   };
 
-  if (arr[2] != userId) {
+  if (arr[2] != userId.userId) {
     history.push("/login");
   }
 
@@ -36,19 +36,25 @@ export default function ConfirmMail(props) {
     axios
       .get("/resendLink/" + JSON.stringify(data))
       .then((res) => {
-        setnotifMess("email sent");
-        setVariant("success");
-        setNotif(true);
+        toast.current.show({
+          severity: "success",
+          summary: "Success",
+          detail: "email sent",
+          life: 3000,
+        });
       })
       .catch((err) => {
-        setnotifMess(err?.response?.data?.message || 'An error occured');
-        setVariant("success");
-        setNotif(true);
+        toast.current.show({
+          severity: "error",
+          summary: "Error",
+          detail: "An error occured",
+          life: 5000,
+        });
       });
   };
   return (
     <ConfirmEmailUI
-    returnHeader={returnHeader}
+      returnHeader={returnHeader}
       fromLoging={fromLoging}
       email={user.email}
       handleSendLink={handleSendLink}
@@ -56,6 +62,7 @@ export default function ConfirmMail(props) {
       variant={variant}
       setNotif={setNotif}
       notifMess={notifMess}
+      toast={toast}
     />
   );
 }

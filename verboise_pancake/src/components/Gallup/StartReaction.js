@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 
 function StartReaction({ show, duration, setDuration, setShow, voteFreq, setVoteFreq, handleStartEvent, delay, setDelay }) {
-    console.log('show', show)
     const footer = (
         <div style={{ marginRight: '10vw' }}>
             <Button className="p-button-danger" style={{ width: '10vw', marginBottom: '10px' }} onClick={() => setShow(false)}>cancel</Button>

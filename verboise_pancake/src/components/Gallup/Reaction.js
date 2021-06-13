@@ -49,20 +49,17 @@ const LoadGallup = ({ code, ongoing }) => {
     }
 
     useEffect(() => {
-        console.log('eventState', eventState.eventId, eventState.delay)
-        console.log('code', code)
+        
         const unsubscribe = reactionRef.doc(eventState.eventId).collection(code).onSnapshot((querySnapshot) => {
             querySnapshot.docChanges().filter(({ type }) => type === "added").map(({ doc }) => {
 
                 if (doc.data().message === 'VOTE') {
-                    console.log(doc.data().vote.value)
                     votes.push(doc.data().vote.value)
 
                     if (ctrl === 0) {
                         interval = setInterval(() => {
                             votesData.push({ x: `${voteCount}`, y: average(votes) })
                             voteCount++
-                            console.log(votesData)
                             setDataSet(votesData)
 
                             setRefresh(prev => !prev)
@@ -75,7 +72,6 @@ const LoadGallup = ({ code, ongoing }) => {
                 }
                 else if (doc.data().message === 'MESSAGE') {
                     messageList.push({ freeText: doc.data().textMessage, id: doc.data().id })
-                    console.log(doc.data().textMessage)
                     setChats(messageList)
                     setRefresh(prev => !prev)
 

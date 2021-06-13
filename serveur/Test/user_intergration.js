@@ -23,7 +23,6 @@ describe('users api test', () => {
             expect(_body.length >= 0)
             expect(response.statusCode).to.equal(200);
             if( _body[0].should.have.property('Accountstatus') ){
-                console.log('yes')
               expect(_body[0]. Accountstatus).to.have.lengthOf.at.least(3);
             }
     

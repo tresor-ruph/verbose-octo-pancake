@@ -3,7 +3,6 @@ import {Modal} from 'react-bootstrap'
 
 function TermsAndCondition(props) {
     const [show, setShow] = useState(true);
-  console.log(props)
     return (
       <>
   

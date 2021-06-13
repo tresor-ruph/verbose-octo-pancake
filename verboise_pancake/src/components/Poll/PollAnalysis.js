@@ -20,7 +20,6 @@ const PollAnalysis = () => {
     const eventState = useSelector(state => state.EventReducer.event)
 
     useEffect(() => {
-        console.log('eventState', eventState)
         getResults()
     }, [])
 
@@ -28,7 +27,6 @@ const PollAnalysis = () => {
 
     const getResults = () => {
         axios.get(`eventResults/${eventState.eventId}`).then(res => {
-            console.log('res', res.data)
             let questions = res.data.questions
             let results = res.data.SurveyResults
 
@@ -44,11 +42,8 @@ const PollAnalysis = () => {
             let test = _.groupBy(results, elt => elt.questionText);
             setQuestKey(Object.keys(test))
             setResults(test)
-            console.log('test', test)
             axios.get(`/ranks/${res.data.poll[0].id}`).then(res => {
-                console.log('ranking', res.data)
                 let sortedData = res.data.sort((a, b) => a.points - b.points).reverse()
-                console.log('sorted', sortedData)
                 setRanks(sortedData)
                 setLoaded(true)
 

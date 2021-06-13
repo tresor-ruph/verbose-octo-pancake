@@ -82,7 +82,6 @@ const JoinEvent = () => {
 
             },
         });
-        console.log(eventState)
         let test = await getClientIp()
         setUserIp(test)
         axios

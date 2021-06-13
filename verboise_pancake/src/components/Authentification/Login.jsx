@@ -78,7 +78,6 @@ function Login(props) {
       axios
         .get("/Login/" + JSON.stringify(data))
         .then((res) => {
-          console.log(res.data)
           const id = res.data.user[0].userId
           const token = res.data.token
           const picture = res.data.user[0].imageUrl

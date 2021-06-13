@@ -2,11 +2,7 @@
   "name": "verboise_pancake",
   "version": "0.1.0",
   "private": true,
-<<<<<<< HEAD
-  "homepage": "/",
-=======
   "homepage": "/Home",
->>>>>>> dev1.2
   "dependencies": {
     "@fortawesome/fontawesome-free": "5.15.2",
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
@@ -16,11 +12,8 @@
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.57",
     "@mdi/font": "^5.9.55",
-<<<<<<< HEAD
     "@testing-library/cypress": "^7.0.6",
-=======
     "apexcharts": "^3.27.1",
->>>>>>> dev1.2
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
     "chart.js": "^3.2.1",

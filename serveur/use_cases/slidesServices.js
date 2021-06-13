@@ -9,7 +9,6 @@ module.exports = () => {
 
     const create = async (request) => {
 
-        console.log('body', request.body)
         let decodedToken = tokenManager.decode(request)
         if (decodedToken.error) {
             return "access_D"

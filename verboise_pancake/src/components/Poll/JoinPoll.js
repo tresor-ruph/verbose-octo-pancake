@@ -38,7 +38,6 @@ const JoinPoll = ({ code, setEventStatus, eventId, userIp }) => {
 
 
     useEffect(() => {
-        console.log('pseudo', eventState.pseudo)
         fetchData ? getQuestions(true) : registerFireStore(poll[0].id, question[questionIndex])
     }, [reload])
 
@@ -143,6 +142,7 @@ const JoinPoll = ({ code, setEventStatus, eventId, userIp }) => {
     }
 
     const sentVote = () => {
+        setDisabledField(true)
         if (selectedAns === null || selectedAns === '') {
             setOptErr(true)
             return
@@ -153,10 +153,7 @@ const JoinPoll = ({ code, setEventStatus, eventId, userIp }) => {
         } else {
             score = { pseudo: eventState.pseudo, score: 0 }
         }
-        if (selectedAns === '') {
-            console.log('select an answer')
-            return
-        }
+     
 
         let data = {
             ip: eventState.pseudo,
@@ -167,7 +164,7 @@ const JoinPoll = ({ code, setEventStatus, eventId, userIp }) => {
         axios.put('updateIndex', data).then(res => {
 
             pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'POLL_DATA', value: selectedAns, index: questionIndex, npartCount: eventState.pseudo, score: score }).then(() => {
-                setDisabledField(true)
+                
 
             })
         }).catch(err => {

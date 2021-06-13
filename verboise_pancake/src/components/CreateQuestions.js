@@ -109,8 +109,7 @@ const CreateQuestions = ({ setSendQuestion }) => {
 
     }
     const handleQuestionImage = (x, y) => {
-        console.log('xxxxxx',x)
-        console.log('hehehhe',y)
+   
         questionList[x].picture = y
         eventState.questionList = questionList
         dispatch({

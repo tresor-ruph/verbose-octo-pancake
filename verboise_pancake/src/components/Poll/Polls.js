@@ -66,18 +66,14 @@ const Poll = ({ code }) => {
                 querySnapshot.docChanges().filter(({ type }) => type === "added").map(({ doc }) => {
 
                     if (doc.data().message === 'FETCH_QUESTIONS') {
-                        console.log('fetch data')
                         getQuestions(false)
                     }
                     else if (doc.data().message === 'START_EVENT') {
-                        console.log('startEvent')
                     }
                     else if (doc.data().message === 'REVEAL_RESULTS') {
-                        console.log('reveal question')
 
                     }
                     else if (doc.data().message === 'NEXT_QUESTION') {
-                        console.log('next question')
                     }
 
                     else if (doc.data().message === 'POLL_DATA') {
@@ -280,7 +276,6 @@ const Poll = ({ code }) => {
                 answer: elt.answer,
                 pollId: poll[0].id
             }
-            console.log('data1', data1)
             axios.post('/addQuestions', data1).then(res => {
                 let optionData = []
 
@@ -344,11 +339,9 @@ const Poll = ({ code }) => {
     }
 
     const handleCloseEvent = () => {
-        console.log('optionres', optionsResults)
         optionsResults.forEach(elt => {
             questionStats.push({ optionText: elt.x, vote: elt.y, QuestionQuestionId: question[questionIndex].id })
         })
-        console.log('questionStats', questionStats)
         let frequency = [];
 
         try {
@@ -377,7 +370,6 @@ const Poll = ({ code }) => {
             }
             if (frequency.length !== 0) {
                 axios.post('/ranking', frequency).then(res => {
-                    console.log(res)
                 }).catch(err => {
                     console.log(err.response)
                 })

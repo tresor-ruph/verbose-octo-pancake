@@ -57,14 +57,11 @@ const Gallup = ({ code, eventId, userIp, setEventStatus }) => {
             querySnapshot.docChanges().filter(({ type }) => type === "added").map(({ doc }) => {
 
                 if (doc.data().message === 'BLOCK') {
-                    console.log('block')
                     if (doc.data().id == r) {
                         setHideAll(true)
                     }
                 } else if (doc.data().message === 'UN_BLOCK') {
-                    console.log('unblock')
                     if (doc.data().id == r) {
-                        console.log(true)
                         setHideAll(false)
                     }
                 } else if (doc.data().message === 'END_EVENT') {

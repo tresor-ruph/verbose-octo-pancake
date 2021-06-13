@@ -1,35 +1,20 @@
 import React from "react";
-import { Alert } from "react-bootstrap";
+// import { Alert } from "react-bootstrap";
+import { Toast } from "primereact/toast";
 
 const ConfirmEmailUI = (props) => {
   const {
     fromLoging,
     email,
     handleSendLink,
-    notif,
-    variant,
-    setNotif,
-    notifMess,
     returnHeader,
+    toast,
   } = props;
   return (
     <div>
-      {returnHeader}
-      {notif && (
-        <Alert variant={variant}>
-          <button
-            aria-hidden={true}
-            className="close"
-            data-dismiss="alert"
-            type="button"
-            onClick={() => setNotif(false)}
-          >
-            <i className="nc-icon nc-simple-remove"></i>
-          </button>
-          <div className="notifText">{notifMess}</div>
-        </Alert>
-      )}
-      <div className="container bootstrap snippet">
+      {returnHeader()}
+      <Toast ref={toast} />
+      <div className=" bootstrap snippet" style={{backgroundColor: 'white', height: '100vh'}}>
         <div className="main-div">
           <div className="center-div">
             <p className="text-res">Confirm Account</p>

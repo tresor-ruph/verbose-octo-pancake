@@ -29,7 +29,6 @@ const UserSettings = ({ show, onHide }) => {
     const [activeIndex, setActiveIndex] = useState(null);
     const toast = useRef(null);
 
-console.log('userInfos', userInfo)
     const dispatch = useDispatch();
 
     const user = useRef(null);
@@ -83,9 +82,7 @@ console.log('userInfos', userInfo)
             }, () => {
                 storage.ref('images').child(file.name).getDownloadURL().then(url => {
                     setImgUrl(url)
-                    console.log('success')
                     if (userName.length < 3) {
-                        console.log('please enter username')
                         return
                     }
                     let data = {
@@ -165,7 +162,6 @@ console.log('userInfos', userInfo)
         }
     }
     const handleRemoveAccount = () => {
-        console.log('test', userInfo.username)
         axios.delete(`/user/${userInfo.username}`).then(res => {
             dispatch({
                 type: "LOG_OUT",

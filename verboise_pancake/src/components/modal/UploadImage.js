@@ -116,7 +116,6 @@ const UploadImage = ({ hide, eventId }) => {
 
     const submitImage = () => {
         if (files === []) {
-            console.log('files empty')
             return
         }
 
@@ -128,7 +127,6 @@ const UploadImage = ({ hide, eventId }) => {
         }, () => {
             storage.ref(eventState.eventId).child(files[0].name).getDownloadURL().then(url => {
                 const imageRef = storage.ref(eventState.eventId).child(files[0].name)
-                console.log('image uploaded')
                 hide(url, imageRef)
 
             })

@@ -19,10 +19,8 @@ const ResultGallup = () => {
 
     useEffect(async () => {
 
-        console.log('lolo', eventState)
         const snapshot = await firebase.firestore().collection('reaction').doc(eventState.eventId).collection(`${eventState.code}result`).get()
         let values = snapshot.docs.map(doc => doc.data());
-        console.log('hmmmm', values)
         setDataSet(values[0].dataSet)
         setLoaded(true)
     }, [])

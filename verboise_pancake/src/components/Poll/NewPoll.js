@@ -84,7 +84,6 @@ const NewPoll = ({ handleStartEvent }) => {
         }
         const questions = eventState.questionList.filter(elt => elt.id != "")
         const options = eventState.optionList.filter(elt => elt.id != "")
-        console.log(questions, options)
         if (layout === null) {
             setLayoutErr(true)
             return
@@ -98,7 +97,6 @@ const NewPoll = ({ handleStartEvent }) => {
                 }
             }
         }
-        console.log('questions')
 
         const data = {
             layout: layout,
@@ -108,7 +106,6 @@ const NewPoll = ({ handleStartEvent }) => {
             eventId: eventState.eventId
 
         }
-        console.log(questions)
 
         axios.post('/createPoll', data).then(res => {
             questions.forEach((elt, idx, array) => {
@@ -178,8 +175,6 @@ const NewPoll = ({ handleStartEvent }) => {
             console.log(err.response)
 
         })
-
-        console.log('lol')
 
 
     }
