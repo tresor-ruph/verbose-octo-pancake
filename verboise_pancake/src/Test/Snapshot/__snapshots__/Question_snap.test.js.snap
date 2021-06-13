@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div>
+  <input
+    className="new-quest"
+    onChange={[Function]}
+    placeholder="Question undefined"
+    type="text"
+  />
+  <br />
+  <div
+    className="hide-options options-list"
+    id="optionundefined"
+  >
+    <div>
+      <input
+        className="ques-opt"
+        onChange={[Function]}
+        placeholder="option1"
+        type="text"
+      />
+    </div>
+    <div>
+      <input
+        className="ques-opt"
+        onChange={[Function]}
+        placeholder="option2"
+        type="text"
+      />
+    </div>
+    <div
+      className="add-icon"
+    />
+  </div>
+</div>
+`;

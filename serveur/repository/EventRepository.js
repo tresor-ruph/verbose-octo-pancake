@@ -1,18 +1,18 @@
-const { Event } = require('../database/models')
+const { Event, Polls,Questions,Options ,SurveyResult } = require('../database/models')
 const { Op } = require("sequelize")
 
 module.exports = () => {
 
-    const eventExist = async function (title) {
+    const eventExist = async function (identif) {
         const event = await Event.findAll({
             where: {
-                title: title
+                [Op.or]: [{title: identif}, {eventId: identif}]
             }
         })
         return event
     }
     const addEvent = async function (id, data, code) {
-      
+
       const newEvent = await Event.create({
           title: data.title,
           eventType: data.type,
@@ -24,14 +24,86 @@ module.exports = () => {
       return newEvent
     }
 
-    const getOneEvent= async function(code, userId){
+    const getOneEvent= async function(code){
        const event = await Event.findAll({
             where: {
-                [Op.and]:[{code: code}, {UserUserId: userId}]
+                [Op.or]: [{code: code}, {UserUserId: code}]
+               
             }
         })
         return event
     }
 
-    return ({eventExist,getOneEvent, addEvent})
+    const getEventPoll= async function(code){
+        const event = await Event.findAll({
+             where: {
+                code: code
+             },
+             include : [
+                 {
+                     model:Polls,
+                     include: [
+                         {
+                             model: Questions,
+                             include: [
+                              { model: Options}
+                             ]
+                         }
+                     ]
+                     
+                 }
+             ]
+         })
+         return event
+     }
+
+     const getEventResults= async function(code){
+      const event = await Event.findAll({
+           where: {
+              eventId: code
+           },
+           include : [
+               {
+                   model:Polls,
+                   include: [
+                       {
+                           model: Questions,
+                           include: [
+                            { model: SurveyResult}
+                           ]
+                       }
+                   ]
+                   
+               }
+           ]
+       })
+       return event
+   }
+
+     
+
+     const startEvent = async function (id,status) {
+        const event = await Event.update({
+          status: status
+        },
+          {
+            where:
+            {
+              eventId: id
+            }
+          })
+        return event
+      }
+      const removeEvent = async function (param) {
+
+        const event = await Event.destroy({
+          where: {
+            eventId: param
+          }
+        })
+        return event
+      }
+    
+
+    return ({eventExist,getOneEvent, addEvent, getEventPoll,startEvent,removeEvent,getEventResults})
 }

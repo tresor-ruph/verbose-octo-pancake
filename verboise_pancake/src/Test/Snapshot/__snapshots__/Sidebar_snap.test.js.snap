@@ -45,6 +45,54 @@ exports[`renders correctly 1`] = `
         </span>
       </a>
     </li>
+    <li
+      className="nav-item"
+    >
+      <a
+        className="nav-link"
+        onClick={[Function]}
+      >
+        <svg
+          aria-hidden={true}
+          className="MuiSvgIcon-root"
+          focusable="false"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"
+          />
+        </svg>
+        <span
+          className="menu-title"
+        >
+          POLL 
+        </span>
+      </a>
+    </li>
+    <li
+      className="nav-item"
+    >
+      <a
+        className="nav-link"
+        onClick={[Function]}
+      >
+        <svg
+          aria-hidden={true}
+          className="MuiSvgIcon-root"
+          focusable="false"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"
+          />
+        </svg>
+        <span
+          className="menu-title"
+        >
+          GALLUP 
+        </span>
+      </a>
+    </li>
   </ul>
 </nav>
 `;

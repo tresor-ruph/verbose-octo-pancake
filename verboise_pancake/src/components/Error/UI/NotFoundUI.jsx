@@ -4,7 +4,7 @@ const NotFoundUI = (props) => {
   const { expireLink } = props;
   return (
     <div>
-    
+    {props.returnHeader()}
       {!expireLink ? (
         <div className="container bootstrap snippet">
           <div className="main-div">

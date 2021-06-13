@@ -39,7 +39,8 @@ module.exports = () => {
     if (userExist.length === 0) {
 
       validMod.value.password = passWordManager.hashPassword(validMod.value.password)
-      validMod.value.Accountstatus = 'waiting'
+      validMod.value.accountStatus = 'waiting'
+      validMod.value.userRole = 'client'
       const response = await UsersRepo.addUser(validMod.value)
       const token = await tokenManager.encode(response)
       const link = `http://localhost:8000/api/confirmEmail/${token}`
@@ -60,12 +61,11 @@ module.exports = () => {
       response = await UsersRepo.getOneUser(values.email, true)
       if (response.length === 0) {
         values.password = passWordManager.hashPassword(values.password)
-        values.Accountstatus = 'social'
+        values.accountStatus = 'social'
+        values.userRole = 'client'
         const response = await UsersRepo.addUser(values)
-        console.log(response)
-        const token = await tokenManager.encode(response)
-        console.log(response)
-        return { token: token, id: response }
+        const token = await tokenManager.encode(response[0].dataValues.id)
+      
 
       }
     } else {
@@ -84,44 +84,54 @@ module.exports = () => {
       }
     }
     const token = await tokenManager.encode(response[0].dataValues.userId)
-    return { id: response[0].dataValues.userId, token }
+    return { user: response, token }
 
   }
 
 
   const update = async (request) => {
+  
 
     let token = tokenManager.decode(request)
+
     if (token.error) {
       return "access_D"
     }
-    let values = Object.values(request.body)
-    const validMod = userModel(...values)
-    if (validMod.error) {
-      return { code: -1, message: validMod.error[0].message }
+    console.log(request.body)
+
+    if ((request.body.username.length < 3 && request.body.username.length > 30) || (request.body.username.length < 10)) {
+      return { code: -1, message: 'incorrect parameters' }
+
     }
-    const getOneUser = await UsersRepo.getOneUser(values[2])
+    console.log(token)
+    const getOneUser = await UsersRepo.getOneUser(token.data)
+
     if (getOneUser.length === 0) {
       return 0
     }
-    const response = await UsersRepo.updateUser(validMod.value)
+
+    const response = await UsersRepo.updateUser(token.data,request.body)
     return response
+
   }
 
   const updatePassword = async (request) => {
+  
+  
+    const getOneUser = await UsersRepo.getOneUser(request.body.id)
 
-    let id = tokenManager.decode(request)
-    if (id.error) {
-      return "error"
-    }
-
-    const getOneUser = await UsersRepo.getOneUser(id)
     if (getOneUser.length === 0) {
       return 0
     }
 
+    if (request.body.from_settings) {
+      if (!passWordManager.comparePassword(request.body.oldPassword, getOneUser[0].dataValues.password)) {
+        return ({ code: -2 })
+      }
+    }
+
     request.body.password = passWordManager.hashPassword(request.body.password)
-    const response = await UsersRepo.updatePassword(request.body.password, id)
+    const response = await UsersRepo.updatePassword(request.body.password,request.body.id)
     return response
 
 
@@ -155,7 +165,7 @@ module.exports = () => {
     if (response.length === 0) {
       return -1
     }
-    const token = await tokenManager.encode(response[0].dataValues.userId, Math.floor(Date.now() / 1000) + (30 * 60))
+    const token = await tokenManager.encode(response[0].dataValues.userId, Math.floor(Date.now() / 1000) + (2 * 60))
     let link = `http://localhost:3000/resetpassword/${token}`
     // let link = `https://verbose-pancake-4fb37.web.app/resetpassword/${token}`
     mail.send(request.params.email, link, "", true)
@@ -183,7 +193,7 @@ module.exports = () => {
     if (response.error) {
       return -1
     }
-    return req.params.id
+    return response.data
   }
 
   return ({ fetchAll, fetchOne, create, login, update, deleteUser, redirectPassword, confirm, updatePassword, sendLink, reset })

@@ -8,14 +8,23 @@ module.exports = dbConnection.define("Questions", {
         primaryKey: true,
 
     },
+    order: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+    },
     question: {
         type: Sequelize.STRING,
         allowNull: false,
     },
-    answers: {
+    image : {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
     },
+    answer : {
+        type: Sequelize.INTEGER,
+        allowNull: false, 
+    },
+ 
  
 },
 

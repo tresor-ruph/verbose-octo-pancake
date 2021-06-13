@@ -1,0 +1,17 @@
+.result-line-div {
+  width: 80vw;
+  margin-top: 10vh;
+}
+.btn-div {
+  margin-top: 5vh;
+  text-align: center;
+}
+
+@media (max-width: 1350.98px) {
+  .result-line-div {
+    width: 60vw;
+  }
+  .btn-div {
+    margin-top: 2vh;
+  }
+}

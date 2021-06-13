@@ -1,0 +1,107 @@
+.join-reaction {
+  background-color: rgb(105, 221, 167);
+  height: 100vh;
+  overflow-y: auto;
+}
+.join-sub-div {
+  width: 60vw;
+  height: 50vh;
+  margin-top: 20vh;
+}
+.div-1 {
+  height: 50vh;
+  overflow-y: auto;
+}
+.vote-numb {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: gray;
+}
+.vote-cnt {
+  font-size: 1.5rem;
+  font-weight: 200;
+  color: #888;
+  margin-bottom: 2vh;
+  margin-top: 10vh;
+}
+.tab-view {
+  height: 50vh;
+}
+.vote-cnter {
+  font-weight: 600;
+  color: gray;
+}
+.comm-div {
+  margin-top: 10vh;
+}
+.vote-title1 {
+  font-size: 1.2rem;
+  margin-left: 10vw;
+}
+.vote-title2 {
+  font-size: 1.2rem;
+  margin-left: 20vw;
+}
+.txt-area {
+  width: 40vw;
+}
+@media (max-width: 700.98px) {
+  .join-sub-div {
+    width: 90vw;
+    height: 75vh;
+    margin-top: 20vh;
+  }
+  .div-1 {
+    height: 63vh;
+    overflow-y: auto;
+  }
+  .vote-title1 {
+    font-size: 1rem;
+    margin-left: 5vw;
+  }
+  .vote-title2 {
+    font-size: 1rem;
+    margin-left: 30vw;
+  }
+  .txt-area {
+    width: 80vw;
+  }
+  .vote-cnt {
+    font-size: 1.2rem;
+    font-weight: 200;
+    color: #888;
+    margin-bottom: 2vh;
+    margin-top: 2vh;
+  }
+
+  .layout-display  {
+    width: 10vw;
+    padding-left: 15vw;
+    padding-right: 15vw;
+
+  }
+}
+
+@media (max-width: 300.98px) {
+  .join-sub-div {
+    width: 90vw;
+    height: 50vh;
+    margin-top: 20vh;
+  }
+  .vote-title1 {
+    font-size: 1rem;
+    margin-left: 5vw;
+  }
+  .vote-title2 {
+    font-size: 1rem;
+    margin-left: 10vw;
+  }
+  .txt-area {
+    width: 70vw;
+  }
+  
+  .card-1 .cards .layout-display {
+    width: '30vh';
+  }
+}
+

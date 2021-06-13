@@ -7,7 +7,7 @@ const NotFound = () => {
   let expireLink = false;
   let location =useLocation()
   location.pathname === "/error" ? (expireLink = true) : (expireLink = false);
-  return <NotFoundUI expireLink={expireLink} />;
+  return <NotFoundUI expireLink={expireLink} returnHeader={returnHeader}/>;
 };
 
 export default NotFound;

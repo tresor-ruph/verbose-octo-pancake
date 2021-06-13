@@ -1,0 +1,86 @@
+.create-survey {
+  margin-left: 15vh;
+  width: 100vw;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  // background-color: white;
+}
+.survey-container {
+  margin-top: 2vh;
+  height: 85vh;
+  // background-color: blue;
+}
+.survey-questions {
+//   background-color: red;
+  height: 100vh;
+}
+
+.config-header {
+  text-align: left;
+}
+.config-title {
+  color: gray;
+  font-weight: 500;
+  margin: 20px;
+}
+.layout-display {
+  width: 7vw;
+  text-align: center;
+  margin-top: 2vh;
+  position: relative;
+  margin-right: 1vw;
+  margin-left: 1vw;
+}
+.result-layout-title {
+  color: gray;
+  font-weight: 500;
+  font-size: 0.9em;
+  margin-left: 1vw;
+}
+.result-format {
+  margin-top: 3vh;
+}
+.format-text {
+  color: gray;
+  font-weight: 500;
+  font-size: 0.9em;
+  margin-left: 1vw;
+}
+.format-input {
+  margin-top: 1vh;
+  margin-left: 1vw;
+}
+.survey-timer {
+  margin-top: 2vh;
+}
+.survey-timer-name {
+  color: gray;
+  font-weight: 500;
+  margin-left: 1vw;
+  font-size: 0.9em;
+}
+.survey-mode-input {
+  margin-left: 1vw;
+}
+.timer-input {
+  margin-left: 1vw;
+
+}
+.time-label {
+  font-weight: 500;
+  color: gray;
+  font-size: 0.9em;
+  margin-left: 1vw;
+}
+.timer-div {
+    margin-top: 1vh;
+}
+.post-questiion {
+  height: 50vh;
+  width: 50vh;
+  margin-left: 50%;
+}
+.questions-div {
+  margin-left: 1vw;
+}

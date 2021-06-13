@@ -1,41 +1,46 @@
 
 import React from "react";
-import { useLocation, Route, Switch } from "react-router-dom";
-
+import { useLocation } from "react-router-dom";
+import HomePage from 'components/Home/HomePage'
 import AdminNavbar from "components/Navbars/AdminNavbar";
-import Sidebar from "components/Sidebar/Sidebar";
-import Dashboard from "views/Dashboard.js";
-import UserProfile from "views/UserProfile.js";
+import Events from "components/Events/Events"
+import PollAnalysis from 'components/Poll/PollAnalysis'
 import Notfound from "components/Error/Notfound"
+import ResultGallup from 'components/Gallup/ResultGallup'
+
+
 
 
 
 function Admin() {
   const location = useLocation();
+  const path = location.pathname.split('/')[1]
 
   const renderComponent = () => {
-    console.log(location.pathname)
+    if (path === "Home") {
+      return (<HomePage />)
+    } else if (path === 'Event') {
+      return (<Events />)
+    } else if (path === 'result') {
+      return (<PollAnalysis />)
+    } else if (path === 'resultGallup') {
+      return (<ResultGallup />)
+    }
 
-    if (location.pathname === '/dashboard/event') {
-      return (<Dashboard />)
-    } else if (location.pathname === '/dashboard/userprofile') {
-      return (<UserProfile />)
-    } else {
+    else {
       return (<Notfound />)
     }
   }
 
   return (
-    <>
-      <div className="wrapper">
-        <AdminNavbar />
-        <Sidebar />
-        <div className='content'>
-          {renderComponent()}
-        </div>
+    <div >
+      <AdminNavbar />
+      <div id='dash' className='dash-min dash-max'>
+        {renderComponent()}
       </div>
+    </div>
 
-    </>
+
   );
 }
 

@@ -8,24 +8,18 @@ module.exports = dbConnection.define("Reactions", {
         primaryKey: true,
 
     },
-    type: {
-        type: Sequelize.STRING,
-        allowNull: false,
-    },
+
     audienceNumber: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
     },
+
     waitingTime: {
         type: Sequelize.INTEGER,
-        defaultValue: Sequelize.UUIDV4,
-        primaryKey: true,
+        allowNull: true,
 
     },
-    data: {
-        type: Sequelize.STRING,
-        allowNull: false,
-    },
+
 },
 
 )

@@ -16,3 +16,13 @@ export const Logout = () => {
         type: actionTypes.LOG_OUT,      
     }
 }
+
+export const update = (username, picture) => {
+    return {
+        type: actionTypes.UPDATE_USER,
+        payload: {
+            username: username,
+            picture: picture
+        }
+    }
+}

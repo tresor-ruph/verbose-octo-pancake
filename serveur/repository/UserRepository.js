@@ -51,22 +51,24 @@ module.exports = () => {
 
   const addUser = async function (userObject) {
     const user = await User.create(userObject)
-    return user.dataValues.userId
+    return user
   }
 
 
-  const updateUser = async function (userObject) {
+  const updateUser = async function (id,userObject) {
     const user = await User.update({
-      password: userObject.password
+      imageUrl: userObject.imageUrl,
+      username: userObject.userName
     },
       {
         where:
         {
-          username: userObject.username
+          userId: id
         }
       })
     return user
   }
+  
   const updatePassword = async function (password, id) {
     const user = await User.update({
       password: password

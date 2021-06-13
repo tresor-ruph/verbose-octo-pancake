@@ -1,0 +1,135 @@
+.join-poll {
+  background-color: rgb(105, 221, 167);
+  height: 100vh;
+  overflow-y: auto;
+}
+.join-poll-body {
+  height: 82vh;
+  width: 40vw;
+  margin-top: 10vh;
+  background-color: white;
+  border-radius: 20px;
+  overflow-y: auto;
+  padding-bottom: 2vh;
+}
+.qtn-div {
+  margin-top: 4vh;
+}
+.text-question-div {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 200;
+  color: #888;
+  margin-bottom: 2vh;
+}
+.pie-chart-custom {
+  width: 40vw;
+  margin-left: 20vw;
+}
+.quest-option-div {
+  margin-left: 2vw;
+  margin-top: 2vh;
+}
+.opt-sub-div {
+  margin-bottom: 1vh;
+  background-color: rgba(0, 0, 0, 0.03);
+  height: 7vh;
+  width: 30vw;
+  border-radius: 20px;
+  padding-left: 2vw;
+  padding-top: 1vh;
+  padding-bottom: 2vh;
+  font-size: 1.2rem;
+  font-weight: 200;
+}
+.op-label-2 {
+  color: blue;
+  margin-left: 5vw;
+}
+.inpt-join {
+  width: 20vw
+}
+.opt-val {
+  margin-left: 5vw;
+  color: blue;
+}
+.quest-img {
+  width: 250px;
+}
+.corr-answ-div2 {
+    margin-top: 20vh;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 200;
+    color: #888;
+    margin-bottom: 2vh;
+
+}
+.witing-quest {
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 200;
+    color: #888;
+    margin-bottom: 2vh;
+}
+.graph-div2 {
+    width: 80%;
+    margin-left: 2vw;
+
+}
+.ans-val {
+    color: rgba(255,0,0,0.3);
+    font-weight: 700;
+}
+
+@media (max-width: 1300.98px) {
+    .quest-img {
+        width: 200px;
+      }
+      .opt-sub-div {
+        margin-bottom: 1vh;
+        background-color: rgba(0, 0, 0, 0.03);
+        height: 5vh;
+        width: 30vw;
+        border-radius: 20px;
+        padding-left: 2vw;
+        padding-top: 1vh;
+        padding-bottom: 2vh;
+        font-size: 0.9rem;
+        font-weight: 200;
+      }
+      
+  }
+  
+
+@media (min-width: 1500.98px) {
+  
+}
+
+@media (max-width: 700.98px) {
+    .join-poll-body {
+        height: 82vh;
+        width: 90vw;
+        margin-top: 10vh;
+        background-color: white;
+        border-radius: 20px;
+        overflow-y: auto;
+        padding-bottom: 2vh;
+      }
+      .opt-sub-div {
+        margin-bottom: 1vh;
+        background-color: rgba(0, 0, 0, 0.03);
+        height: 5vh;
+        width: 80vw;
+        border-radius: 20px;
+        padding-left: 2vw;
+        padding-top: 1vh;
+        padding-bottom: 2vh;
+        font-size: 0.9rem;
+        font-weight: 200;
+      }
+      .inpt-join {
+        width: 70vw
+      }
+
+}

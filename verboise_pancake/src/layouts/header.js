@@ -7,7 +7,7 @@ const Header = ({ children }) => {
 
   return (
     <Navbar collapseOnSelect expand="lg"  variant="dark" style={{left: '0px', backgroundColor:'#343A40', height: '12vh'}}>
-      <Navbar.Brand href="#" onClick={() => history.push('/login')}>Verbose</Navbar.Brand>
+      <Navbar.Brand href="#" style={{marginLeft: '5vw'}} onClick={() => history.push('/login')}>Verbose</Navbar.Brand>
 
       <Nav className="mr-auto" />
       <Nav>

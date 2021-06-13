@@ -1,8 +1,21 @@
 const userService = require('./userServices')
 const eventService = require('./eventServices')
-
+const pollService = require('./pollServices')
+const questionService = require('./questionServices')
+const optionService = require('./optionService')
+const reactionService = require('./reactionServices')
+const surveyResultService = require('./surveyResultService')
+const rankingService = require('./rankingService')
+const audienceService =require('./audienceServices')
 
 const userServices = userService()
 const eventServices = eventService()
+const pollServices = pollService()
+const questionServices = questionService()
+const optionServices = optionService()
+const reactionServices = reactionService()
+const surveyResultServices = surveyResultService()
+const rankingServices = rankingService()
+const audienceServices = audienceService()
 
-module.exports= {userServices, eventServices}
+module.exports= {userServices, eventServices, pollServices, questionServices, optionServices,reactionServices,surveyResultServices,rankingServices,audienceServices}

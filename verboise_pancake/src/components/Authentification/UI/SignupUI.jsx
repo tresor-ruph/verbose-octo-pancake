@@ -1,41 +1,29 @@
 import React from "react";
-import { Button, Alert, Popover, OverlayTrigger } from "react-bootstrap";
+import { Button } from "react-bootstrap";
+import { Password } from "primereact/password";
+import { InputText } from "primereact/inputtext";
+import { Toast } from "primereact/toast";
 
 const SignupUI = (props) => {
   const {
     MainHeader,
     showModal,
     returnTermsAndCondition,
-    notif,
-    setNotif,
-    notifMess,
     loginImage,
-    emailRef,
-    emailLabel,
     email,
-    emailInp,
     handleEmailFocus,
     handleEmailBlur,
     handleEmail,
     emailErr,
-    userRef,
-    userLabel,
     username,
-    userInp,
     handleUserFocus,
     handleUserBlur,
     handleUsername,
-    passwd,
-    labelPasswd,
-    pwd,
     password,
     handlePasswordFocus,
     handlePasswordBlur,
     handlePassword,
-    passwd2,
-    labelPasswd2,
     password2,
-    pwd2,
     handlePassword2Focus,
     handlePassword2Blur,
     handlePassword2,
@@ -45,146 +33,127 @@ const SignupUI = (props) => {
     handleTerms,
     handlePrivacy,
     handleSubmit,
-    variant,
     userErr,
     disabled,
     checkBoxErr,
+    toast,
   } = props;
 
-  const popover = (
-    <Popover id="popover-basic">
-      <Popover.Content>
-        your passwo/rd should contain atleast. 1 capital letter 1 small letter 1
-        number 6 characters
-      </Popover.Content>
-    </Popover>
-  );
   return (
     <div class="main-sigin">
       {showModal && returnTermsAndCondition}
       {MainHeader}
-      {notif && (
-        <Alert variant={variant}>
-          <button
-            aria-hidden={true}
-            className="close"
-            data-dismiss="alert"
-            type="button"
-            onClick={() => setNotif(false)}
-          >
-            <i className="nc-icon nc-simple-remove"></i>
-          </button>
-          <div className="notifText">{notifMess}</div>
-        </Alert>
-      )}
+      <Toast ref={toast} />
       <div className="d-lg-flex half ">
         <div className="bg order-2 order-md-1 login-i left">
-          <img src={loginImage} width="100%" className="login-i " />
+          <img src={loginImage} width="80%" className="login-i " />
         </div>
         <div className="contents order-1 order-md-2 ">
           <div className="container">
             <div className="row align-items-center justify-content-center">
               <div className="col-md-7">
                 <div className="mb-4">
-                  <h3>Sign In</h3>
+                  <span className="auth-txt">Sign In</span>
                 </div>
-                <div className="form-group first frm-log" ref={emailRef}>
-                  <label className="label" ref={emailLabel} htmlFor="username">
-                    Email
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="email"
-                    value={email}
-                    ref={emailInp}
-                    onFocus={handleEmailFocus}
-                    onBlur={handleEmailBlur}
-                    onChange={(event) => handleEmail(event)}
-                  />
+
+                <div className="input-div">
+                  <span className="p-float-label">
+                    <InputText
+                      id="email"
+                      value={email}
+                      className="input-auth"
+                      onFocus={handleEmailFocus}
+                      onBlur={handleEmailBlur}
+                      onChange={(event) => handleEmail(event)}
+                    />
+                    <label htmlFor="email" className="label-password">
+                      Email
+                    </label>
+                  </span>
                 </div>
                 {emailErr && (
-                  <span className="pwd-inv-mess">email not valid</span>
+                  <div class="error-div">
+                    <small id="username2-help error-div" className="p-error">
+                      Invalid Email..{" "}
+                    </small>
+                  </div>
                 )}
 
                 <br />
-                <div className="form-group first frm-log" ref={userRef}>
-                  <label className="label" ref={userLabel} htmlFor="username">
-                    Username
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="username"
-                    value={username}
-                    ref={userInp}
-                    onFocus={handleUserFocus}
-                    onBlur={handleUserBlur}
-                    onChange={(event) => handleUsername(event)}
-                  />
+
+                <div className="input-div-2">
+                  <span className="p-float-label">
+                    <InputText
+                      id="username"
+                      value={username}
+                      className="input-auth"
+                      onFocus={handleUserFocus}
+                      onBlur={handleUserBlur}
+                      onChange={(event) => handleUsername(event)}
+                    />
+                    <label htmlFor="email" className="label-password">
+                      Username
+                    </label>
+                  </span>
                 </div>
                 {userErr && (
-                  <span className="pwd-inv-mess">username not valid</span>
+                  <div class="error-div">
+                    <small id="username2-help error-div" className="p-error">
+                      Invalid Username.{" "}
+                    </small>
+                  </div>
                 )}
 
                 <br />
-                <div className="form-group frm-log" ref={passwd}>
-                  <label htmlFor="password" ref={labelPasswd} className="label">
-                    Password
-                    <OverlayTrigger
-                      rootClose={true}
-                      trigger="click"
-                      placement="right"
-                      overlay={popover}
-                    >
-                      <i
-                        id="password"
-                        className="far fa-question-circle title-i"
-                      ></i>
-                    </OverlayTrigger>
-                  </label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="password"
-                    ref={pwd}
-                    value={password}
-                    onFocus={handlePasswordFocus}
-                    onBlur={handlePasswordBlur}
-                    onChange={(event) => handlePassword(event)}
-                  />
+
+                <div className="password-div">
+                  <span className="p-float-label">
+                    <Password
+                      className="test-pass"
+                      value={password}
+                      onFocus={handlePasswordFocus}
+                      onBlur={handlePasswordBlur}
+                      onChange={(event) => handlePassword(event)}
+                      feedback={false}
+                      toggleMask
+                    />
+                    <label htmlFor="password" className="label-password">
+                      Password
+                    </label>
+                  </span>
                 </div>
                 {disabled && (
-                  <span className="pwd-inv-mess">password not valid</span>
+                  <div class="error-div">
+                    <small id="username2-help error-div" className="p-error">
+                      Invalid password.{" "}
+                    </small>
+                  </div>
                 )}
                 <br />
-                <div className="form-group frm-log" ref={passwd2}>
-                  <label
-                    className="label"
-                    ref={labelPasswd2}
-                    htmlFor="password2"
-                  >
-                    Confirm Password
-                  </label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="password2"
-                    value={password2}
-                    ref={pwd2}
-                    onFocus={handlePassword2Focus}
-                    onBlur={handlePassword2Blur}
-                    onChange={(event) => handlePassword2(event)}
-                    disabled={disabled}
-                  />
+
+                <div className="password-div">
+                  <span className="p-float-label">
+                    <Password
+                      className="test-pass"
+                      value={password2}
+                      onFocus={handlePassword2Focus}
+                      onBlur={handlePassword2Blur}
+                      onChange={(event) => handlePassword2(event)}
+                      disabled={disabled}
+                      feedback={false}
+                      toggleMask
+                    />
+                    <label htmlFor="password" className="label-password">
+                      Confirm Password
+                    </label>
+                  </span>
                 </div>
                 {disabled2 && (
-                  <span
-                    className="pwd-inv-mess"
-                    style={{ marginBottom: "20px" }}
-                  >
-                    password not identical
-                  </span>
+                  <div class="error-div">
+                    <small id="username2-help error-div" className="p-error">
+                      Passwords must be identical.
+                    </small>
+                  </div>
                 )}
                 <br />
                 <div className="custom-control custom-checkbox">
@@ -220,17 +189,20 @@ const SignupUI = (props) => {
                   </label>
                 </div>
                 {checkBoxErr && (
-                  <span
-                    className="pwd-inv-mess"
+                  <small
+                    id="username2-help error-div "
                     style={{ marginBottom: "20px" }}
+                    className="p-error"
                   >
                     You must accept our conditions
-                  </span>
+                  </small>
                 )}
                 <div className="signin-btn">
                   <Button
                     block
-                    className="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn"
+                    className="btn btn-block btn-lg"
+                    variant="success"
+                    style={{ backgroundColor: "#00C0F8" }}
                     type="submit"
                     variant="info"
                     onClick={() => handleSubmit()}
