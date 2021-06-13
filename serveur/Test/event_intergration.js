@@ -8,7 +8,7 @@ describe('events api test', () => {
     it("it should return a list of events",function(done){
         request.get(
           {
-            url : 'http://localhost:8000/api/getEvent/1d2925b0-383f-4753-a102-b0963d067dad'
+            url : 'http://localhost:8000/api/getEvent/3541b546-c8c9-46bd-adf0-b54959476b8d'
           },
           function(error, response, body){
     
