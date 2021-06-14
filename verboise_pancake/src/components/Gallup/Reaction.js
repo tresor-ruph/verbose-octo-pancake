@@ -201,7 +201,7 @@ const LoadGallup = ({ code, ongoing }) => {
                                     <div className='or-div' >
                                         <span className='or-text'> -- OU -- </span><br />
                                         <div className='url-div'>
-                                            <span  className='url-text'>{`https://verbose-pancake-4fb37.web.app/join/${code}`}</span>
+                                            <span  className='url-text'  style={{fontSize:'1rem'}}>{`https://verbose-pancake-4fb37.web.app/join/${code}`}</span>
                                         </div>
                                     </div>
                                 </div>

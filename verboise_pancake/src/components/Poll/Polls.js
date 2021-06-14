@@ -433,7 +433,7 @@ const Poll = ({ code }) => {
                                         <div className='or-div' >
                                             <span className='or-text'> -- OU -- </span><br />
                                             <div className='url-div'>
-                                                <span className='url-text'>{`https://verbose-pancake-4fb37.web.app/join/${code}`}</span>
+                                                <span style= {{fontSize: '1rem'}} className='url-text'>{`https://verbose-pancake-4fb37.web.app/join/${code}`}</span>
                                             </div>
                                         </div>
                                     </div>

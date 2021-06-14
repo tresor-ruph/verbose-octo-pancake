@@ -22,12 +22,14 @@ function Login(props) {
     ],
     callbacks: {
       signInSuccessWithAuthResult: ({ user }) => {
+        console.log('user',user)
         handleSubmit({
           email: user.email,
           password: user.uid,
           username: user.displayName,
           social: true,
         });
+
       },
     },
   };
@@ -75,21 +77,24 @@ function Login(props) {
     }
   ) => {
     if (data.em_usname !== "" || data.email !== undefined) {
+      console.log('hehehheheh')
       axios
         .get("/Login/" + JSON.stringify(data))
         .then((res) => {
+
+          console.log('res')
           const id = res.data.user[0].userId
           const token = res.data.token
           const picture = res.data.user[0].imageUrl
           const accountStatus = res.data.user[0].accountStatus
-
+          console.log(data)
           dispatch({
             type: "LOG_IN",
             payload: {
               sessionId: token,
               userId: id,
               user: {
-                username: data.username ? data.username : username,
+                username: res.data?.user[0]?.username || username,
                 isLogged: res.status == 200 ? true : false,
                 picture: picture,
                 status: accountStatus
@@ -105,6 +110,7 @@ function Login(props) {
         })
         .catch((err) => {
           console.log(err)
+          console.log(err.response)
          
           if(err?.response?.status === 400){
           toast.current.show({severity:'Erreur', summary: 'Erreur', detail:'Identifiants non valides', life: 5000});

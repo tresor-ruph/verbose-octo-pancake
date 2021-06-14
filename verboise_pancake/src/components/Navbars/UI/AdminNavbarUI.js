@@ -28,11 +28,11 @@ const AdminNavbarUI = (props) => {
                 </Dropdown.Item>
                 <hr />
                 <Dropdown.Item  className='admin-options' onClick={() => handleSettings()}>
-                <FontAwesomeIcon  icon='cog'  size='sm'  style ={{marginRight: '10px', color: 'gray'}}  /><span style={{color: 'gray'}}>Settings</span>     
+                <FontAwesomeIcon  icon='cog'  size='sm'  style ={{marginRight: '10px', color: 'gray'}}  /><span style={{color: 'gray'}}>Paramètres</span>     
                 </Dropdown.Item>
                 <hr />
                 <Dropdown.Item  className='admin-options' onClick={() => handleLogOut()}>
-                <FontAwesomeIcon  icon='sign-out-alt'  size='sm'  style ={{marginRight: '10px',color: 'gray'}}  /><span style={{color: 'gray'}}>Sign out</span>     
+                <FontAwesomeIcon  icon='sign-out-alt'  size='sm'  style ={{marginRight: '10px',color: 'gray'}}  /><span style={{color: 'gray'}}>Se déconnecter</span>     
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>

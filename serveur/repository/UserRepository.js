@@ -23,6 +23,7 @@ module.exports = () => {
         [Op.and]: [{ Accountstatus: 'social' }, { email: param }]
       }
     }))
+    
     return user
   }
 

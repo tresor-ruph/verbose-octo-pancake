@@ -25,7 +25,6 @@ module.exports = {
                  username: username,
                  link: token
              }
-            // html: `<a href='http://localhost:8000/api/confirmEmail/${token}' >confirm mail</a>`
 
         };
         transporter.use('compile', hbs({

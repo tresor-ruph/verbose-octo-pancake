@@ -61,7 +61,6 @@ const JoinEvent = () => {
 
     useEffect(async () => {
     
-        console.log('hello',eventState)
 
         let test = await getClientIp()
         setUserIp(test)
@@ -92,7 +91,7 @@ const JoinEvent = () => {
 
                         } else if (res.data[0].eventType === 'ranking') {
 
-                            setStartCompet(false)
+                        // setStartCompet(false)
                             setLoaded(true)
                         }else {
                          
