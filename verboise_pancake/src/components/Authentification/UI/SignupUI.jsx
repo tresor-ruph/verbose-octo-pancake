@@ -53,7 +53,7 @@ const SignupUI = (props) => {
             <div className="row align-items-center justify-content-center">
               <div className="col-md-7">
                 <div className="mb-4">
-                  <span className="auth-txt">Sign In</span>
+                  <span className="auth-txt">Créer un compte</span>
                 </div>
 
                 <div className="input-div">
@@ -74,7 +74,7 @@ const SignupUI = (props) => {
                 {emailErr && (
                   <div class="error-div">
                     <small id="username2-help error-div" className="p-error">
-                      Invalid Email..{" "}
+                      Email non valide
                     </small>
                   </div>
                 )}
@@ -92,14 +92,14 @@ const SignupUI = (props) => {
                       onChange={(event) => handleUsername(event)}
                     />
                     <label htmlFor="email" className="label-password">
-                      Username
+                      Nom d'utilisateur
                     </label>
                   </span>
                 </div>
                 {userErr && (
                   <div class="error-div">
                     <small id="username2-help error-div" className="p-error">
-                      Invalid Username.{" "}
+                      Nom d'utilisateur invalide.{" "}
                     </small>
                   </div>
                 )}
@@ -118,14 +118,14 @@ const SignupUI = (props) => {
                       toggleMask
                     />
                     <label htmlFor="password" className="label-password">
-                      Password
+                      Mot de passe
                     </label>
                   </span>
                 </div>
                 {disabled && (
                   <div class="error-div">
                     <small id="username2-help error-div" className="p-error">
-                      Invalid password.{" "}
+                      Mot de passe invalide.{" "}
                     </small>
                   </div>
                 )}
@@ -144,14 +144,14 @@ const SignupUI = (props) => {
                       toggleMask
                     />
                     <label htmlFor="password" className="label-password">
-                      Confirm Password
+                      Confirmer le mot de passe
                     </label>
                   </span>
                 </div>
                 {disabled2 && (
                   <div class="error-div">
                     <small id="username2-help error-div" className="p-error">
-                      Passwords must be identical.
+                      Les mots de passe doivent être identiques.
                     </small>
                   </div>
                 )}
@@ -169,21 +169,21 @@ const SignupUI = (props) => {
                     htmlFor="defaultUnchecked"
                   >
                     <span className="caption">
-                      I accept the{" "}
+                      J'accepte les{" "}
                       <a
                         href="#"
                         style={{ color: "#42D0ED", textDecoration: "none" }}
                         onClick={() => handleTerms()}
                       >
-                        terms and condition
+                        termes et conditions
                       </a>{" "}
-                      and{" "}
+                      et{" "}
                       <a
                         href="#"
                         style={{ color: "#42D0ED", textDecoration: "none" }}
                         onClick={() => handlePrivacy()}
                       >
-                        private policy
+                        la politique privée
                       </a>
                     </span>
                   </label>
@@ -194,7 +194,7 @@ const SignupUI = (props) => {
                     style={{ marginBottom: "20px" }}
                     className="p-error"
                   >
-                    You must accept our conditions
+                    Vous devez accepter nos conditions d'utilisation{" "}
                   </small>
                 )}
                 <div className="signin-btn">
@@ -207,7 +207,7 @@ const SignupUI = (props) => {
                     variant="info"
                     onClick={() => handleSubmit()}
                   >
-                    Create Account
+                    Créer un compte
                   </Button>
                 </div>
               </div>

@@ -38,16 +38,16 @@ export default function ConfirmMail(props) {
       .then((res) => {
         toast.current.show({
           severity: "success",
-          summary: "Success",
-          detail: "email sent",
+          summary: "Succès",
+          detail: "email envoyé",
           life: 3000,
         });
       })
       .catch((err) => {
         toast.current.show({
           severity: "error",
-          summary: "Error",
-          detail: "An error occured",
+          summary: "Erreur",
+          detail: "Une erreur est survenue",
           life: 5000,
         });
       });

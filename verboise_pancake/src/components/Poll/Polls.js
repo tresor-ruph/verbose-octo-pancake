@@ -360,7 +360,7 @@ const Poll = ({ code }) => {
 
 
         if (questionStats.length === 0) {
-            toast.current.show({ severity: 'error', summary: 'Error', detail: 'Cannot end event without participation', life: 5000 });
+            toast.current.show({ severity: 'error', summary: 'Erreur', detail: "Impossible de mettre fin à l'événement sans participation", life: 5000 });
             return
         }
         axios.post('/surveyResults', questionStats).then(res => {
@@ -422,27 +422,27 @@ const Poll = ({ code }) => {
                                         {question[questionIndex]?.image != "" && <div className='img-div'><img src={question[questionIndex].image} width='300px' /></div>}
                                     </div>
                                 </TabPanel>
-                                <TabPanel headerClassName='tab-view-title' header="Invite Participants">
+                                <TabPanel headerClassName='tab-view-title' header="Partager">
                                     <div className='scan-div'>
 
                                         <QRCode bgColor="#FFFFFF"
                                             fgColor="#000000"
                                             level="Q"
                                             className='qr-code'
-                                            value={`http://localhost:3000/${code}`} />
+                                            value={`https://verbose-pancake-4fb37.web.app/join/${code}`} />
                                         <div className='or-div' >
-                                            <span className='or-text'> -- OR -- </span><br />
+                                            <span className='or-text'> -- OU -- </span><br />
                                             <div className='url-div'>
-                                                <span className='url-text'>{`verbosePancake/${code}`}</span>
+                                                <span className='url-text'>{`https://verbose-pancake-4fb37.web.app/join/${code}`}</span>
                                             </div>
                                         </div>
                                     </div>
 
                                 </TabPanel>
-                                <TabPanel headerClassName='tab-view-title' header="Add Question">
+                                <TabPanel headerClassName='tab-view-title' header="créer une question">
                                     <div>
                                         <CreateQuestion addNew={true} setSendQuestion={setSendQuestion} />
-                                        {sendQuestion && <Button onClick={addNewQuestion}>send</Button>}
+                                        {sendQuestion && <Button onClick={addNewQuestion}>Envoyer</Button>}
 
                                     </div>
                                 </TabPanel>

@@ -98,13 +98,13 @@ const UserSettings = ({ show, onHide }) => {
                                 picture: url
                             },
                         });
-                        toast.current.show({severity:'success', summary: 'user updated', detail:'User updated', life: 3000});
+                        toast.current.show({ severity: 'success', summary: 'succès', detail: 'données mises à jour', life: 3000 });
 
 
                     }).catch(err => {
                         console.log(err)
                         console.log(err.response)
-                        toast.current.show({severity:'error', summary: 'Error', detail:'An error occured', life: 5000});
+                        toast.current.show({ severity: 'error', summary: 'Error', detail: 'Une erreur est survenue', life: 5000 });
 
                     })
                 })
@@ -139,12 +139,12 @@ const UserSettings = ({ show, onHide }) => {
         }
         axios.put('/password', data).then(res => {
             console.log(res)
-            toast.current.show({severity:'success', summary: 'user updated', detail:'password updated', life: 3000});
+            toast.current.show({ severity: 'success', summary: 'user updated', detail: 'password updated', life: 3000 });
 
         }).catch(err => {
             console.log(err)
             console.log(err.response)
-            toast.current.show({severity:'error', summary: 'Error', detail:'An error occured', life: 5000});
+            toast.current.show({ severity: 'error', summary: 'Error', detail: 'An error occured', life: 5000 });
 
         })
 
@@ -173,7 +173,7 @@ const UserSettings = ({ show, onHide }) => {
         })
 
     }
- 
+
 
 
     return (
@@ -186,7 +186,7 @@ const UserSettings = ({ show, onHide }) => {
                         <AccordionTab header={<React.Fragment> <div className='item-title main-title'><FontAwesomeIcon icon='info-circle' style={{ marginRight: '10px' }} /><span style={{ fontWeight: 'bolder', }}>User Info</span></div>
                         </React.Fragment>}>
                             <div className='setting-elt'>
-                                <div className='item-title content-title'> Edit your user name and profile picture</div>
+                                <div className='item-title content-title'> Modifier votre nom d'utilisateur ou votre photo de profil</div>
                                 <div className='row user-info'>
                                     <div className='col-md-3'>
                                         <Avatar imgSrc={userInfo.picture || imgSrc} handleUploadImage={handleUploadImage} />
@@ -194,15 +194,15 @@ const UserSettings = ({ show, onHide }) => {
                                     <div className='col-md-5 username-info'>
                                         <span className="p-float-label">
                                             <InputText id="username" className='usr-name' value={userName} onChange={(event) => handleName(event)} />
-                                            <label htmlFor="username" className='usr-lbl'>Username</label>
+                                            <label htmlFor="username" className='usr-lbl'>Nom d'utilisateur </label>
                                         </span>
                                     </div>
 
                                 </div>
                                 <div className='upd-usename'>
-                                    <Button onClick={() => handleUpdateUserInfo()}>update userinfo</Button>
+                                    <Button onClick={() => handleUpdateUserInfo()}>Sauver</Button>
                                 </div>
-                              
+
 
                             </div>
                         </AccordionTab>
@@ -216,22 +216,22 @@ const UserSettings = ({ show, onHide }) => {
                                     <div className='col-md-5 username-info'>
                                         <span className="p-float-label">
                                             <Password className='usr-name' onChange={(event) => handleOldPassword(event)} feedback={false} toggleMask />
-                                            <label htmlFor="password" className='usr-lbl'>Enter your old password</label>
+                                            <label htmlFor="password" className='usr-lbl'>Entrez votre ancien mot de passe</label>
                                         </span>
                                     </div>
 
                                     <div className='col-md-5 username-info' style={{ marginTop: '4vh' }}>
                                         <span className="p-float-label">
                                             <Password className='usr-name' onChange={(event) => handleNewPassword(event)} feedback={false} toggleMask onFocus={() => handleNewPasswordFocus()} />
-                                            <label htmlFor="password" className='usr-lbl'>Enter your new password</label>
+                                            <label htmlFor="password" className='usr-lbl'>Entrez votre nouveau mot de passe</label>
                                             {passwordErr && (
-                                                <span className="pwd-inv-mess">password not valid</span>
+                                                <span className="pwd-inv-mess">mot de passe non valide</span>
                                             )}
                                         </span>
                                     </div>
 
                                     <div className='username-info '>
-                                        <Button onClick={() => handlePasswordUpdate()}>update password</Button>
+                                        <Button onClick={() => handlePasswordUpdate()}>mettre à jour le mot de passe</Button>
                                     </div>
 
                                 </div>
@@ -242,21 +242,21 @@ const UserSettings = ({ show, onHide }) => {
                         <AccordionTab header={<React.Fragment> <div className='item-title main-title'><FontAwesomeIcon icon='trash-alt' style={{ marginRight: '10px' }} /><span style={{ fontWeight: 'bolder' }}>Delete Account</span></div>
                         </React.Fragment>}>
                             <div className='setting-elt'>
-                                <div className='item-title content-title'> If you delete your account, all the data related to the app will be lost</div>
+                                <div className='item-title content-title'> Si vous supprimez votre compte, toutes les données liées au compte seront perdues et ne pourront pas être récupérées.</div>
                                 <div className='username-info'>
-                                    <Button variant="danger" onClick={() => handleDeleteAccount()}>Delete Account</Button>
+                                    <Button variant="danger" onClick={() => handleDeleteAccount()}>Supprimer le compte</Button>
                                 </div>
                                 {confDelete && <div className='col-md-5 username-info'>
-                                    <span style={{ fontSize: '0.9rem', color: '#888' }}>To delete your account, please enter the the word 'delete'</span><br /><br />
+                                    <span style={{ fontSize: '0.9rem', color: '#888' }}>Pour supprimer votre compte, veuillez saisir le mot <b>delete</b>.</span><br /><br />
                                     <div className='username-info'>
                                         <span className="p-float-label">
                                             <InputText id="deleteAcc" className='usr-name' onChange={(event) => handleConfirmDelete(event)} />
-                                            <label htmlFor="deleteAcc" className='usr-lbl'>Type <span className='text-danger'>delete</span> to confirm</label>
+                                            <label htmlFor="deleteAcc" className='usr-lbl'>Entrez le mot <span className='text-danger'><b>delete</b></span>pour confirmer </label>
                                         </span>
                                     </div>
                                 </div>}
                                 {revealDeleteButton && <div className='username-info'>
-                                    <Button variant="danger" onClick={() => handleRemoveAccount()}> Confirm </Button>
+                                    <Button variant="danger" onClick={() => handleRemoveAccount()}> Confirmer </Button>
                                 </div>}
                             </div>
                         </AccordionTab>

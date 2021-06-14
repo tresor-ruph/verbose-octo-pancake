@@ -108,9 +108,9 @@ const Questions = (props) => {
                 <Button icon="pi pi-pencil" className="p-button-success" style={{ display: 'none', height: '37px' }} onClick={() => revealOptions(props.questionKey)} className='edit-quests' id={'edit-quest' + props.questionKey} />
                 <Button icon="pi pi-times" className="p-button-danger" style={{ height: '37px' }} onClick={() => props.rmvQuestion(props.questionCount, props.questionKey)} />
             </div>
-            <small id="username2-help" className="p-error" id={`inv-quest${props.questionKey}`} style={{ display: 'none' }}>Please add your question.</small>
-            <small id="username2-help" className="p-error" id={`inv-option${props.questionKey}`} style={{ display: 'none' }}>Please add atleast 2 options.</small>
-            <small id="username2-help" className="p-error" id={`inv-answ${props.questionKey}`} style={{ display: 'none' }}>Please select an answer.</small>
+            <small id="username2-help" className="p-error" id={`inv-quest${props.questionKey}`} style={{ display: 'none' }}>Veuillez ajouter votre question.</small>
+            <small id="username2-help" className="p-error" id={`inv-option${props.questionKey}`} style={{ display: 'none' }}>Veuillez ajouter au moins 2 options.</small>
+            <small id="username2-help" className="p-error" id={`inv-answ${props.questionKey}`} style={{ display: 'none' }}>Veuillez sélectionner une réponse.</small>
 
             <br />
             <div className={'hide-options options-list'} id={'option' + props.questionKey}>

@@ -72,7 +72,7 @@ const PollAnalysis = () => {
                 <div>
                     <div className='row result-container p-d-flex p-jc-center'>
                         <div className="p-shadow-4 col-5 poll-result">
-                            <div className='res-txt'><span>Poll Results</span></div>
+                            <div className='res-txt'><span>Résultats du sondage</span></div>
                             <hr />
                             {questKey.map((elt, idx) => (
                                 <div key={idx}>
@@ -90,9 +90,9 @@ const PollAnalysis = () => {
 
                         </div>
                         <div className='p-shadow-4 col-5 ranking'>
-                            <div className='res-txt'><span> Ranking</span></div>
+                            <div className='res-txt'><span> Classement</span></div>
                             <hr />
-                          {eventState.eventType === 'polls' ?<div style={{marginTop: '20vh', fontSize:'1.5rem', fontWeight: '200' }} className='p-d-flex p-jc-center no-rank' > No Ranking for this event</div> :  <div>
+                          {eventState.eventType === 'polls' ?<div style={{marginTop: '20vh', fontSize:'1.5rem', fontWeight: '200' }} className='p-d-flex p-jc-center no-rank' > Pas de classement pour cet événement </div> :  <div>
                             {ranks.map((elt, idx) => (
                                 <div className='p-d-flex p-jc-center row  rank-div' key={idx}>
                                     <div className='col-1'>{idx + 1}</div>
@@ -106,7 +106,7 @@ const PollAnalysis = () => {
                         </div>
 
                     </div><div className='p-d-flex p-jc-center' style={{ marginTop: '2vh' }}>
-                        <Button onClick={() => handleReturn()} style={{ fontWeight: '500' }}> Home</Button>
+                        <Button onClick={() => handleReturn()} style={{ fontWeight: '500' }}> Page d'accueil</Button>
                     </div>
                 </div>
             )}

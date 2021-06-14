@@ -32,9 +32,10 @@ const ResetPasswordUI = (props) => {
         <div className="main-div">
           <div className="center-div p-shadow-1">
             <div>
-              <p className="text-res">Forgot your Password ?</p>
+              <p className="text-res">Mot de passe oublié ?</p>
               <span className="textsub-res">
-                To reset your password please provide your account email Address
+                Pour réinitialiser votre mot de passe, veuillez fournir votre
+                adresse mail.
               </span>
             </div>
 
@@ -47,7 +48,7 @@ const ResetPasswordUI = (props) => {
                   onChange={(event) => handleEmail(event)}
                 />
                 <label htmlFor="email" className="label-password">
-                  Enter your email
+                  Entrez votre email
                 </label>
               </span>
             </div>
@@ -59,7 +60,7 @@ const ResetPasswordUI = (props) => {
               onClick={() => handleReset()}
               style={{ backgroundColor: "#00C0F8" }}
             >
-              Reset Password
+              Réinitialiser le mot de passe
             </Button>
           </div>
         </div>
@@ -67,49 +68,52 @@ const ResetPasswordUI = (props) => {
         <div className="main-div p-shadow-1">
           <div className="center-div">
             <div>
-              <p className="text-res">Update your Password</p>
-              <span>Please enter your new password</span>
+              <p className="text-res">Mettez à jour votre mot de passe</p>
+              <span>Veuillez entrer votre nouveau mot de passe</span>
             </div>
-             <div className="password-div">
-                  <span className="p-float-label">
-                    <Password
-                    id='passwd1'
-                      value={password1}
-                      onFocus={() =>handleFocus()}
-                      onChange={(event) => handlePassword1(event)}                      feedback={false}
-                      toggleMask
-                    />
-                    <label htmlFor="password" className="label-password">
-                    password
-                    </label>
-                  </span>
-                </div>
-                {passwordErr1 && <div className="error-div">
+            <div className="password-div">
+              <span className="p-float-label">
+                <Password
+                  id="passwd1"
+                  value={password1}
+                  onFocus={() => handleFocus()}
+                  onChange={(event) => handlePassword1(event)}
+                  feedback={false}
+                  toggleMask
+                />
+                <label htmlFor="password" className="label-password">
+                  mot de passe
+                </label>
+              </span>
+            </div>
+            {passwordErr1 && (
+              <div className="error-div">
                 <small id="username2-help error-div" className="p-error">
-                  Invalid password{" "}
+                  Mot de passe invalide{" "}
                 </small>
-              </div>}
+              </div>
+            )}
             <br />
-       
-             <div className="password-div">
-                  <span className="p-float-label">
-                    <Password
-                     id='passwd2'
-                     
-                     value={password2}
-                     onFocus={() =>handleFocus()}
-                     onChange={(event) => handlePassword2(event)}                      feedback={false}
-                      toggleMask
-                    />
-                    <label htmlFor="password" className="label-password">
-                    repeat password
-                    </label>
-                  </span>
-                </div>
+
+            <div className="password-div">
+              <span className="p-float-label">
+                <Password
+                  id="passwd2"
+                  value={password2}
+                  onFocus={() => handleFocus()}
+                  onChange={(event) => handlePassword2(event)}
+                  feedback={false}
+                  toggleMask
+                />
+                <label htmlFor="password" className="label-password">
+                  répéter le mot de passe
+                </label>
+              </span>
+            </div>
             {passwordErr && (
               <div className="error-div">
                 <small id="username2-help error-div" className="p-error">
-                  Passwords must be the same{" "}
+                  Les mots de passe doivent être les mêmes{" "}
                 </small>
               </div>
             )}
@@ -120,7 +124,7 @@ const ResetPasswordUI = (props) => {
               variant="info"
               onClick={() => updatePassword()}
             >
-              Update password
+              Meettre à jour le mot de passe
             </Button>
           </div>
         </div>

@@ -107,9 +107,9 @@ function Login(props) {
           console.log(err)
          
           if(err?.response?.status === 400){
-          toast.current.show({severity:'error', summary: 'Error', detail:'Invalid credentials', life: 5000});
+          toast.current.show({severity:'Erreur', summary: 'Erreur', detail:'Identifiants non valides', life: 5000});
           }else {
-            toast.current.show({severity:'error', summary: 'Error', detail:'an error occured', life: 5000});
+            toast.current.show({severity:'Erreur', summary: 'Erreur', detail:'une erreur est survenue', life: 5000});
           }
         
         });

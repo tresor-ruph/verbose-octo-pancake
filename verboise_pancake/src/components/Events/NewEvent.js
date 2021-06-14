@@ -6,10 +6,9 @@ import { Toast } from 'primereact/toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { InputText } from 'primereact/inputtext';
 import { Card } from 'primereact/card';
-
+import { Tooltip } from 'primereact/tooltip';
 import axios from 'axios'
 import "helper/axiosConfig"
-
 import 'customcss/newEvent.scss'
 
 const NewEvents = ({ hide }) => {
@@ -21,9 +20,9 @@ const NewEvents = ({ hide }) => {
     const toast = useRef(null);
 
     const footer = (
-        <div style={{marginRight:'7vw'}}>
-            <Button label="cancel"  className='p-button-danger p-button-sm cancel-evt' onClick={() => hide(false)} />
-            <Button label="create" className='p-button-sm save-evt' onClick={() => handleSubmit()} />
+        <div style={{ marginRight: '7vw' }}>
+            <Button label="Annuler" className='p-button-danger p-button-sm cancel-evt' onClick={() => hide(false)} />
+            <Button label="Créer" className='p-button-sm save-evt' onClick={() => handleSubmit()} />
         </div>
     );
 
@@ -74,44 +73,45 @@ const NewEvents = ({ hide }) => {
             selected: eventType
         }
         axios.post('/createEvent', data).then(res => {
-                toast.current.show({severity:'success', summary: 'Success', detail:'Event created', life: 3000});
-                hide('reload')
-            
+            toast.current.show({ severity: 'success', summary: 'succès', detail: 'Événement créé', life: 3000 });
+            hide('reload')
+
         }).catch(err => {
             console.log(err)
 
-            if(err?.response?.status === 404){
-                toast.current.show({severity:'error', summary: 'Error', detail:'Event already exists', life: 5000});
-            }else {
-                toast.current.show({severity:'error', summary: 'Error', detail:'An error occured', life: 5000});
+            if (err?.response?.status === 404) {
+                toast.current.show({ severity: 'error', summary: 'Erreur', detail: "L'événement existe déjà", life: 5000 });
+            } else {
+                toast.current.show({ severity: 'error', summary: 'Erreur', detail: 'Une erreur est survenue', life: 5000 });
             }
         })
     }
 
     return (
         <div >
-            
-            <Dialog header="Create Event" showHeader={false} footer={footer} visible={true} style={{ width: '45vw' }} modal  closable={false}  onHide={() => hide(false)}>
-            <Toast ref={toast} />
+
+            <Dialog header="Créer un événement" showHeader={false} footer={footer} visible={true} style={{ width: '45vw' }} modal closable={false} onHide={() => hide(false)}>
+                <Toast ref={toast} />
                 <div>
                     <div className='new-event-body '>
                         <div >
                             <span className="p-float-label">
                                 <InputText id="in" value={eventName} className='p-inputtext-md p-d-block p-mb-2 label-eventTitle' onChange={(e) => handleEventName(e)} onBlur={() => handleEventNameBlur()} onFocus={() => handleEventNameFocus()} />
-                                <label htmlFor="in" style={{ color: 'gray', fontSize: '1vw' }}>Name</label>
+                                <label htmlFor="in" style={{ color: 'gray', fontSize: '1vw' }}>Nom</label>
                             </span>
-                            {evtNameErr && <small id="in" className="p-error p-d-block">Invalid name.</small>}
+                            {evtNameErr && <small id="in" className="p-error p-d-block">Nom invalide.</small>}
                         </div>
                         <div className='evt-type'>
-                            <span className='label-evt-type ' style={{ color: 'gray', fontSize: '1vw' }}>Event mode</span>
+                            <span className='label-evt-type ' style={{ color: 'gray', fontSize: '1vw' }}>Type d'événement</span>
                         </div>
                         <div className='event-types row'>
                             <Card className='cards card-gallup' >
+                                
                                 <a className='stretched-link' id='gallup' onClick={() => handleSelect("gallup")}>
-                                    <div>
+                                    <div >
                                         <FontAwesomeIcon color='#888' icon='chart-line' size="2x" />
                                     </div>
-                                Gallup
+                                    Gallup
                                 </a>
                             </Card>
                             <Card className='cards card-polls'>
@@ -119,7 +119,7 @@ const NewEvents = ({ hide }) => {
                                     <div>
                                         <FontAwesomeIcon color='#888' icon='chart-bar' size="2x" />
                                     </div>
-                                Polls
+                                    Sondages
                                 </a>
                             </Card>
                             <Card className='cards card-ranking' id='ranking'>
@@ -127,12 +127,12 @@ const NewEvents = ({ hide }) => {
                                     <div>
                                         <FontAwesomeIcon icon='trophy' color='#888' size="2x" />
                                     </div>
-                                Ranking
+                                    compétition
                                 </a>
                             </Card>
                         </div>
                         <div className='event-type-error'>
-                            {eventTypeErr && <small id="username2-help" className="p-error p-d-block">Please Select an event mode.</small>}
+                            {eventTypeErr && <small id="username2-help" className="p-error p-d-block">Veuillez sélectionner le type d'événement</small>}
                         </div>
                     </div>
                 </div>

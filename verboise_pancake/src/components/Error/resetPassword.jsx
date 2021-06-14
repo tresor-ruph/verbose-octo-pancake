@@ -71,12 +71,11 @@ export default function Reset(props) {
         .get(`/resetpassword/${email}`)
         .then((res) => {
           if (res.status == 200) {
-            toast.current.show({severity:'success', summary: 'success', detail:` An Email has been sent to ${email}. Follow the instructions to reset
-            your password`, life: 10000});
+            toast.current.show({severity:'success', summary: 'succès', detail:` Un message a été envoyé à ${email}. Suivez les instructions pour réinitialiser votre mot de passe`, life: 10000});
           }
         })
         .catch((err) => {
-          toast.current.show({severity:'error', summary: 'Error', detail:'IAn error occured`', life: 5000});    
+          toast.current.show({severity:'error', summary: 'Error', detail:'Une erreur est survenue', life: 5000});    
         });
     }
   };
@@ -98,13 +97,13 @@ export default function Reset(props) {
       axios
         .put("/password", data)
         .then((res) => {
-          toast.current.show({severity:'success', summary: 'success', detail:'password updated', life: 5000});
+          toast.current.show({severity:'success', summary: 'succès', detail:'mise à jour du mot de passe', life: 5000});
           setTimeout(function () {
             history.push("/login");
           }, 1000);
         })
         .catch((err) => {
-          toast.current.show({severity:'error', summary: 'Error', detail:'An error occured`', life: 5000});
+          toast.current.show({severity:'error', summary: 'Erreur', detail:'Une erreur est survenue', life: 5000});
         });
     }
   };

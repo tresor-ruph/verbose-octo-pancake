@@ -38,28 +38,23 @@ const LoginUI = (props) => {
             <div className="row align-items-center justify-content-center">
               <div className="col-md-7">
                 <div className="mb-4">
-                  <span className='auth-txt'>Log In</span>
+                  <span className="auth-txt">Connectez-vous</span>
                 </div>
-              
-                <div className="input-div" ref={user}>
-                <span className="p-float-label">
-                  <InputText
-                    id="username"
-                    value={username}
 
-                    className="input-auth"
-                    onChange={(event) => handleUsername(event)}
-                    onBlur={handleUserBlur}
-                    onFocus={handleUserFocus}
-                  />
-                  <label
-                    htmlFor="username"
-                    className="label-password"
-                    
-                  >
-                     Username or Email
-                  </label>
-                </span>
+                <div className="input-div" ref={user}>
+                  <span className="p-float-label">
+                    <InputText
+                      id="username"
+                      value={username}
+                      className="input-auth"
+                      onChange={(event) => handleUsername(event)}
+                      onBlur={handleUserBlur}
+                      onFocus={handleUserFocus}
+                    />
+                    <label htmlFor="username" className="label-password">
+                      Nom d'utilisateur ou email
+                    </label>
+                  </span>
                 </div>
                 <br />
 
@@ -74,7 +69,7 @@ const LoginUI = (props) => {
                       toggleMask
                     />
                     <label htmlFor="password" className="label-password">
-                      Password
+                      Mot de passe
                     </label>
                   </span>
                 </div>
@@ -85,7 +80,7 @@ const LoginUI = (props) => {
                       className="forgot-pass"
                       onClick={() => history.push("/resetpassword/user")}
                     >
-                      Forgot Password ?
+                      Mot de passe oublié ?
                     </a>
                   </span>
                 </div>
@@ -103,11 +98,11 @@ const LoginUI = (props) => {
                     })
                   }
                 >
-                  Login
+                  Connexion
                 </Button>
 
                 <span className="d-block text-center my-4 text-muted">
-                  &mdash; or &mdash;
+                  &mdash; ou &mdash;
                 </span>
                 <div>{props.children}</div>
               </div>

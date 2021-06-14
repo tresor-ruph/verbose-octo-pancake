@@ -153,7 +153,7 @@ const CreateQuestions = ({ setSendQuestion }) => {
     const addQuestions = () => {
         setSendQuestion(true)
         if (questionCount > 6   ) {
-            toast.current.show({severity:'error', summary: 'Error', detail:'cannot create more than 7 questions at once', life: 5000});
+            toast.current.show({severity:'error', summary: 'Erreurr', detail:'vous ne pouvez pas ajouter plus de 7 questions à la fois', life: 5000});
             return
         }
 
@@ -209,8 +209,8 @@ const CreateQuestions = ({ setSendQuestion }) => {
         <div className='questions-div'>
         <Toast ref={toast} style={{marginTop:'5vh'}}/>
 
-            <Button className="p-button-raised p-button-success" style={{ backgroundColor: "#00C0F8", fontWeight: '500' }} onClick={() => addQuestions()}>{!questionCount > 0 ? 'Add Questions' : 'New Question'}</Button><br /><br />
-            <small id="username2-help" className="p-error" id='null-question' style={{ display: 'none' }}>Please add your question.</small>
+            <Button className="p-button-raised p-button-success" style={{ backgroundColor: "#00C0F8", fontWeight: '500' }} onClick={() => addQuestions()}>Nouvelle question</Button><br /><br />
+            <small id="username2-help" className="p-error" id='null-question' style={{ display: 'none' }}>Veuillez ajouter votre question.</small>
 
             {questionCount > 0 && questionArr}
         </div>

@@ -51,6 +51,14 @@ const JoinPoll = ({ code, setEventStatus, eventId, userIp }) => {
                         getQuestions(false)
                     }
                     else if (doc.data().message === 'END_EVENT') {
+                        eventState.pseudo =''
+                        eventState.block=''
+                        dispatch({
+                            type: "NEW_EVENT",
+                            payload: {
+                                event: eventState,
+                            },
+                        });
                         setEventStatus('Ended')
                     }
                     else if (doc.data().message === 'START_EVENT') {
@@ -60,25 +68,20 @@ const JoinPoll = ({ code, setEventStatus, eventId, userIp }) => {
                         setDisplayGraph(true)
                     }
                     else if (doc.data().message === 'NEXT_QUESTION') {
-                        let data = {
-                            ip: eventState.pseudo,
-                            eventId: eventId,
-                            questionIndex: 1
-                        }
-
-                        axios.put('updateIndex', data).then(res => {
-                            setDisplayGraph(false)
-                            questionIndex = doc.data().index
-                            chartDataList = []
-                            setDataSet([])
-                            setDisabledField(false)
-                            setReload(prev => prev + 1)
-                        }).catch(err => {
-                            console.log(err.response)
-                        })
-
-
-
+                        eventState.block = false;
+                        dispatch({
+                            type: "NEW_EVENT",
+                            payload: {
+                                event: eventState,
+                            },
+                        });
+                        // console.log(eventState)
+                        setDisplayGraph(false)
+                        chartDataList = []
+                        questionIndex = doc.data().index
+                        setDataSet([])
+                        setDisabledField(false)
+                        setReload(prev => prev + 1)
 
                     }
                     else if (doc.data().message === 'POLL_DATA') {
@@ -102,8 +105,6 @@ const JoinPoll = ({ code, setEventStatus, eventId, userIp }) => {
                             tempPieChart.push(elt[1])
                             total += elt[1]
                         })
-                        // questionIndex = doc.data().index
-
                         tempArr.forEach(elt => {
                             resultPercent.push({ x: elt.x, y: ((parseInt(elt.y) / total) * 100).toFixed(1) })
                             pieResultPercent.push(((parseInt(elt.y) / total) * 100).toFixed(1))
@@ -143,6 +144,14 @@ const JoinPoll = ({ code, setEventStatus, eventId, userIp }) => {
 
     const sentVote = () => {
         setDisabledField(true)
+        eventState.block = true;
+        dispatch({
+            type: "NEW_EVENT",
+            payload: {
+                event: eventState,
+            },
+        });
+
         if (selectedAns === null || selectedAns === '') {
             setOptErr(true)
             return
@@ -153,26 +162,10 @@ const JoinPoll = ({ code, setEventStatus, eventId, userIp }) => {
         } else {
             score = { pseudo: eventState.pseudo, score: 0 }
         }
+
+
      
-
-        let data = {
-            ip: eventState.pseudo,
-            eventId: eventId,
-            questionIndex: 2
-        }
-
-        axios.put('updateIndex', data).then(res => {
-
-            pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'POLL_DATA', value: selectedAns, index: questionIndex, npartCount: eventState.pseudo, score: score }).then(() => {
-                
-
-            })
-        }).catch(err => {
-            console.log(err.response)
-        })
-
-
-
+        pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'POLL_DATA', value: selectedAns, index: questionIndex, npartCount: eventState.pseudo, score: score })
     }
 
     const getQuestions = (x) => {
@@ -186,18 +179,7 @@ const JoinPoll = ({ code, setEventStatus, eventId, userIp }) => {
                 questionIndex = res.data.poll[0].questionIndex
             }
             if (x) {
-                axios.get(`/audience/${userIp}/${eventId}`).then(res2 => {
-                    if (res2.data[0].questionIndex === 2) {
-                        setDisabledField(true)
-                    } else if (res2.data[0].questionIndex === 1 || res2.data[0].questionIndex === 0) {
-                        setDisabledField(false)
-                    }
-
-                }).catch(err => {
-                    console.log(err.response)
-                })
-
-
+                eventState.block ? setDisabledField(true) : setDisabledField(false)
                 registerFireStore(res.data.poll[0].id, sorted[questionIndex])
                 setFetchData(false)
                 setLoaded(true)
@@ -309,7 +291,7 @@ const JoinPoll = ({ code, setEventStatus, eventId, userIp }) => {
                     {displayGraph
                         ?
                         <div>
-                            <div className='corr-answ-div2'> Correct Answer: <span className='ans-val'>{validAnswer().optionText}</span></div>
+                            <div className='corr-answ-div2'> Bonne réponse : <span className='ans-val'>{validAnswer().optionText}</span></div>
                             <div className=' graph-div2'>
                                 {renderChart()}
                             </div>
@@ -320,7 +302,7 @@ const JoinPoll = ({ code, setEventStatus, eventId, userIp }) => {
                                     <span className='text-question-span'>{question[questionIndex].question || ''}</span>
                                 </div>
                                 <hr />
-                                {disabledField && <div className='witing-quest'> waiting for next question</div>}
+                                {disabledField && <div className='witing-quest'>   en attende de la prochaine question</div>}
                                 <div className='p-d-flex p-jc-center'>
                                     <div>
                                         <div className='p-d-flex p-jc-center'>
@@ -342,17 +324,17 @@ const JoinPoll = ({ code, setEventStatus, eventId, userIp }) => {
                                         </div>
 
                                     </div>
-                                   
+
                                 </div>
                                 {optErr && <div className=' p-d-flex p-jc-center'><small
-                                        id="username2-help error-div "
-                            
-                                        className="p-error"
-                                    >
-                                        please select an option
-                                    </small></div>}
+                                    id="username2-help error-div "
+
+                                    className="p-error"
+                                >
+                                    veuillez sélectionner une option
+                                </small></div>}
                             </div>
-                            <div className='p-d-flex p-jc-center' style={{ marginTop: '5vh' }}> <Button onClick={() => sentVote()} className='snd-answ-btn' disabled={disabledField} >Answer</Button></div>
+                            <div className='p-d-flex p-jc-center' style={{ marginTop: '5vh' }}> <Button onClick={() => sentVote()} className='snd-answ-btn' disabled={disabledField} >Envoyer</Button></div>
 
                         </div>}
                 </div>

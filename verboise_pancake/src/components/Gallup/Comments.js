@@ -26,7 +26,7 @@ const Comment = ({ message, handleBlock, handleUnblock }) => {
                 </div>
                 ) : (
                     <div>
-                        <span>No comments </span>
+                        <span>Aucun commentaire pour le moment </span>
                     </div>
                 )
         }

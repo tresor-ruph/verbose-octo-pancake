@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
-import {useHistory} from 'react-router'
+import { useHistory } from 'react-router'
 import CreateQuestion from 'components/CreateQuestions'
 import { InputSwitch } from 'primereact/inputswitch';
 import { useSelector, useDispatch } from 'react-redux'
@@ -126,8 +126,7 @@ const NewPoll = ({ handleStartEvent }) => {
                             QuestionQuestionId: res.data.response.questionId
                         })
                     })
-                    if(optionData.length > 6){
-                        console.log('an error occured')
+                    if (optionData.length > 6) {
                         return
                     }
 
@@ -197,7 +196,7 @@ const NewPoll = ({ handleStartEvent }) => {
                         <hr />
                     </div>
                     <div>
-                        <span className='result-layout-title'> Result layout</span>
+                        <span className='result-layout-title'> Disposition des résultats</span>
                         <div className='row'>
 
                             <Card className='layout-display card-bar-chart'>
@@ -226,9 +225,9 @@ const NewPoll = ({ handleStartEvent }) => {
                             </Card>
 
                         </div>
-                        {layoutErr && <small className="p-error p-d-block" >Please select your result layout.</small>}
+                        {layoutErr && <small className="p-error p-d-block" >Veuillez sélectionner un type de graphique.</small>}
                         <div className='result-format'>
-                            <span className='format-text'>Result in percentage :</span><br />
+                            <span className='format-text'>Résultat en pourcentage ? :</span><br />
 
                             <InputSwitch checked={resultFormat} onChange={(e) => setResultFormat(e.value)} className='format-input' />
                         </div>
@@ -239,8 +238,8 @@ const NewPoll = ({ handleStartEvent }) => {
 
             </div><br /><br />
             <div className='p-d-flex p-jc-center new-poll-bottons'>
-            <Button label="Back" className="p-button-raised p-button-secondary p-button-sm" icon="pi pi-arrow-left"  onClick={() => goBack()} iconPos="left" style ={{marginRight: '2vw'}}/>
-              <Button  className="primary p-button-raised p-button-sm"  onClick={() => startEvent()}>Start Event</Button>
+                <Button label="retourner" className="p-button-raised p-button-secondary p-button-sm" icon="pi pi-arrow-left" onClick={() => goBack()} iconPos="left" style={{ marginRight: '2vw' }} />
+                <Button className="primary p-button-raised p-button-sm" onClick={() => startEvent()}>Démarrer</Button>
             </div>
         </div>
     )

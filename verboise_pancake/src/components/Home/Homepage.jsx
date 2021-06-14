@@ -5,10 +5,8 @@ import { DataTable } from "primereact/datatable";
 import { Button } from "primereact/button";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { confirmPopup } from 'primereact/confirmpopup';
 import { Chip } from "primereact/chip";
 import { Column } from "primereact/column";
-import moment from "moment";
 import axios from "axios";
 import "helper/axiosConfig";
 
@@ -40,18 +38,17 @@ const EventList = () => {
         } else {
           setWelcome(false);
         }
-        res.data.forEach(elt=> {
-         let dataFormat = elt.createdAt.split('T')[0]
+        res.data.forEach((elt) => {
+          let dataFormat = elt.createdAt.split("T")[0];
           arr.push({
             eventId: elt.eventId,
             title: elt.title,
             eventType: elt.eventType,
             code: elt.code,
             status: elt.status,
-            createdAt:dataFormat
-          })
-
-      });
+            createdAt: dataFormat,
+          });
+        });
         setEventData(arr);
         setLoaded(true);
       })
@@ -134,17 +131,25 @@ const EventList = () => {
     if (rowData.status === "In progress") {
       return (
         <Chip
-          label={rowData.status.trim().toLowerCase()}
+          label='En cours'
           className={`status-progress p-mr-2 p-mb-2 chip`}
         />
       );
+    } else if (rowData.status === "inactive") {
+      return (
+        <Chip
+          label='En attente'
+          className={`status-${rowData.status.toLowerCase()} p-mr-2 p-mb-2 chip`}
+        />
+      );
+    } else {
+      return (
+        <Chip
+          label='Terminé'
+          className={`status-${rowData.status.toLowerCase()} p-mr-2 p-mb-2 chip`}
+        />
+      );
     }
-    return (
-      <Chip
-        label={rowData.status.trim().toLowerCase()}
-        className={`status-${rowData.status.toLowerCase()} p-mr-2 p-mb-2 chip`}
-      />
-    );
   };
   const typeBodyTemplate = (rowData) => {
     if (rowData.eventType === "gallup") {
@@ -169,7 +174,7 @@ const EventList = () => {
   };
 
   return (
-    <div className='evt-list-container'>
+    <div className="evt-list-container">
       {loaded ? (
         <div>
           {welcome ? (
@@ -189,7 +194,13 @@ const EventList = () => {
               )}{" "}
               {showModal && <NewEvent hide={modalOnHide} show={modalOnShow} />}
               <div className="btn-add">
-                <Button className='p-shadow-4' style ={{backgroundColor: '#00C0F8', fontWeight:"500"}} onClick={() => showAddEventModal()}>New Event</Button>
+                <Button
+                  className="p-shadow-4"
+                  style={{ backgroundColor: "#00C0F8", fontWeight: "500" }}
+                  onClick={() => showAddEventModal()}
+                >
+                  Nouvel événement
+                </Button>
               </div>
               <hr />
               <div className="card event-list">
@@ -198,14 +209,13 @@ const EventList = () => {
                   className="p-datatable-striped datatable-responsive-demo p-datatable-sm p-shadow-4"
                   paginator
                   paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                  currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+                  currentPageReportTemplate="affichage de {first} à {last} sur {totalRecords}"
                   rows={6}
                   rowsPerPageOptions={[6, 16, 30]}
-                 
                 >
                   <Column
                     field="title"
-                    header="EventTitle"
+                    header="Nom"
                     editor={() => console.log("")}
                     onBeforeEditorShow={(event) => openEvent(event)}
                     bodyClassName="event-td"
@@ -213,7 +223,7 @@ const EventList = () => {
                   ></Column>
                   <Column
                     field="status"
-                    header="Status"
+                    header="Statut"
                     body={statusBodyTemplate}
                     sortable
                   />
@@ -221,7 +231,7 @@ const EventList = () => {
 
                   <Column
                     headerStyle={{ width: "10em" }}
-                    header="Created At"
+                    header="Créé le"
                     bodyStyle={{ color: "gray" }}
                     field="createdAt"
                   ></Column>

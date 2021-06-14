@@ -136,10 +136,10 @@ const UploadImage = ({ hide, eventId }) => {
     const footer = (
         <div>
             <Button variant="danger" onClick={() => hide()}>
-                Cancel
+                Annuler
             </Button>
             <Button variant="primary" onClick={() => submitImage()}>
-                Save
+                Sauver
             </Button>
         </div>
 
@@ -152,7 +152,7 @@ const UploadImage = ({ hide, eventId }) => {
                 <section className="container" style={{ marginTop: '10vh' }}>
                     <div {...getRootProps({ style })}>
                         <input {...getInputProps()} />
-                        <p>Drag 'n' drop some files here, or click to select files</p>
+                        <p>Glissez et déposez des fichiers ici, ou cliquez pour les sélectionner.</p>
                     </div>
                     <aside style={thumbsContainer}>
                         {thumbs}

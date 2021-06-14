@@ -27,8 +27,8 @@ const JoinEvent = () => {
     const [userIp, setUserIp] = useState('')
     const [userNameErr, setUserNameErr] = useState(false)
     const dispatch = useDispatch()
+    
     const eventState = useSelector(state => state.EventReducer.event)
-
     const handlePseudo = (x) => {
         setPseudo(x)
     }
@@ -46,21 +46,7 @@ const JoinEvent = () => {
 
             },
         });
-
-        let data = {
-            audAddress: userIp,
-            pseudo: pseudo,
-            questionIndex: 0,
-            EventEventId: eventId
-        }
-
-        axios.post('addPart', data).then(res => {
-            setStartCompet(true)
-
-        }).catch(err => {
-            console.log(err)
-        })
-
+        setStartCompet(true)
     }
 
     const getClientIp = async () => await publicIp.v4({
@@ -68,83 +54,52 @@ const JoinEvent = () => {
     }).then(res => {
         return res
     })
+
     const handleFocus = () => {
         setUserNameErr(false)
     }
 
-
-
     useEffect(async () => {
-        dispatch({
-            type: "NEW_EVENT",
-            payload: {
-                event: [],
+    
+        console.log('hello',eventState)
 
-            },
-        });
         let test = await getClientIp()
         setUserIp(test)
         axios
             .get(`/getEvent/${path}`).then(res => {
-                console.log(res)
+                // console.log(res)
 
                 if (res.data.length > 0) {
 
                     setEventId(res.data[0].eventId)
                     setEventType(res.data[0].eventType)
                     setEventStatus(res.data[0].status)
+                    if (eventState.pseudo && eventState.pseudo != '' ) {
+                        setPseudo(eventState.pseudo)
+                        console.log(eventState.pseudo)
+                    } else {
+                        if (res.data[0].eventType === 'polls' || res.data[0].eventType === 'gallup') {
 
-                    axios.get(`/audience/${test}/${res.data[0].eventId}`).then(res2 => {
-                        if (res2.data.length === 0) {
-                            if (res.data[0].eventType === 'polls' || res.data[0].eventType === 'gallup') {
-                                let r = Math.random().toString(36).substring(7)
-                                setPseudo(r)
-                                eventState.pseudo = r
-                                dispatch({
-                                    type: "NEW_EVENT",
-                                    payload: {
-                                        event: eventState,
-                                    },
-                                });
-                                let data = {
-                                    audAddress: test,
-                                    pseudo: r,
-                                    questionIndex: 0,
-                                    EventEventId: res.data[0].eventId
-                                }
-
-                                axios.post('addPart', data).then(res => {
-                                    setLoaded(true)
-
-                                }).catch(err => {
-                                    console.log(err)
-                                })
-
-                            } else if (res.data[0].eventType === 'ranking') {
-                                setStartCompet(false)
-                                setLoaded(true)
-
-                            }
-
-                        } else {
-                            eventState.pseudo = res2.data[0].pseudo
-                            if (res2.data[0].questionIndex >= 1000) {
-                                eventState.maxVotes = res2.data[0].questionIndex - 1000
-                            }
+                            let r = Math.random().toString(36).substring(7)
+                            setPseudo(r)
+                            eventState.pseudo = r
                             dispatch({
                                 type: "NEW_EVENT",
                                 payload: {
                                     event: eventState,
-
                                 },
                             });
+
+                        } else if (res.data[0].eventType === 'ranking') {
+
+                            setStartCompet(false)
                             setLoaded(true)
+                        }else {
+                         
 
                         }
-
-                    }).catch(err => {
-                        console.log(err.response)
-                    })
+                    }
+                    setLoaded(true)
                 } else {
                     setLoaded(true)
                 }
@@ -179,9 +134,6 @@ const JoinEvent = () => {
         else {
             return (<EventStatus status={eventStatus} />)
         }
-    }
-    const renderNothing = () => {
-
     }
 
     return (

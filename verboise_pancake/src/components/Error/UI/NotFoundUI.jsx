@@ -9,7 +9,7 @@ const NotFoundUI = (props) => {
         <div className="container bootstrap snippet">
           <div className="main-div">
             <div className="center-div">
-              <p className="text-res">Page not found</p>
+              <p className="text-res">Page introuvable</p>
             </div>
           </div>
         </div>
@@ -17,7 +17,7 @@ const NotFoundUI = (props) => {
         <div className="container bootstrap snippet">
           <div className="main-div">
             <div className="center-div">
-              <p className="text-res">The Link expired</p>
+              <p className="text-res">Le lien a expiré</p>
             </div>
           </div>
         </div>

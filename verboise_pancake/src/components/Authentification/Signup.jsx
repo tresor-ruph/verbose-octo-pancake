@@ -165,15 +165,15 @@ function Signup(props) {
         if (err?.response?.status === 404) {
           toast.current.show({
             severity: "error",
-            summary: "Error",
-            detail: "User already exist",
+            summary: "Erreur",
+            detail: "L'utilisateur existe déjà",
             life: 5000,
           });
         } else {
           toast.current.show({
             severity: "error",
             summary: "Error",
-            detail: "an error occured",
+            detail: "une erreur est survenue",
             life: 5000,
           });
         }

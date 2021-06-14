@@ -1,5 +1,5 @@
-import { useState, useEffect,useRef } from 'react';
-import { Button } from  'primereact/button';
+import { useState, useEffect, useRef } from 'react';
+import { Button } from 'primereact/button';
 import ReactionGraph from './ReactionGraph'
 import { TabView, TabPanel } from 'primereact/tabview';
 import { useDispatch, useSelector } from 'react-redux'
@@ -33,8 +33,8 @@ const LoadGallup = ({ code, ongoing }) => {
     const [dataSet, setDataSet] = useState([])
     const [refresh, setRefresh] = useState(false)
     const [show, setShow] = useState(true);
-    const [duration, setDuration] = useState(60)
-    const [voteFreq, setVoteFreq] = useState(duration / 10)
+    const [duration, setDuration] = useState(0)
+    const [voteFreq, setVoteFreq] = useState(10)
     const [delay, setDelay] = useState(3000)
     const toast = useRef(null);
 
@@ -49,7 +49,7 @@ const LoadGallup = ({ code, ongoing }) => {
     }
 
     useEffect(() => {
-        
+
         const unsubscribe = reactionRef.doc(eventState.eventId).collection(code).onSnapshot((querySnapshot) => {
             querySnapshot.docChanges().filter(({ type }) => type === "added").map(({ doc }) => {
 
@@ -92,13 +92,13 @@ const LoadGallup = ({ code, ongoing }) => {
     const average = arr => arr.reduce((p, c) => p + c, 0) / arr.length;
     const handleBlock = (x) => {
         reactionRef.doc(eventState.eventId).collection(code).add({ message: 'BLOCK', id: x.r })
-        toast.current.show({severity:'success', summary: 'Success', detail:'User Banned', life: 3000});
+        toast.current.show({ severity: 'success', summary: 'Succès', detail: 'Utilisateur bloqué', life: 3000 });
 
     }
 
     const handleUnblock = (x) => {
         reactionRef.doc(eventState.eventId).collection(code).add({ message: 'UN_BLOCK', id: x.r })
-        toast.current.show({severity:'success', summary: 'Success', detail:'user unBlocked', life: 3000});
+        toast.current.show({ severity: 'success', summary: 'Succès', detail: 'utilisateur débloqué', life: 3000 });
 
     }
 
@@ -175,33 +175,33 @@ const LoadGallup = ({ code, ongoing }) => {
 
     return (
         <div>
-                {showModal()}
-                <Toast ref={toast} style={{marginTop: '5vh'}}   />
+            {showModal()}
+            <Toast ref={toast} style={{ marginTop: '5vh' }} />
 
             <div className='poll-main'>
                 <div className='row poll-container'>
                     <div className='p-shadow-2 col-7 graphs'>
-                    <div className='graph-sub-mess line-div'>
-                        <ReactionGraph dataSet={dataSet} StopEvent={StopEvent} />
+                        <div className='graph-sub-mess line-div'>
+                            <ReactionGraph dataSet={dataSet} StopEvent={StopEvent} />
                         </div>
                     </div>
                     <div className='p-shadow-2 col-3  qr-codes'>
                         <TabView activeIndex={activeIndex} onTabChange={(e) => handleIndex(e)}>
-                            <TabPanel headerClassName='tab-view-title' header="Comments" >
+                            <TabPanel headerClassName='tab-view-title' header="Commentaires" >
                                 <div className=''><Comment message={chats} handleBlock={handleBlock} handleUnblock={handleUnblock} /></div>
                             </TabPanel>
-                            <TabPanel headerClassName='tab-view-title' header="Invite Participants">
+                            <TabPanel headerClassName='tab-view-title' header="partager">
                                 <div className='scan-div'>
 
                                     <QRCode bgColor="#FFFFFF"
                                         fgColor="#000000"
                                         level="Q"
                                         className='qr-code'
-                                        value={`http://localhost:3000/${code}`} />
+                                        value={`https://verbose-pancake-4fb37.web.app/join/${code}`} />
                                     <div className='or-div' >
-                                        <span className='or-text'> -- OR -- </span><br />
+                                        <span className='or-text'> -- OU -- </span><br />
                                         <div className='url-div'>
-                                            <span className='url-text'>{`verbosePancake/${code}`}</span>
+                                            <span  className='url-text'>{`https://verbose-pancake-4fb37.web.app/join/${code}`}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -210,7 +210,7 @@ const LoadGallup = ({ code, ongoing }) => {
                         </TabView>
                     </div>
                 </div>
-                <div className='p-d-flex p-jc-center param-div stop-react' > <Button style={{width: '20vh', textAlign: 'center', fontWeight: '500', fontSize: '1.2vw'}} onClick={() => StopEvent()}>End Event</Button></div>
+                <div className='p-d-flex p-jc-center param-div stop-react' > <Button style={{ width: '20vh', textAlign: 'center', fontWeight: '500', fontSize: '1.2vw' }} onClick={() => StopEvent()}>arrêter</Button></div>
             </div>
         </div>
     )

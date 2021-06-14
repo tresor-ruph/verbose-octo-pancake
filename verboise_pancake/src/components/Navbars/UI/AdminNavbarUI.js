@@ -24,15 +24,15 @@ const AdminNavbarUI = (props) => {
               </Dropdown.Toggle>
               <Dropdown.Menu className="preview-list navbar-dropdown pb-3">
                 <Dropdown.Item className='admin-options user-option' >
-                <FontAwesomeIcon  icon='user-alt'  size='sm'  style ={{marginRight: '10px'}}  /><span>{userName}</span>     
+                <FontAwesomeIcon  icon='user-alt'  size='sm'  style ={{marginRight: '10px',color: 'gray'}}  /><span style={{color: 'gray'}}>{userName}</span>     
                 </Dropdown.Item>
                 <hr />
                 <Dropdown.Item  className='admin-options' onClick={() => handleSettings()}>
-                <FontAwesomeIcon  icon='cog'  size='sm'  style ={{marginRight: '10px'}}  /><span>Settings</span>     
+                <FontAwesomeIcon  icon='cog'  size='sm'  style ={{marginRight: '10px', color: 'gray'}}  /><span style={{color: 'gray'}}>Settings</span>     
                 </Dropdown.Item>
                 <hr />
                 <Dropdown.Item  className='admin-options' onClick={() => handleLogOut()}>
-                <FontAwesomeIcon  icon='sign-out-alt'  size='sm'  style ={{marginRight: '10px'}}  /><span>Sign out</span>     
+                <FontAwesomeIcon  icon='sign-out-alt'  size='sm'  style ={{marginRight: '10px',color: 'gray'}}  /><span style={{color: 'gray'}}>Sign out</span>     
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>

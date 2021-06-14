@@ -22,17 +22,17 @@ const AddUsername = ({ pseudo, handlePseudo,handleFocus, handleValidatePseudo, u
                     className="label-password"
                     
                   >
-                    Enter a username
+                    Entrez un nom d'utilisateur
                   </label>
                 </span>
                 </div>
                 {userNameErr && <div class="error-div">
                     <small id="username2-help error-div" className="p-error">
-                      Invalid Username.{" "}
+                    Nom d'utilisateur invalide.{" "}
                     </small>
                   </div>}
                 <div style = {{marginTop: '4vh'}} className=' p-d-flex p-jc-center'>
-                <Button onClick={handleValidatePseudo}> JOIN </Button>
+                <Button onClick={handleValidatePseudo}>Rejoindre </Button>
                 </div>
                 </div>
             </div>
