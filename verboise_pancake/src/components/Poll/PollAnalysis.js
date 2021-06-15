@@ -101,7 +101,7 @@ const PollAnalysis = () => {
                                 <div className='res-txt'><span> Classement</span></div>
                                 <hr />
                                 {!noData ? <div>
-                                    {eventState.eventType === 'polls' ? <div style={{ marginTop: '20vh', fontSize: '1.5rem', fontWeight: '200' }} className='p-d-flex p-jc-center no-rank' > Une erreur est survenue. Impossible de recuperer les données </div> : <div>
+                                    {eventState.eventType === 'polls' ? <div style={{ marginTop: '20vh', fontSize: '1.5rem', fontWeight: '200' }} className='p-d-flex p-jc-center no-rank' >Pas de classement pour cet événement  </div> : <div>
                                         {ranks.map((elt, idx) => (
                                             <div className='p-d-flex p-jc-center row  rank-div' key={idx}>
                                                 <div className='col-1'>{idx + 1}</div>

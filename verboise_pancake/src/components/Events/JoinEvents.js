@@ -44,11 +44,7 @@ const JoinEvent = () => {
         setStartCompet(true)
     }
 
-    const getClientIp = async () => await publicIp.v4({
-        fallbackUrls: ["https://ifconfig.co/ip"]
-    }).then(res => {
-        return res
-    })
+  
 
     const handleFocus = () => {
         setUserNameErr(false)
@@ -57,8 +53,7 @@ const JoinEvent = () => {
     useEffect(async () => {
     
         console.log(newEventState)
-        let test = await getClientIp()
-        setUserIp(test)
+      
         axios
             .get(`/getEvent/${path}`).then(res => {
 

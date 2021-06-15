@@ -13,7 +13,7 @@ const AdminNavbarUI = (props) => {
     <nav className="navbar col-lg-12 col-12 p-lg-0 fixed-top d-flex flex-row">
       <div className="navbar-menu-wrapper d-flex align-items-center justify-content-between ">
         <button className="navbar-toggler align-self-center " type="button" onClick={() => handleRedirectHome()}>
-         verbosePancake
+       <span style={{color: 'white', fontSize: '1.2rem', fontWeight: '500'}}> Survey Hunt</span> 
         </button>
 
         <ul className="navbar-nav navbar-nav-right">
