@@ -22,7 +22,6 @@ function Login(props) {
     ],
     callbacks: {
       signInSuccessWithAuthResult: ({ user }) => {
-        console.log('user',user)
         handleSubmit({
           email: user.email,
           password: user.uid,
@@ -113,9 +112,9 @@ function Login(props) {
           console.log(err.response)
          
           if(err?.response?.status === 400){
-          toast.current.show({severity:'Erreur', summary: 'Erreur', detail:'Identifiants non valides', life: 5000});
+          toast.current.show({severity:'error', summary: 'Erreur', detail:'Identifiants non valides', life: 5000});
           }else {
-            toast.current.show({severity:'Erreur', summary: 'Erreur', detail:'une erreur est survenue', life: 5000});
+            toast.current.show({severity:'error', summary: 'Erreur', detail:'une erreur est survenue', life: 5000});
           }
         
         });

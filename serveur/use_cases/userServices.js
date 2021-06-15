@@ -55,7 +55,6 @@ module.exports = () => {
   }
 
   const login = async (request) => {
-
     let values = JSON.parse(request.params.user)
     let response;
     if (values.social) {
@@ -85,7 +84,6 @@ module.exports = () => {
       }
     }
     const token = await tokenManager.encode(response[0].dataValues.userId)
-    console.log(token)
     return { user: response, token }
 
   }
