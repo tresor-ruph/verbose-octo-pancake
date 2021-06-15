@@ -6,7 +6,6 @@ import { Toast } from 'primereact/toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { InputText } from 'primereact/inputtext';
 import { Card } from 'primereact/card';
-import { Tooltip } from 'primereact/tooltip';
 import axios from 'axios'
 import "helper/axiosConfig"
 import 'customcss/newEvent.scss'
@@ -20,7 +19,7 @@ const NewEvents = ({ hide }) => {
     const toast = useRef(null);
 
     const footer = (
-        <div style={{ marginRight: '7vw' }}>
+        <div style={{ marginRight: '4vw' }}>
             <Button label="Annuler" className='p-button-danger p-button-sm cancel-evt' onClick={() => hide(false)} />
             <Button label="Créer" className='p-button-sm save-evt' onClick={() => handleSubmit()} />
         </div>

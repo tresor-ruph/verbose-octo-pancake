@@ -10,6 +10,7 @@ import NotFound from 'components/Error/Notfound'
 import EventStatus from 'components/Events/EventStatus'
 import AddUsername from 'components/Poll/AddUsername'
 import { ProgressSpinner } from "primereact/progressspinner";
+import ls from 'local-storage'
 
 import axios from 'axios'
 import 'helper/axiosConfig'
@@ -26,9 +27,8 @@ const JoinEvent = () => {
     const [startCompet, setStartCompet] = useState(false)
     const [userIp, setUserIp] = useState('')
     const [userNameErr, setUserNameErr] = useState(false)
-    const dispatch = useDispatch()
     
-    const eventState = useSelector(state => state.EventReducer.event)
+    const newEventState =  JSON.parse(ls.get('newEventState'))
     const handlePseudo = (x) => {
         setPseudo(x)
     }
@@ -38,14 +38,9 @@ const JoinEvent = () => {
             setUserNameErr(true)
             return
         }
-        eventState.pseudo = pseudo
-        dispatch({
-            type: "NEW_EVENT",
-            payload: {
-                event: eventState,
-
-            },
-        });
+     
+        ls.set('newEventState', JSON.stringify({pseudo: pseudo}))
+        
         setStartCompet(true)
     }
 
@@ -61,37 +56,33 @@ const JoinEvent = () => {
 
     useEffect(async () => {
     
-
+        console.log(newEventState)
         let test = await getClientIp()
         setUserIp(test)
         axios
             .get(`/getEvent/${path}`).then(res => {
-                // console.log(res)
 
                 if (res.data.length > 0) {
 
                     setEventId(res.data[0].eventId)
                     setEventType(res.data[0].eventType)
                     setEventStatus(res.data[0].status)
-                    if (eventState.pseudo && eventState.pseudo != '' ) {
-                        setPseudo(eventState.pseudo)
-                        console.log(eventState.pseudo)
+
+                    if (newEventState != null && newEventState.pseudo != '' ) {
+                        setPseudo(newEventState.pseudo)
+                        setStartCompet(true)
+
                     } else {
                         if (res.data[0].eventType === 'polls' || res.data[0].eventType === 'gallup') {
 
                             let r = Math.random().toString(36).substring(7)
                             setPseudo(r)
-                            eventState.pseudo = r
-                            dispatch({
-                                type: "NEW_EVENT",
-                                payload: {
-                                    event: eventState,
-                                },
-                            });
+                            ls.set('newEventState', JSON.stringify({pseudo: r}))
+                         
 
                         } else if (res.data[0].eventType === 'ranking') {
 
-                        // setStartCompet(false)
+                        setStartCompet(false)
                             setLoaded(true)
                         }else {
                          

@@ -140,8 +140,10 @@ module.exports = () => {
 
     }
 
-    res.status(200).redirect(`http://localhost:3000/login`)
+    // res.status(200).redirect(`http://localhost:3000/login`)
     // res.status(200).redirect(`https://verbose-pancake-4fb37.web.app/login`) 
+    res.status(200).redirect(`https://surveyhunt.web.app/login`) 
+
 
   }
 

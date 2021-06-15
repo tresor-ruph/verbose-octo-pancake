@@ -370,6 +370,7 @@ const Poll = ({ code }) => {
             }
             if (frequency.length !== 0) {
                 axios.post('/ranking', frequency).then(res => {
+                    
                 }).catch(err => {
                     console.log(err.response)
                 })

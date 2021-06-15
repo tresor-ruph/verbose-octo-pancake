@@ -11,7 +11,7 @@ const MainHeader = (props) => {
       return (
         <Header>
           <a
-            style={{ color: "#42D0ED", fontSize: '1rem', fontWeight:'500',marginRight:'5vw', textDecoration: "none" }}
+            style={{ color: "white", fontSize: '1.4rem', fontWeight:'500',marginRight:'5vw', textDecoration: "none" }}
             onClick={() => history.push("/signup")}
          
           >
@@ -24,7 +24,7 @@ const MainHeader = (props) => {
         <Header>
           <a
             // href="#"
-            style={{ color: "#42D0ED",fontSize: '1rem', fontWeight:'500',marginRight:'5vw', textDecoration: "none" }}
+            style={{ color: "white",fontSize: '1.4rem', fontWeight:'500',marginRight:'5vw', textDecoration: "none" }}
             onClick={() => history.push("/login")}
           >
             Login

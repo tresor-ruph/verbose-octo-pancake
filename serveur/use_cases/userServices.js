@@ -43,8 +43,9 @@ module.exports = () => {
       validMod.value.userRole = 'client'
       const response = await UsersRepo.addUser(validMod.value)
       const token = await tokenManager.encode(response)
-      const link = `http://localhost:8000/api/confirmEmail/${token}`
+      // const link = `http://localhost:8000/api/confirmEmail/${token}`
       // const link = `https://verbose-octo-pancake.herokuapp.com/api/confirmEmail/${token}`
+      const link = `https://verbose-octo-pancake.herokuapp.com/api/confirmEmail/${token}`
       mail.send(validMod.value.email, link, validMod.value.username)
       return { token: token, id: response }
 
@@ -153,8 +154,8 @@ module.exports = () => {
     const param = JSON.parse(request.params.obj)
     const username = param.userName
     const email = param.email
-    const link = `http://localhost:8000/api/confirmEmail/${param.token}`
-    // const link = `https://verbose-octo-pancake.herokuapp.com/api/confirmEmail/${param.token}`
+    // const link = `http://localhost:8000/api/confirmEmail/${param.token}`
+    const link = `https://verbose-octo-pancake.herokuapp.com/api/confirmEmail/${param.token}`
     mail.send(email, link, username)
   }
 
@@ -164,8 +165,8 @@ module.exports = () => {
       return -1
     }
     const token = await tokenManager.encode(response[0].dataValues.userId, Math.floor(Date.now() / 1000) + (2 * 60))
-    let link = `http://localhost:3000/resetpassword/${token}`
-    // let link = `https://verbose-pancake-4fb37.web.app/resetpassword/${token}`
+    // let link = `http://localhost:3000/resetpassword/${token}`
+    let link = `https://surveyhunt.web.app/resetpassword/${token}`
     mail.send(request.params.email, link, "", true)
 
   }

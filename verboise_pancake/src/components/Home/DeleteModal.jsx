@@ -1,28 +1,33 @@
-import {Modal,Button} from 'react-bootstrap'
-const DeleteModal = ({ show, selEvent, handleClose,confirmDelete }) => {
+// import {Modal,Button} from 'react-bootstrap'
+import { Dialog } from "primereact/dialog";
+import { Button } from "primereact/button";
+
+const DeleteModal = ({ show, selEvent, handleClose, confirmDelete }) => {
+  const footer = (
+    <div style={{ textAlign: "center" }}>
+      <Button className='p-button-danger p-button-sm' onClick={() => handleClose()}>
+        Annuler
+      </Button>
+      <Button className='p-button-sm ' onClick={() => confirmDelete()}>
+        supprimer
+      </Button>
+    </div>
+  );
+
   return (
-    <Modal
-      size="md"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-      show={show}
-    //   onHide={handleClose}
+    <Dialog
+      header="Créer un événement"
+      showHeader={false}
+      footer={footer}
+      visible={true}
+      style={{ width: "45vw" }}
+      modal
+      closable={false}
     >
-      <Modal.Header closeButton>
-        <Modal.Title>Modal heading</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        Do you really want to delete the event :{selEvent.title || ''}
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={() =>handleClose()}>
-          Close
-        </Button>
-        <Button variant="danger" onClick={() =>confirmDelete()}>
-          Delete
-        </Button>
-      </Modal.Footer>
-    </Modal>
+      <div style = {{marginTop: '3vh', textAlign: 'center'}}>
+        Voulez-vous vraiment supprimer l'événement :{selEvent.title || ""}
+      </div>
+    </Dialog>
   );
 };
 

@@ -9,6 +9,7 @@ import { Bar, Pie, Doughnut } from 'react-chartjs-2'
 import firebase from 'firebase';
 import 'firebase/firestore';
 import './JoinPoll.scss'
+import ls from 'local-storage'
 
 let chartDataList = []
 let questionIndex = 0
@@ -31,6 +32,7 @@ const JoinPoll = ({ code, setEventStatus, eventId, userIp }) => {
     const [optErr, setOptErr] = useState(false)
     const dispatch = useDispatch()
     const eventState = useSelector(state => state.EventReducer.event)
+    const newEventState =  JSON.parse(ls.get('newEventState'))
 
 
     let percent = null
@@ -51,14 +53,16 @@ const JoinPoll = ({ code, setEventStatus, eventId, userIp }) => {
                         getQuestions(false)
                     }
                     else if (doc.data().message === 'END_EVENT') {
-                        eventState.pseudo =''
-                        eventState.block=''
-                        dispatch({
-                            type: "NEW_EVENT",
-                            payload: {
-                                event: eventState,
-                            },
-                        });
+                        newEventState.pseudo =''
+                        newEventState.block=''
+                        ls.set('newEventState', JSON.stringify(newEventState))
+                        
+                        // dispatch({
+                        //     type: "NEW_EVENT",
+                        //     payload: {
+                        //         event: eventState,
+                        //     },
+                        // });
                         setEventStatus('Ended')
                     }
                     else if (doc.data().message === 'START_EVENT') {
@@ -68,13 +72,15 @@ const JoinPoll = ({ code, setEventStatus, eventId, userIp }) => {
                         setDisplayGraph(true)
                     }
                     else if (doc.data().message === 'NEXT_QUESTION') {
-                        eventState.block = false;
-                        dispatch({
-                            type: "NEW_EVENT",
-                            payload: {
-                                event: eventState,
-                            },
-                        });
+                        newEventState.block = false;
+                        ls.set('newEventState', JSON.stringify(newEventState))
+
+                        // dispatch({
+                        //     type: "NEW_EVENT",
+                        //     payload: {
+                        //         event: eventState,
+                        //     },
+                        // });
                         // console.log(eventState)
                         setDisplayGraph(false)
                         chartDataList = []
@@ -144,13 +150,15 @@ const JoinPoll = ({ code, setEventStatus, eventId, userIp }) => {
 
     const sentVote = () => {
         setDisabledField(true)
-        eventState.block = true;
-        dispatch({
-            type: "NEW_EVENT",
-            payload: {
-                event: eventState,
-            },
-        });
+        newEventState.block = true;
+        ls.set('newEventState', JSON.stringify(newEventState))
+
+        // dispatch({
+        //     type: "NEW_EVENT",
+        //     payload: {
+        //         event: eventState,
+        //     },
+        // });
 
         if (selectedAns === null || selectedAns === '') {
             setOptErr(true)
@@ -158,14 +166,14 @@ const JoinPoll = ({ code, setEventStatus, eventId, userIp }) => {
         }
         let score = null
         if (selectedAns === validAnswer().optionText) {
-            score = { pseudo: eventState.pseudo, score: 1 }
+            score = { pseudo: newEventState.pseudo, score: 1 }
         } else {
-            score = { pseudo: eventState.pseudo, score: 0 }
+            score = { pseudo: newEventState.pseudo, score: 0 }
         }
 
 
      
-        pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'POLL_DATA', value: selectedAns, index: questionIndex, npartCount: eventState.pseudo, score: score })
+        pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'POLL_DATA', value: selectedAns, index: questionIndex, npartCount: newEventState.pseudo, score: score })
     }
 
     const getQuestions = (x) => {
@@ -179,7 +187,7 @@ const JoinPoll = ({ code, setEventStatus, eventId, userIp }) => {
                 questionIndex = res.data.poll[0].questionIndex
             }
             if (x) {
-                eventState.block ? setDisabledField(true) : setDisabledField(false)
+                newEventState?.block ? setDisabledField(true) : setDisabledField(false)
                 registerFireStore(res.data.poll[0].id, sorted[questionIndex])
                 setFetchData(false)
                 setLoaded(true)
