@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "react-bootstrap";
 import { Password } from "primereact/password";
 import { InputText } from "primereact/inputtext";
+import { useHistory } from "react-router";
 import { Toast } from "primereact/toast";
 
 const SignupUI = (props) => {
@@ -39,8 +40,10 @@ const SignupUI = (props) => {
     toast,
   } = props;
 
+  const history = useHistory();
+
   return (
-    <div class="main-sigin">
+    <div className="main-sigin">
       {showModal && returnTermsAndCondition}
       {MainHeader}
       <Toast ref={toast} />
@@ -72,7 +75,7 @@ const SignupUI = (props) => {
                   </span>
                 </div>
                 {emailErr && (
-                  <div class="error-div">
+                  <div className="error-div">
                     <small id="username2-help error-div" className="p-error">
                       Email non valide
                     </small>
@@ -97,7 +100,7 @@ const SignupUI = (props) => {
                   </span>
                 </div>
                 {userErr && (
-                  <div class="error-div">
+                  <div className="error-div">
                     <small id="username2-help error-div" className="p-error">
                       Nom d'utilisateur invalide.{" "}
                     </small>
@@ -123,7 +126,7 @@ const SignupUI = (props) => {
                   </span>
                 </div>
                 {disabled && (
-                  <div class="error-div">
+                  <div className="error-div">
                     <small id="username2-help error-div" className="p-error">
                       Mot de passe invalide.{" "}
                     </small>
@@ -149,7 +152,7 @@ const SignupUI = (props) => {
                   </span>
                 </div>
                 {disabled2 && (
-                  <div class="error-div">
+                  <div className="error-div">
                     <small id="username2-help error-div" className="p-error">
                       Les mots de passe doivent être identiques.
                     </small>
@@ -204,11 +207,21 @@ const SignupUI = (props) => {
                     variant="success"
                     style={{ backgroundColor: "#00C0F8" }}
                     type="submit"
-                    variant="info"
                     onClick={() => handleSubmit()}
                   >
                     Créer un compte
                   </Button>
+                  <div className="d-flex mb-5 align-items-center">
+                <span className="align-items-left ">
+                    <a
+                      className="login-link"
+                      onClick={() => history.push("/login")}
+                    >
+                      Vous avez déjà un compte ? [Connectez vous]
+                    </a>
+                </span>
+                
+                </div>
                 </div>
               </div>
             </div>

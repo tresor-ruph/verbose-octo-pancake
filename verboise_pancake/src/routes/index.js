@@ -1,12 +1,10 @@
 
+import "index.scss"
 import React from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
-import "index.scss"
-
 import AdminLayout from "layouts/Admin.js";
-import Login from "components/authentification/Login"
-
-import Signup from "components/authentification/Signup"
+import Login from "components/Authentification/Login.jsx"
+import Signup from "components/Authentification/Signup"
 import ConfirmMail from "components/Error/confirmEmail"
 import Reset from "components/Error/resetPassword"
 import JoinEvents from "components/Events/JoinEvents"

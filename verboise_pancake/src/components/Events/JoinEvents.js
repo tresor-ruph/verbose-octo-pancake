@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react'
 import { useLocation, useHistory } from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
-import publicIp from "public-ip";
 
 import Gallup from 'components/Gallup/Gallup'
 import JoinPoll from 'components/Poll/JoinPoll'

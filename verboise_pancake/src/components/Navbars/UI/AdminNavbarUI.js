@@ -1,19 +1,25 @@
 import React from 'react'
-import {Dropdown } from "react-bootstrap";
+import {Navbar, Nav, Dropdown } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-// import Settings from 'components/Navbars/Settings'
+import AppLogo from '../../../assets/images/SurveyHuntLogo.png'
 import Settings from '../../Navbars/Settings'
 const AdminNavbarUI = (props) => {
-  const { handleLogOut, toggleOffcanvas, avatar, toggleClass, userName, showModal,onHide,handleSettings,profilePicture,handleRedirectHome } = props
+  const { handleLogOut, avatar, userName, showModal,onHide,handleSettings,profilePicture,handleRedirectHome } = props
 
   return (
     <div>
-            <Settings show ={showModal} onHide={onHide} />
+      <Settings show ={showModal} onHide={onHide} />
 
     <nav className="navbar col-lg-12 col-12 p-lg-0 fixed-top d-flex flex-row">
       <div className="navbar-menu-wrapper d-flex align-items-center justify-content-between ">
         <button className="navbar-toggler align-self-center " type="button" onClick={() => handleRedirectHome()}>
-       <span style={{color: 'white', fontSize: '1.2rem', fontWeight: '500'}}> Survey Hunt</span> 
+        <img
+          src={AppLogo}
+          width="150px"
+          height="150px"
+          className="d-inline-block align-top p-3"
+          alt="SurveyHunt Logo"
+        />
         </button>
 
         <ul className="navbar-nav navbar-nav-right">

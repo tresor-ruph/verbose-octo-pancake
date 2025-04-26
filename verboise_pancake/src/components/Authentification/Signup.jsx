@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { useDispatch } from "react-redux";
-import SignupUI from "components/authentification/UI/SignupUI";
+import SignupUI from "components/Authentification/UI/SignupUI";
 import TermsAndCondition from "components/modal/TermsCondition";
 import { Button } from "react-bootstrap";
 import loginImage from "assets/images/auth/login.svg";

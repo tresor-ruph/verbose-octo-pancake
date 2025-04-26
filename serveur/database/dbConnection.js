@@ -20,6 +20,13 @@ const dotenv = require('dotenv');
       }
 
     });
+    dbConnection.sync()  
+    .then(() => {
+      console.log("All tables synced");
+    })
+    .catch((err) => {
+      console.error("Error syncing tables:", err);
+    });
  
     module.exports= dbConnection
 

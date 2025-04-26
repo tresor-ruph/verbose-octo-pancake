@@ -73,11 +73,19 @@ const LoginUI = (props) => {
                     </label>
                   </span>
                 </div>
-
+          
                 <div className="d-flex mb-5 align-items-center">
+                <span className="align-items-left ">
+                    <a
+                      className="login-link"
+                      onClick={() => history.push("/signup")}
+                    >
+                      Pas encore inscrit ? [Créer un compte]
+                    </a>
+                </span>
                   <span className="ml-auto">
                     <a
-                      className="forgot-pass"
+                      className="login-link"
                       onClick={() => history.push("/resetpassword/user")}
                     >
                       Mot de passe oublié ?

@@ -8,7 +8,7 @@ import {returnHeader} from "helper/customMixin"
 
  import "customcss/login.css";
 
-import LoginUI from "components/authentification/UI/LoginUI";
+import LoginUI from "components/Authentification/UI/LoginUI";
 
 import "helper/axiosConfig";
 import "helper/firebaseConfig";

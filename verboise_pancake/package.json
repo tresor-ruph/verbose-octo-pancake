@@ -28,9 +28,10 @@
     "local-storage": "^2.0.0",
     "moment": "2.24.0",
     "moment-timezone": "^0.5.33",
-    "node-sass": "4.14.1",
     "primeflex": "^2.0.0",
+    "primeicons": "^7.0.0",
     "primereact": "^6.3.2",
+    "public-ip": "^7.0.1",
     "react": "^17.0.1",
     "react-apexcharts": "^1.3.9",
     "react-bootstrap": "^1.5.2",
@@ -48,6 +49,7 @@
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.9",
     "redux-persist": "^6.0.0",
+    "sass": "^1.86.3",
     "underscore": "^1.13.1",
     "web-vitals": "^0.2.4"
   },
@@ -82,5 +84,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.18.6"
   }
 }

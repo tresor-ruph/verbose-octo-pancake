@@ -7,35 +7,7 @@ const MainHeader = (props) => {
   const history = useHistory();
 
   const renderLoginHeader = () => {
-    if (route.pathname === "/login") {
-      return (
-        <Header>
-          <a
-            style={{ color: "white", fontSize: '1.4rem', fontWeight:'500',marginRight:'5vw', textDecoration: "none" }}
-            onClick={() => history.push("/signup")}
-         
-          >
-            Create an account
-          </a>
-        </Header>
-      );
-    } else if (route.pathname === "/signup") {
-      return (
-        <Header>
-          <a
-            // href="#"
-            style={{ color: "white",fontSize: '1.4rem', fontWeight:'500',marginRight:'5vw', textDecoration: "none" }}
-            onClick={() => history.push("/login")}
-          >
-            Login
-          </a>
-        </Header>
-      );
-    } else {
-      return ( <Header>
-        
-      </Header>)
-    }
+    return <Header />
   };
 
   return <div>{renderLoginHeader()}</div>;
