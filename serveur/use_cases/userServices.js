@@ -44,7 +44,6 @@ module.exports = () => {
       const response = await UsersRepo.addUser(validMod.value)
       const token = await tokenManager.encode(response)
       // const link = `http://localhost:8000/api/confirmEmail/${token}`
-      // const link = `https://verbose-octo-pancake.herokuapp.com/api/confirmEmail/${token}`
       const link = `https://verbose-octo-pancake.herokuapp.com/api/confirmEmail/${token}`
       mail.send(validMod.value.email, link, validMod.value.username)
       return { token: token, id: response }
@@ -65,7 +64,7 @@ module.exports = () => {
         values.userRole = 'client'
         const response = await UsersRepo.addUser(values)
         const token = await tokenManager.encode(response[0].dataValues.id)
-      
+
 
       }
     } else {
@@ -89,7 +88,7 @@ module.exports = () => {
   }
 
   const update = async (request) => {
-  
+
 
     let token = tokenManager.decode(request)
 
@@ -107,14 +106,14 @@ module.exports = () => {
       return 0
     }
 
-    const response = await UsersRepo.updateUser(token.data,request.body)
+    const response = await UsersRepo.updateUser(token.data, request.body)
     return response
 
   }
 
   const updatePassword = async (request) => {
-  
-  
+
+
     const getOneUser = await UsersRepo.getOneUser(request.body.id)
 
     if (getOneUser.length === 0) {
@@ -128,7 +127,7 @@ module.exports = () => {
     }
 
     request.body.password = passWordManager.hashPassword(request.body.password)
-    const response = await UsersRepo.updatePassword(request.body.password,request.body.id)
+    const response = await UsersRepo.updatePassword(request.body.password, request.body.id)
     return response
 
 
@@ -153,7 +152,7 @@ module.exports = () => {
     const username = param.userName
     const email = param.email
     // const link = `http://localhost:8000/api/confirmEmail/${param.token}`
-    const link = `https://verbose-octo-pancake.herokuapp.com/api/confirmEmail/${param.token}`
+    const link = `https://verbose-octo-pancake-9qgp.onrender.com/api/confirmEmail/${param.token}`
     mail.send(email, link, username)
   }
 
@@ -194,13 +193,13 @@ module.exports = () => {
   }
   const authStatus = async (req) => {
     if (tokenManager.decode(req).error) {
-      return {code: -1}
+      return { code: -1 }
     }
     response = await UsersRepo.getOneUser(req.params.id)
-    if(response.length === 0){
+    if (response.length === 0) {
       return -1
     }
-    return {response: response}
+    return { response: response }
 
   }
 
