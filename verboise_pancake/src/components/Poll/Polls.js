@@ -370,7 +370,7 @@ const Poll = ({ code }) => {
             }
             if (frequency.length !== 0) {
                 axios.post('/ranking', frequency).then(res => {
-                    
+
                 }).catch(err => {
                     console.log(err.response)
                 })
@@ -404,75 +404,148 @@ const Poll = ({ code }) => {
 
 
     return (
-        <div className='poll-main'>
-            <Toast ref={toast} style={{ marginTop: '5vh' }} />
-            {loaded ?
-                <div className=''>
-                    <div className='row poll-container'>
-                        <div className='p-shadow-2 col-7 graphs'>
-                            <div className='graph-sub-mess'>
-                                <PollGraphs handleNextQuestion={handleNextQuestion} questionIndex={questionIndex} defChart={defChart} question={question} handleStopEvent={handleEndQuestion} voteLock={voteLock} dataSet={dataSet} numbVotes={numbVotes} handleCloseEvent={handleCloseEvent} chartLabels={chartLabels} pieChartData={pieChartData} />
+        <div className="poll-main">
+            <Toast ref={toast} style={{ marginTop: "5vh" }} />
+
+            {loaded ? (
+                <div className="poll-wrapper">
+                    <div className="poll-card">
+
+                        {/* Haut : graph + panneau latéral */}
+                        <div className="poll-top">
+                            {/* Panel graphique */}
+                            <div className="poll-graph-panel">
+                                <PollGraphs
+                                    handleNextQuestion={handleNextQuestion}
+                                    questionIndex={questionIndex}
+                                    defChart={defChart}
+                                    question={question}
+                                    handleStopEvent={handleEndQuestion}
+                                    voteLock={voteLock}
+                                    dataSet={dataSet}
+                                    numbVotes={numbVotes}
+                                    handleCloseEvent={handleCloseEvent}
+                                    chartLabels={chartLabels}
+                                    pieChartData={pieChartData}
+                                />
                             </div>
-                        </div>
 
-                        <div className='p-shadow-2 col-4  qr-codes'>
-                            <TabView activeIndex={activeIndex} onTabChange={(e) => handleIndex(e)}>
-                                <TabPanel headerClassName='tab-view-title' header="Question">
-                                    <div className='question-div'>
-                                        <span className='question-txt'>{question[questionIndex]?.question || ''}</span>
-                                        {question[questionIndex]?.image != "" && <div className='img-div'><img src={question[questionIndex].image} width='300px' /></div>}
-                                    </div>
-                                </TabPanel>
-                                <TabPanel headerClassName='tab-view-title' header="Partager">
-                                    <div className='scan-div'>
+                            {/* Panel de droite : onglets Question / Partager / Créer */}
+                            <div className="poll-side-panel">
+                                <TabView
+                                    activeIndex={activeIndex}
+                                    onTabChange={handleIndex}
+                                    className="poll-tabs"
+                                >
+                                    <TabPanel headerClassName="tab-view-title" header="Question">
+                                        <div className="question-div">
+                                            <span className="question-txt">
+                                                {question[questionIndex]?.question || ""}
+                                            </span>
 
-                                        <QRCode bgColor="#FFFFFF"
-                                            fgColor="#000000"
-                                            level="Q"
-                                            className='qr-code'
-                                            value={`https://verbose-pancake-4fb37.web.app/join/${code}`} />
-                                        <div className='or-div' >
-                                            <span className='or-text'> -- OU -- </span><br />
-                                            <div className='url-div'>
-                                                <span style= {{fontSize: '1rem'}} className='url-text'>{`https://verbose-pancake-4fb37.web.app/join/${code}`}</span>
+                                            {question[questionIndex]?.image !== "" && (
+                                                <div className="img-div">
+                                                    <img
+                                                        src={question[questionIndex].image}
+                                                        width="280"
+                                                        alt="question"
+                                                    />
+                                                </div>
+                                            )}
+                                        </div>
+                                    </TabPanel>
+
+                                    <TabPanel headerClassName="tab-view-title" header="Partager">
+                                        <div className="share-panel">
+                                            <div className="scan-div">
+                                                <QRCode
+                                                    bgColor="#FFFFFF"
+                                                    fgColor="#000000"
+                                                    level="Q"
+                                                    className="qr-code"
+                                                    value={`https://verbose-pancake-4fb37.web.app/join/${code}`}
+                                                />
+                                                <div className="or-div">
+                                                    <span className="or-text">OU</span>
+                                                    <div className="url-div">
+                                                        <span className="url-text">
+                                                            {`https://verbose-pancake-4fb37.web.app/join/${code}`}
+                                                        </span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </TabPanel>
 
-                                </TabPanel>
-                                <TabPanel headerClassName='tab-view-title' header="créer une question">
-                                    <div>
-                                        <CreateQuestion addNew={true} setSendQuestion={setSendQuestion} />
-                                        {sendQuestion && <Button onClick={addNewQuestion}>Envoyer</Button>}
-
-                                    </div>
-                                </TabPanel>
-
-                            </TabView>
-
-                        </div>
-                    </div>
-                    <div className='p-shadow-2 p-d-flex p-jc-between param-div'>
-                        <div className='p-d-flex left-icons'>
-                            <div className="p-mr-2 p-order-1">
-                                {voteLock ? <FontAwesomeIcon icon="lock-open" color='#5F98FA' size='2x' onClick={() => handleEndQuestion()} /> : <FontAwesomeIcon icon="lock" color='#5F98FA' size='2x' />}
-                            </div>
-                            <div className="p-mr-2 p-order-2 lock-icon">
-                                {questionIndex < question.length - 1 ? <FontAwesomeIcon icon="arrow-alt-circle-right" color='#5F98FA' size='2x' onClick={() => handleNextQuestion()} /> : <FontAwesomeIcon icon="stop" color='#5F98FA' onClick={() => handleCloseEvent()} size='2x' />}
+                                    <TabPanel
+                                        headerClassName="tab-view-title"
+                                        header="Créer une question"
+                                    >
+                                        <div className="create-panel">
+                                            <CreateQuestion addNew={true} setSendQuestion={setSendQuestion} />
+                                            {sendQuestion && (
+                                                <Button className="send-question-btn" onClick={addNewQuestion}>
+                                                    Envoyer
+                                                </Button>
+                                            )}
+                                        </div>
+                                    </TabPanel>
+                                </TabView>
                             </div>
                         </div>
-                        <div className="right-icons">
-                            <div><span className='particip-div'>{numbVotes} /</span><FontAwesomeIcon icon="user-friends" color='gray' size='2x' className='particip-icon' /></div>
+
+                        {/* Barre du bas : actions + participants */}
+                        <div className="poll-bottom-bar">
+                            <div className="bottom-left">
+                                <div className="icon-wrapper">
+                                    {voteLock ? (
+                                        <FontAwesomeIcon
+                                            icon="lock-open"
+                                            className="bottom-icon clickable"
+                                            onClick={handleEndQuestion}
+                                        />
+                                    ) : (
+                                        <FontAwesomeIcon icon="lock" className="bottom-icon" />
+                                    )}
+                                </div>
+
+                                <div className="icon-wrapper">
+                                    {questionIndex < question.length - 1 ? (
+                                        <FontAwesomeIcon
+                                            icon="arrow-alt-circle-right"
+                                            className="bottom-icon clickable"
+                                            onClick={handleNextQuestion}
+                                        />
+                                    ) : (
+                                        <FontAwesomeIcon
+                                            icon="stop"
+                                            className="bottom-icon clickable"
+                                            onClick={handleCloseEvent}
+                                        />
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="bottom-right">
+                                <span className="participants-label">
+                                    {numbVotes} participants
+                                </span>
+                                <FontAwesomeIcon
+                                    icon="user-friends"
+                                    className="participants-icon"
+                                />
+                            </div>
                         </div>
                     </div>
-                </div> : <div
-                    className="spinner p-d-flex p-jc-center"
-                    style={{ marginTop: "40vh" }}
-                >
+                </div>
+            ) : (
+                <div className="spinner p-d-flex p-jc-center" style={{ marginTop: "40vh" }}>
                     <ProgressSpinner />
-                </div>}
+                </div>
+            )}
         </div>
-    )
+    );
+
 
 }
 export default Poll

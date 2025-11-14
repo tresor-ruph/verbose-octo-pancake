@@ -11,40 +11,70 @@ import "helper/axiosConfig"
 
 import 'customcss/newPoll.scss'
 
+/**
+ * Composant de création et configuration d'un nouveau sondage
+ * 
+ * @component NewPoll
+ * @description Interface permettant de configurer un sondage avec questions, options
+ * et paramètres d'affichage (graphiques, pourcentages, minuterie)
+ * 
+ * @param {Object} props - Les propriétés du composant
+ * @param {function} props.handleStartEvent - Fonction de rappel pour démarrer l'événement
+ * 
+ * @returns {JSX.Element} Interface de création de sondage avec configuration
+ */
 const NewPoll = ({ handleStartEvent }) => {
 
-    const [resultFormat, setResultFormat] = useState(false)
-    const [timerMode, setTimerMode] = useState(false)
-    const [time, setTime] = useState(0)
+    // États de configuration du sondage
+    const [resultFormat, setResultFormat] = useState(false) // Affichage des résultats en pourcentage
+    const [timerMode, setTimerMode] = useState(false) // Activation du mode minuterie
+    const [time, setTime] = useState(0) // Durée de la minuterie en secondes
     const dispatch = useDispatch()
 
-    const [layout, setLayout] = useState(null)
-    const [layoutErr, setLayoutErr] = useState(false)
+    // États de l'interface utilisateur
+    const [layout, setLayout] = useState(null) // Type de graphique sélectionné (bar-chart|pie-chart|donut)
+    const [layoutErr, setLayoutErr] = useState(false) // État d'erreur pour la sélection du graphique
+
+    // Accès aux données Redux et navigation
     const eventState = useSelector(state => state.EventReducer.event)
     const history = useHistory()
 
 
 
+    /**
+     * Gère la sélection du type de graphique pour l'affichage des résultats
+     * @param {string} x - Type de graphique ('bar-chart'|'pie-chart'|'donut')
+     */
     const handleSelect = (x) => {
-
+        // Réinitialise le style de toutes les cartes
         let allCards = document.getElementsByClassName('layout-display')
         Array.from(allCards).forEach(elt => {
             elt.style.backgroundColor = 'white'
         })
+        // Met en évidence la carte sélectionnée
         let selectedCard = document.getElementsByClassName(`card-${x}`)
         Array.from(selectedCard)[0].style.backgroundColor = 'rgba(0,255,0,0.2)'
         setLayout(x)
         setLayoutErr(false)
-
     }
+
+    /**
+     * Placeholder pour la fonction de soumission de question
+     */
     const setSendQuestion = () => {
         //------
     }
 
+    /**
+     * Démarre l'événement en publiant les questions configurées
+     */
     const startEvent = async () => {
         await postQuestion()
-
     }
+    /**
+     * Valide et publie les questions du sondage
+     * Effectue la validation des données, crée le sondage et ajoute les questions/options
+     */
     const postQuestion = () => {
 
         if (!eventState.questionList) {
@@ -177,12 +207,19 @@ const NewPoll = ({ handleStartEvent }) => {
 
 
     }
+    /**
+     * Navigation de retour vers la page d'accueil
+     */
     const goBack = () => {
         history.push('/Home')
     }
 
     return (
         <div className='new-poll-container'>
+            <div className='p-d-flex p-jc-center new-poll-bottons'>
+                <Button label="Retour" className="p-button-raised p-button-secondary p-button-sm" icon="pi pi-arrow-left" onClick={() => goBack()} iconPos="left" style={{ marginRight: '2vw' }} />
+                <Button className="primary p-button-raised p-button-sm" onClick={() => startEvent()}>Démarrer</Button>
+            </div>
             <div className='new-poll-subcontainer row '>
                 <div className='p-shadow-4 col-7 '>
                     <div className='new-poll-question'>
@@ -196,7 +233,7 @@ const NewPoll = ({ handleStartEvent }) => {
                         <hr />
                     </div>
                     <div>
-                        <span className='result-layout-title'> Disposition des résultats</span>
+                        <span className='result-layout-title'>Format d'affichage des résultats</span>
                         <div className='row'>
 
                             <Card className='layout-display card-bar-chart'>
@@ -204,7 +241,7 @@ const NewPoll = ({ handleStartEvent }) => {
                                     <div>
                                         <FontAwesomeIcon icon='chart-bar' color='gray' size="1x" />
                                     </div>
-                                    Bar char
+                                    Graphique en barres
                                 </a>
                             </Card>
                             <Card className='layout-display card-pie-chart'>
@@ -212,7 +249,7 @@ const NewPoll = ({ handleStartEvent }) => {
                                     <div>
                                         <FontAwesomeIcon icon='chart-pie' color='gray' size="1x" />
                                     </div>
-                                    Pie chart
+                                    Graphique circulaire
                                 </a>
                             </Card>
                             <Card className='layout-display card-donut'>
@@ -220,14 +257,14 @@ const NewPoll = ({ handleStartEvent }) => {
                                     <div>
                                         <FontAwesomeIcon icon='chart-bar' color='gray' size="1x" />
                                     </div>
-                                    Donut
+                                    Graphique en anneau
                                 </a>
                             </Card>
 
                         </div>
                         {layoutErr && <small className="p-error p-d-block" >Veuillez sélectionner un type de graphique.</small>}
                         <div className='result-format'>
-                            <span className='format-text'>Résultat en pourcentage ? :</span><br />
+                            <span className='format-text'>Afficher les résultats en pourcentage :</span><br />
 
                             <InputSwitch checked={resultFormat} onChange={(e) => setResultFormat(e.value)} className='format-input' />
                         </div>
@@ -236,11 +273,8 @@ const NewPoll = ({ handleStartEvent }) => {
 
                 </div>
 
-            </div><br /><br />
-            <div className='p-d-flex p-jc-center new-poll-bottons'>
-                <Button label="retourner" className="p-button-raised p-button-secondary p-button-sm" icon="pi pi-arrow-left" onClick={() => goBack()} iconPos="left" style={{ marginRight: '2vw' }} />
-                <Button className="primary p-button-raised p-button-sm" onClick={() => startEvent()}>Démarrer</Button>
             </div>
+
         </div>
     )
 

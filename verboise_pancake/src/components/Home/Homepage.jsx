@@ -15,14 +15,36 @@ import NewEvent from "../Events/NewEvent";
 import WelcomeMessage from "./WelcomeMessage";
 import "customcss/Event.scss";
 
+/**
+ * Page d'accueil principale affichant la liste des événements de l'utilisateur
+ * 
+ * @component EventList
+ * @description Interface principale permettant aux utilisateurs de visualiser, 
+ * gérer et créer leurs événements. Affiche un message de bienvenue si aucun 
+ * événement n'existe, sinon présente un tableau paginé avec les détails des événements.
+ * 
+ * @returns {JSX.Element} Interface de gestion des événements avec tableau et actions
+ * 
+ * Fonctionnalités principales :
+ * - Affichage conditionnel (message de bienvenue vs liste d'événements)
+ * - Création de nouveaux événements via modale
+ * - Suppression d'événements avec confirmation
+ * - Navigation vers les détails d'un événement
+ * - Pagination et tri des données
+ * - Indicateurs visuels de statut et type d'événement
+ * 
+ * @example
+ * <EventList />
+ */
 const EventList = () => {
-  const [showDelete, setShowDelete] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [eventData, setEventData] = useState([]);
-  const [selectedEvent, setSelectedEvent] = useState(null);
-  const [reload, setReload] = useState(false);
-  const [welcome, setWelcome] = useState(false);
-  const [loaded, setLoaded] = useState(false);
+  // États pour la gestion des modales et interface utilisateur
+  const [showDelete, setShowDelete] = useState(false); // Contrôle l'affichage de la modale de suppression
+  const [showModal, setShowModal] = useState(false); // Contrôle l'affichage de la modale de création d'événement
+  const [eventData, setEventData] = useState([]); // Données des événements à afficher dans le tableau
+  const [selectedEvent, setSelectedEvent] = useState(null); // Événement sélectionné pour suppression
+  const [reload, setReload] = useState(false); // Trigger pour recharger les données
+  const [welcome, setWelcome] = useState(false); // Détermine si l'écran de bienvenue doit être affiché
+  const [loaded, setLoaded] = useState(false); // Indique si les données ont été chargées
 
   const userInfo = useSelector((state) => state.SessionReducer);
   const history = useHistory();
@@ -57,23 +79,42 @@ const EventList = () => {
       });
   }, [reload]);
 
+  /**
+   * Ferme la modale de suppression d'événement
+   */
   const hideDelModal = () => {
     setShowDelete(false);
   };
 
+  /**
+   * Gestionnaire pour l'action de suppression (placeholder)
+   * @param {Object} e - Événement de suppression
+   */
   const handleDelete = (e) => {
     //-----
   };
+
+  /**
+   * Template pour afficher l'icône de suppression dans le tableau
+   * @returns {JSX.Element} Icône de corbeille pour la suppression
+   */
   const actionBodyTemplate = () => {
     return <FontAwesomeIcon icon="trash-alt" />;
   };
 
+  /**
+   * Gère le rechargement des données d'événements
+   * @param {boolean} reload - Indique si un rechargement est nécessaire
+   */
   const handleReload = (reload) => {
     if (reload) {
       setReload((prev) => !prev);
     }
   };
 
+  /**
+   * Confirme et exécute la suppression d'un événement
+   */
   const confirmDelete = () => {
     axios
       .delete(`/Event/${selectedEvent.eventId}`)
@@ -87,16 +128,28 @@ const EventList = () => {
       });
   };
 
+  /**
+   * Gestionnaire appelé avant de masquer l'éditeur (suppression)
+   */
   const onBeforeEditorHide = () => {
     setShowDelete(false);
-
     return;
   };
+
+  /**
+   * Gestionnaire appelé avant d'afficher l'éditeur (suppression)
+   * @param {Object} e - Événement contenant les données de la ligne
+   */
   const onBeforeEditorShow = (e) => {
     setSelectedEvent(e.columnProps.rowData);
     setShowDelete(true);
     return;
   };
+
+  /**
+   * Gère la fermeture de la modale de création d'événement
+   * @param {string} x - Paramètre indiquant si un rechargement est nécessaire
+   */
   const modalOnHide = (x) => {
     setShowModal(false);
     if (x === "reload") {
@@ -104,29 +157,49 @@ const EventList = () => {
     }
   };
 
+  /**
+   * Ouvre la modale de création d'événement
+   */
   const modalOnShow = () => {
     setShowModal(true);
   };
 
+  /**
+   * Affiche la modale d'ajout d'événement
+   */
   const showAddEventModal = () => {
     setShowModal(true);
   };
+  /**
+   * Ouvre un événement pour modification/gestion
+   * Initialise les données de l'événement dans Redux et navigue vers la page de détail
+   * @param {Object} event - Événement contenant les données de la ligne sélectionnée
+   */
   const openEvent = (event) => {
     let eventData = event.columnProps.rowData;
+    // Initialisation des propriétés pour la gestion des questions et options
     eventData.tempQuestionArr = [];
     eventData.questionCount = 0;
     eventData.optionList = [];
     eventData.questionList = [];
 
+    // Mise à jour du store Redux avec les données de l'événement
     dispatch({
       type: "NEW_EVENT",
       payload: {
         event: eventData,
       },
     });
+
+    // Navigation vers la page de gestion de l'événement
     history.push(`/Event/${event.columnProps.rowData.code}`);
   };
 
+  /**
+   * Template pour afficher le statut d'un événement avec les couleurs appropriées
+   * @param {Object} rowData - Données de la ligne contenant le statut
+   * @returns {JSX.Element} Chip coloré avec le statut traduit
+   */
   const statusBodyTemplate = (rowData) => {
     if (rowData.status === "In progress") {
       return (
@@ -151,6 +224,11 @@ const EventList = () => {
       );
     }
   };
+  /**
+   * Template pour afficher l'icône correspondant au type d'événement
+   * @param {Object} rowData - Données de la ligne contenant le type d'événement
+   * @returns {JSX.Element} Icône FontAwesome représentant le type d'événement
+   */
   const typeBodyTemplate = (rowData) => {
     if (rowData.eventType === "gallup") {
       return (
@@ -199,7 +277,7 @@ const EventList = () => {
                   style={{ backgroundColor: "#00C0F8", fontWeight: "500" }}
                   onClick={() => showAddEventModal()}
                 >
-                  Nouvel événement
+                  Créer un événement
                 </Button>
               </div>
               <hr />
@@ -209,13 +287,13 @@ const EventList = () => {
                   className="p-datatable-striped datatable-responsive-demo p-datatable-sm p-shadow-4"
                   paginator
                   paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                  currentPageReportTemplate="affichage de {first} à {last} sur {totalRecords}"
+                  currentPageReportTemplate="Affichage de {first} à {last} sur {totalRecords} événements"
                   rows={6}
                   rowsPerPageOptions={[6, 16, 30]}
                 >
                   <Column
                     field="title"
-                    header="Nom"
+                    header="Nom de l'événement"
                     editor={() => console.log("")}
                     onBeforeEditorShow={(event) => openEvent(event)}
                     bodyClassName="event-td"
@@ -231,7 +309,7 @@ const EventList = () => {
 
                   <Column
                     headerStyle={{ width: "10em" }}
-                    header="Créé le"
+                    header="Date de création"
                     bodyStyle={{ color: "gray" }}
                     field="createdAt"
                   ></Column>

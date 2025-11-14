@@ -201,7 +201,7 @@ const LoadGallup = ({ code, ongoing }) => {
                                     <div className='or-div' >
                                         <span className='or-text'> -- OU -- </span><br />
                                         <div className='url-div'>
-                                            <span  className='url-text'  style={{fontSize:'1rem'}}>{`https://verbose-pancake-4fb37.web.app/join/${code}`}</span>
+                                            <span className='url-text' style={{ fontSize: '1rem' }}>{`https://verbose-pancake-4fb37.web.app/join/${code}`}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -210,7 +210,9 @@ const LoadGallup = ({ code, ongoing }) => {
                         </TabView>
                     </div>
                 </div>
-                <div className='p-d-flex p-jc-center param-div stop-react' > <Button style={{ width: '20vh', textAlign: 'center', fontWeight: '500', fontSize: '1.2vw' }} onClick={() => StopEvent()}>arrêter</Button></div>
+                <div className='p-d-flex p-jc-center param-div stop-react' >
+                    <Button style={{ width: '20vh', textAlign: 'center', fontWeight: '500', fontSize: '1.2vw' }} onClick={() => StopEvent()}>Arrêter</Button>
+                </div>
             </div>
         </div>
     )

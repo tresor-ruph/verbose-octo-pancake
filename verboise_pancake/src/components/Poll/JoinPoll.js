@@ -32,7 +32,7 @@ const JoinPoll = ({ code, setEventStatus, eventId, userIp }) => {
     const [optErr, setOptErr] = useState(false)
     const dispatch = useDispatch()
     const eventState = useSelector(state => state.EventReducer.event)
-    const newEventState =  JSON.parse(ls.get('newEventState'))
+    const newEventState = JSON.parse(ls.get('newEventState'))
 
 
     let percent = null
@@ -53,10 +53,10 @@ const JoinPoll = ({ code, setEventStatus, eventId, userIp }) => {
                         getQuestions(false)
                     }
                     else if (doc.data().message === 'END_EVENT') {
-                        newEventState.pseudo =''
-                        newEventState.block=''
+                        newEventState.pseudo = ''
+                        newEventState.block = ''
                         ls.set('newEventState', JSON.stringify(newEventState))
-                        
+
                         // dispatch({
                         //     type: "NEW_EVENT",
                         //     payload: {
@@ -172,7 +172,7 @@ const JoinPoll = ({ code, setEventStatus, eventId, userIp }) => {
         }
 
 
-     
+
         pollRef.doc(poll[0].id).collection(question[questionIndex].id).add({ message: 'POLL_DATA', value: selectedAns, index: questionIndex, npartCount: newEventState.pseudo, score: score })
     }
 
@@ -299,8 +299,8 @@ const JoinPoll = ({ code, setEventStatus, eventId, userIp }) => {
                     {displayGraph
                         ?
                         <div>
-                            <div className='corr-answ-div2'> Bonne réponse : <span className='ans-val'>{validAnswer().optionText}</span></div>
-                            <div className=' graph-div2'>
+                            {/* <div className='corr-answ-div2'> Bonne réponse : <span className='ans-val'>{validAnswer().optionText}</span></div> */}
+                            <div className='graph-div2'>
                                 {renderChart()}
                             </div>
                         </div> :
