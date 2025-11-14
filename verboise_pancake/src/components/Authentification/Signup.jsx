@@ -144,7 +144,6 @@ function Signup(props) {
     axios
       .post("/Signin", data)
       .then((res) => {
-        console.log('res', res.data)
         dispatch({
           type: "LOG_IN",
           payload: {
@@ -192,7 +191,7 @@ function Signup(props) {
   return (
     <SignupUI
       returnHeader={returnHeader()}
-      toast ={toast}
+      toast={toast}
       returnTermsAndCondition={returnTermsAndCondition()}
       showModal={showModal}
       setShowModal={setShowModal}
